@@ -31,6 +31,10 @@ dependencies:
     sdk: flutter
   get: ^4.3.4
   socket_io_client: ^1.0.1
+  readmore: ^2.1.0
+  assorted_layout_widgets: ^5.0.2
+  cached_network_image: ^3.1.0
+  backdrop: ^0.6.2
 
 
   # The following adds the Cupertino Icons font to your application.
