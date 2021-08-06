@@ -1,8 +1,15 @@
+import 'dart:developer';
+
+import 'package:backdrop/backdrop.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:visual_novel_strider/http_client.dart';
 import 'package:visual_novel_strider/item_widget.dart';
 import 'package:get/get.dart';
 import 'package:visual_novel_strider/socket_server.dart';
+
+import 'characters_repository.dart';
 
 void main() {
   runApp(const MyApp());
@@ -30,6 +37,7 @@ class MyApp extends StatelessWidget {
             brightness: Brightness.light,
             textTheme: TextTheme(),
             primaryColorLight: const Color(0xFF73e8ff),
+            accentColor: Colors.white,
             primaryColorDark: const Color(0xFF0086c3),
             fontFamily: "Nunito"),
         home: const MyHome());
@@ -64,29 +72,139 @@ class MyHome extends StatefulWidget {
 }
 
 class _MyHomeState extends State<MyHome> {
+  final HttpClient _httpClient = HttpClient();
+
+  final SocketServer _serverSocket = Get.put(SocketServer());
+  final CharactersRepository _charactersRepository =
+      Get.put(CharactersRepository());
+  final TextEditingController _searchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    final SocketServer _serverSocket = Get.put(SocketServer());
-    final TextEditingController _searchController = TextEditingController();
+    // _httpClient.getTags();
 
-    return Scaffold(
+    return BackdropScaffold(
+      headerHeight: MediaQuery.of(context).size.height - 320,
+      backLayer: Container(
+        margin: EdgeInsets.fromLTRB(20, 20, 20, 10),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  elevation: 0,
+                  primary: Theme.of(context).accentColor,
+                  minimumSize: Size(double.infinity, 50)),
+              child: Row(
+                children: [
+                  Icon(
+                    CupertinoIcons.home,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Text("Home",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: Theme.of(context).primaryColor,
+                      )),
+                ],
+              ),
+              onPressed: () {},
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  primary: Theme.of(context).accentColor,
+                  minimumSize: Size(double.infinity, 50)),
+              child: Row(
+                children: [
+                  Icon(
+                    CupertinoIcons.search,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Text("Catalog",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).primaryColor,
+                      )),
+                ],
+              ),
+              onPressed: () {},
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  elevation: 0,
+                  primary: Theme.of(context).accentColor,
+                  minimumSize: Size(double.infinity, 50)),
+              child: Row(
+                children: [
+                  Icon(
+                    CupertinoIcons.bag,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Text("Inventory",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).primaryColor,
+                      )),
+                ],
+              ),
+              onPressed: () {},
+            )
+          ],
+        ),
+      ),
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 1,
-        backgroundColor: Colors.white,
+      appBar: BackdropAppBar(
+        leading: const BackdropToggleButton(
+          icon: AnimatedIcons.list_view,
+        ),
+        backgroundColor: Theme.of(context).primaryColor,
         title: TextField(
+          cursorColor: Theme.of(context).accentColor,
           controller: _searchController,
-          style: const TextStyle(fontSize: 16),
-          decoration: const InputDecoration(
+          style: TextStyle(fontSize: 16, color: Theme.of(context).accentColor),
+          decoration: InputDecoration(
+            hintStyle: TextStyle(color: Theme.of(context).accentColor),
             hintText: "Search visual novel",
+            focusedBorder: UnderlineInputBorder(),
+            prefixIcon: Icon(
+              CupertinoIcons.search,
+              size: 16,
+              color: Theme.of(context).accentColor,
+            ),
             border: InputBorder.none,
             enabledBorder: InputBorder.none,
-            focusedBorder: InputBorder.none,
             disabledBorder: InputBorder.none,
           ),
         ),
       ),
-      body: Container(
+      frontLayer: Container(
         margin: const EdgeInsets.symmetric(vertical: 16),
         child: Center(
           child: GetBuilder<SocketServer>(builder: (_controller) {
@@ -98,7 +216,10 @@ class _MyHomeState extends State<MyHome> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-          child: const Icon(CupertinoIcons.search),
+          child: Icon(
+            CupertinoIcons.search,
+            color: Theme.of(context).accentColor,
+          ),
           backgroundColor: Theme.of(context).primaryColor,
           onPressed: () async {
             await _serverSocket.connect();
