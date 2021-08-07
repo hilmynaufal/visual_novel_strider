@@ -1,6 +1,11 @@
+import 'package:hive/hive.dart';
+
 import 'image_flagging.dart';
 
-class Screen {
+part 'screen.g.dart';
+
+@HiveType(typeId: 4)
+class Screen extends HiveObject {
   Screen(
       {required this.image,
       required this.rid,
@@ -9,11 +14,22 @@ class Screen {
       required this.height,
       required this.width});
 
+  @HiveField(0)
   String? image;
+
+  @HiveField(1)
   int? rid;
+
+  @HiveField(2)
   bool? nsfw;
+
+  @HiveField(3)
   ImageFlagging? flagging;
+
+  @HiveField(4)
   int? height;
+
+  @HiveField(5)
   int? width;
 
   factory Screen.fromJson(Map<String, dynamic> json) => Screen(

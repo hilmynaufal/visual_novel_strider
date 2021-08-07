@@ -1,0 +1,60 @@
+import 'package:hive/hive.dart';
+import 'package:visual_novel_strider/model/image_flagging.dart';
+
+import '../gender.dart';
+
+part 'hive_characters_model.g.dart';
+
+@HiveType(typeId: 1)
+class HiveCHaractersModel extends HiveObject {
+  @HiveField(0)
+  int id;
+
+  @HiveField(1)
+  String? name;
+
+  @HiveField(2)
+  dynamic spoilGender;
+
+  @HiveField(3)
+  String? gender;
+
+  @HiveField(4)
+  String? original;
+
+  @HiveField(5)
+  String? bloodt;
+
+  @HiveField(6)
+  List<dynamic>? birthday;
+
+  @HiveField(7)
+  String? aliases;
+
+  @HiveField(8)
+  String? description;
+
+  @HiveField(9)
+  int? age;
+
+  @HiveField(10)
+  String? image;
+
+  @HiveField(11)
+  ImageFlagging? imageFlagging;
+
+  HiveCHaractersModel({
+    required this.id,
+    required this.spoilGender,
+    required this.gender,
+    required this.original,
+    required this.name,
+    required this.bloodt,
+    required this.birthday,
+    required this.imageFlagging,
+    required this.image,
+    required this.aliases,
+    required this.description,
+    required this.age,
+  });
+}

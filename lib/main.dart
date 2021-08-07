@@ -1,17 +1,31 @@
-import 'dart:developer';
-
 import 'package:backdrop/backdrop.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:visual_novel_strider/hive_repository.dart';
 import 'package:visual_novel_strider/http_client.dart';
+import 'package:visual_novel_strider/inventory_widget.dart';
 import 'package:visual_novel_strider/item_widget.dart';
 import 'package:get/get.dart';
+import 'package:visual_novel_strider/links.dart';
+import 'package:visual_novel_strider/model/hive_model/hive_characters_model.dart';
+import 'package:visual_novel_strider/model/hive_model/hive_model.dart';
+import 'package:visual_novel_strider/model/image_flagging.dart';
+import 'package:visual_novel_strider/model/screen.dart';
 import 'package:visual_novel_strider/socket_server.dart';
+import 'package:visual_novel_strider/tags_repository.dart';
 
 import 'characters_repository.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter(HiveVNModelAdapter());
+  Hive.registerAdapter(HiveCHaractersModelAdapter());
+  Hive.registerAdapter(LinksAdapter());
+  Hive.registerAdapter(ImageFlaggingAdapter());
+  Hive.registerAdapter(ScreenAdapter());
   runApp(const MyApp());
 }
 
@@ -75,9 +89,11 @@ class _MyHomeState extends State<MyHome> {
   final HttpClient _httpClient = HttpClient();
 
   final SocketServer _serverSocket = Get.put(SocketServer());
+  final TagsRepository _tagsRepository = Get.put(TagsRepository());
   final CharactersRepository _charactersRepository =
       Get.put(CharactersRepository());
   final TextEditingController _searchController = TextEditingController();
+  final HiveRepository _hiveRepository = Get.put(HiveRepository());
 
   @override
   Widget build(BuildContext context) {
@@ -174,7 +190,9 @@ class _MyHomeState extends State<MyHome> {
                       )),
                 ],
               ),
-              onPressed: () {},
+              onPressed: () {
+                Get.to(() => InventoryWidget());
+              },
             )
           ],
         ),

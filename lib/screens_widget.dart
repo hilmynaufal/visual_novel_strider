@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:visual_novel_strider/screen.dart';
+import 'package:visual_novel_strider/model/screen.dart';
 
 class ScreensWidget extends StatelessWidget {
-  ScreensWidget({Key? key, required this.screenshot}) : super(key: key);
+  const ScreensWidget({Key? key, required this.screenshot}) : super(key: key);
 
-  List<Screen>? screenshot;
+  final List<Screen>? screenshot;
 
   @override
   Widget build(BuildContext context) {

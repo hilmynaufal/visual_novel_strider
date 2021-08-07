@@ -1,5 +1,5 @@
 import 'package:visual_novel_strider/links.dart';
-import 'package:visual_novel_strider/screen.dart';
+import 'package:visual_novel_strider/model/screen.dart';
 
 import 'image_flagging.dart';
 

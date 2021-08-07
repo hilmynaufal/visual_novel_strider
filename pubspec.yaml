@@ -35,6 +35,11 @@ dependencies:
   assorted_layout_widgets: ^5.0.2
   cached_network_image: ^3.1.0
   backdrop: ^0.6.2
+  http: ^0.13.3
+  floor: ^1.1.0
+  hive: ^2.0.4
+  hive_flutter: ^1.1.0
+  hive_generator: ^1.1.0
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -44,6 +49,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  floor_generator: ^1.1.0
+  build_runner: ^2.0.0
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

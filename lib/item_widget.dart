@@ -49,14 +49,6 @@ class ItemWidget extends StatelessWidget {
                                       fontSize: 17,
                                       fontWeight: FontWeight.bold),
                                 ),
-                                Text(
-                                  _controller.result!.value.items[index].length
-                                      .toString(),
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.bold),
-                                ),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [

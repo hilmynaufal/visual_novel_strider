@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:visual_novel_strider/item.dart';
+import 'item.dart';
 
 Result resultFromJson(String str) => Result.fromJson(json.decode(str));
 

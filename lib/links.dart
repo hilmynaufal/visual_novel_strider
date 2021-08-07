@@ -1,4 +1,9 @@
-class Links {
+import 'package:hive/hive.dart';
+
+part 'links.g.dart';
+
+@HiveType(typeId: 2)
+class Links extends HiveObject {
   Links({
     required this.encubed,
     required this.renai,
@@ -6,9 +11,16 @@ class Links {
     required this.wikidata,
   });
 
+  @HiveField(0)
   dynamic encubed;
+
+  @HiveField(1)
   dynamic renai;
+
+  @HiveField(2)
   String? wikipedia;
+
+  @HiveField(3)
   String? wikidata;
 
   factory Links.fromJson(Map<String, dynamic> json) => Links(
