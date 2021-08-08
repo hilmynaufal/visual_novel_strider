@@ -32,10 +32,22 @@ class ItemWidget extends StatelessWidget {
                             width: 70,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
-                              child: Image.network(
-                                _controller.result!.value.items[index].image!,
-                                fit: BoxFit.cover,
-                              ),
+                              child: (_controller.result!.value.items[index]
+                                              .imageFlagging!.sexualAvg +
+                                          _controller.result!.value.items[index]
+                                              .imageFlagging!.violenceAvg ==
+                                      0)
+                                  ? Image.network(
+                                      _controller
+                                          .result!.value.items[index].image!,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : const Center(
+                                      child: Text(
+                                        "NSFW",
+                                        style: TextStyle(fontSize: 22),
+                                      ),
+                                    ),
                             ),
                           ),
                           Expanded(

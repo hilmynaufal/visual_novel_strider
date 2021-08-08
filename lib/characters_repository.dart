@@ -14,7 +14,7 @@ class CharactersRepository extends GetxController {
   Rx<CharacterResult> result =
       CharacterResult(num: 0, more: false, charaItems: null).obs;
 
-  bool isReady = false;
+  RxBool isReady = false.obs;
 
   @override
   void onReady() {
@@ -22,9 +22,10 @@ class CharactersRepository extends GetxController {
   }
 
   void getCharacters(int id) async {
-    isReady = false;
+    result.value = CharacterResult(num: 0, more: false, charaItems: null);
+    isReady.value = false;
     await _server.getCharaFromDatabase(id, "a", () async {}, "character");
-    isReady = true;
+    isReady.value = true;
     update();
   }
 }

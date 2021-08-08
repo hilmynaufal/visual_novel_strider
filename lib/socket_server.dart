@@ -16,14 +16,9 @@ class SocketServer extends GetxController {
   StreamController<Result> controller = StreamController<Result>();
   StreamController<CharacterResult> characterController =
       StreamController<CharacterResult>();
-  var EOM = '\u0004';
+  static const EOM = '\u0004';
 
   Function? functionCall;
-
-  @override
-  void onInit() {
-    super.onInit();
-  }
 
   Future<void> connect() async {
     try {

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:backdrop/scaffold.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -55,11 +57,21 @@ class VnDetail extends StatelessWidget {
                             height: 170,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
-                              child: Image.network(
-                                _controller.result!.value.items[i].image!,
-                                fit: BoxFit.cover,
-                                scale: 2,
-                              ),
+                              child: (_controller.result!.value.items[i]
+                                              .imageFlagging!.sexualAvg +
+                                          _controller.result!.value.items[i]
+                                              .imageFlagging!.violenceAvg ==
+                                      0)
+                                  ? Image.network(
+                                      _controller.result!.value.items[i].image!,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : const Center(
+                                      child: Text(
+                                        "NSFW",
+                                        style: TextStyle(fontSize: 22),
+                                      ),
+                                    ),
                             )),
                         SizedBox(
                           width: 16,
@@ -175,8 +187,20 @@ class VnDetail extends StatelessWidget {
                 ),
               )
             : const LinearProgressIndicator(),
-        floatingActionButton: ProgressFab(
-            item: _controller.result!.value.items[i],
-            charaItem: _charactersRepository.result.value.charaItems!)));
+        floatingActionButton: Obx(
+          () {
+            return _charactersRepository.result.value.num != 0
+                ? ProgressFab(
+                    item: _controller.result!.value.items[i],
+                    charaItem: _charactersRepository.result.value.charaItems!)
+                : FloatingActionButton(
+                    backgroundColor: _theme.primaryColor,
+                    onPressed: () {},
+                    child: CircularProgressIndicator(
+                      color: _theme.accentColor,
+                    ),
+                  );
+          },
+        )));
   }
 }

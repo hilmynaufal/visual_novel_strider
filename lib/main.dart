@@ -210,7 +210,6 @@ class _MyHomeState extends State<MyHome> {
           decoration: InputDecoration(
             hintStyle: TextStyle(color: Theme.of(context).accentColor),
             hintText: "Search visual novel",
-            focusedBorder: UnderlineInputBorder(),
             prefixIcon: Icon(
               CupertinoIcons.search,
               size: 16,
@@ -240,8 +239,10 @@ class _MyHomeState extends State<MyHome> {
           ),
           backgroundColor: Theme.of(context).primaryColor,
           onPressed: () async {
-            await _serverSocket.connect();
-            await _serverSocket.sendMessage(_searchController.text);
+            if (_searchController.text.isNotEmpty) {
+              await _serverSocket.connect();
+              await _serverSocket.sendMessage(_searchController.text);
+            }
           }),
     );
   }

@@ -73,8 +73,6 @@ class HiveRepository extends GetxController {
       log('added');
       box!.add(temp);
     }
-
-    log(box!.getAt(1)!.title.toString());
   }
 
   bool checkIfAdded(Item item) {
