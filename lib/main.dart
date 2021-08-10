@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+
 import 'package:backdrop/backdrop.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +18,9 @@ import 'package:visual_novel_strider/model/image_flagging.dart';
 import 'package:visual_novel_strider/model/screen.dart';
 import 'package:visual_novel_strider/socket_server.dart';
 import 'package:visual_novel_strider/tags_repository.dart';
+import 'package:visual_novel_strider/vn_detail.dart';
+import 'package:visual_novel_strider/widgets/home_widget.dart';
+import 'package:visual_novel_strider/widgets/search_widget.dart';
 
 import 'characters_repository.dart';
 
@@ -58,26 +63,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-MaterialColor createMaterialColor(Color color) {
-  List strengths = <double>[.05];
-  final swatch = <int, Color>{};
-  final int r = color.red, g = color.green, b = color.blue;
-
-  for (int i = 1; i < 10; i++) {
-    strengths.add(0.1 * i);
-  }
-  strengths.forEach((strength) {
-    final double ds = 0.5 - strength;
-    swatch[(strength * 1000).round()] = Color.fromRGBO(
-      r + ((ds < 0 ? r : (255 - r)) * ds).round(),
-      g + ((ds < 0 ? g : (255 - g)) * ds).round(),
-      b + ((ds < 0 ? b : (255 - b)) * ds).round(),
-      1,
-    );
-  });
-  return MaterialColor(color.value, swatch);
-}
-
 class MyHome extends StatefulWidget {
   const MyHome({Key? key}) : super(key: key);
 
@@ -92,158 +77,57 @@ class _MyHomeState extends State<MyHome> {
   final TagsRepository _tagsRepository = Get.put(TagsRepository());
   final CharactersRepository _charactersRepository =
       Get.put(CharactersRepository());
-  final TextEditingController _searchController = TextEditingController();
   final HiveRepository _hiveRepository = Get.put(HiveRepository());
+
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     // _httpClient.getTags();
+    final _theme = Theme.of(context);
 
-    return BackdropScaffold(
-      headerHeight: MediaQuery.of(context).size.height - 320,
-      backLayer: Container(
-        margin: EdgeInsets.fromLTRB(20, 20, 20, 10),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  elevation: 0,
-                  primary: Theme.of(context).accentColor,
-                  minimumSize: Size(double.infinity, 50)),
-              child: Row(
-                children: [
-                  Icon(
-                    CupertinoIcons.home,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  SizedBox(
-                    width: 20,
-                  ),
-                  Text("Home",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: Theme.of(context).primaryColor,
-                      )),
-                ],
-              ),
-              onPressed: () {},
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  primary: Theme.of(context).accentColor,
-                  minimumSize: Size(double.infinity, 50)),
-              child: Row(
-                children: [
-                  Icon(
-                    CupertinoIcons.search,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  SizedBox(
-                    width: 20,
-                  ),
-                  Text("Catalog",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).primaryColor,
-                      )),
-                ],
-              ),
-              onPressed: () {},
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  elevation: 0,
-                  primary: Theme.of(context).accentColor,
-                  minimumSize: Size(double.infinity, 50)),
-              child: Row(
-                children: [
-                  Icon(
-                    CupertinoIcons.bag,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  SizedBox(
-                    width: 20,
-                  ),
-                  Text("Inventory",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).primaryColor,
-                      )),
-                ],
-              ),
-              onPressed: () {
-                Get.to(() => InventoryWidget());
-              },
-            )
-          ],
-        ),
-      ),
-      backgroundColor: Colors.white,
-      appBar: BackdropAppBar(
-        leading: const BackdropToggleButton(
-          icon: AnimatedIcons.list_view,
-        ),
-        backgroundColor: Theme.of(context).primaryColor,
-        title: TextField(
-          cursorColor: Theme.of(context).accentColor,
-          controller: _searchController,
-          style: TextStyle(fontSize: 16, color: Theme.of(context).accentColor),
-          decoration: InputDecoration(
-            hintStyle: TextStyle(color: Theme.of(context).accentColor),
-            hintText: "Search visual novel",
-            prefixIcon: Icon(
-              CupertinoIcons.search,
-              size: 16,
-              color: Theme.of(context).accentColor,
-            ),
-            border: InputBorder.none,
-            enabledBorder: InputBorder.none,
-            disabledBorder: InputBorder.none,
+    return Scaffold(
+      body: _pages.elementAt(_selectedIndex),
+      bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: _theme.primaryColor,
+        backgroundColor: Colors.white,
+        selectedFontSize: 10,
+        unselectedFontSize: 10,
+        iconSize: 20,
+        onTap: onItemTapped,
+        currentIndex: _selectedIndex,
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(CupertinoIcons.home),
+            label: 'Home',
           ),
-        ),
-      ),
-      frontLayer: Container(
-        margin: const EdgeInsets.symmetric(vertical: 16),
-        child: Center(
-          child: GetBuilder<SocketServer>(builder: (_controller) {
-            if (!_controller.isReady) {
-              return Text("No Data");
-            }
-            return const ItemWidget();
-          }),
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-          child: Icon(
-            CupertinoIcons.search,
-            color: Theme.of(context).accentColor,
+          BottomNavigationBarItem(
+            icon: Icon(
+              CupertinoIcons.bag,
+            ),
+            label: 'Inventory',
           ),
-          backgroundColor: Theme.of(context).primaryColor,
-          onPressed: () async {
-            if (_searchController.text.isNotEmpty) {
-              await _serverSocket.connect();
-              await _serverSocket.sendMessage(_searchController.text);
-            }
-          }),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.chat,
+            ),
+            label: 'Chats',
+          ),
+        ],
+      ),
     );
   }
+
+  void onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  // ignore: prefer_final_fields
+  static List<Widget> _pages = <Widget>[
+    SearchWidget(),
+    InventoryWidget(),
+    HomeWidget()
+  ];
 }

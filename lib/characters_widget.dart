@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:transparent_image/transparent_image.dart';
 import 'package:visual_novel_strider/characters_repository.dart';
 
 class CharactersWidget extends StatelessWidget {
@@ -48,11 +49,12 @@ class CharactersWidget extends StatelessWidget {
                                   elevation: 4,
                                   primary: Theme.of(context).accentColor),
                               child: e.image != null
-                                  ? Image.network(
-                                      e.image!,
+                                  ? FadeInImage.memoryNetwork(
+                                      imageScale: 2,
+                                      placeholder: kTransparentImage,
+                                      image: e.image!,
                                       alignment: Alignment.topCenter,
                                       fit: BoxFit.cover,
-                                      scale: 2,
                                     )
                                   : Text("no image")),
                           Text(

@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:get/get.dart';
+import 'package:transparent_image/transparent_image.dart';
 import 'package:visual_novel_strider/characters_repository.dart';
 import 'package:visual_novel_strider/characters_widget.dart';
 import 'package:visual_novel_strider/progress_fab.dart';
@@ -62,8 +63,10 @@ class VnDetail extends StatelessWidget {
                                           _controller.result!.value.items[i]
                                               .imageFlagging!.violenceAvg ==
                                       0)
-                                  ? Image.network(
-                                      _controller.result!.value.items[i].image!,
+                                  ? FadeInImage.memoryNetwork(
+                                      placeholder: kTransparentImage,
+                                      image: _controller
+                                          .result!.value.items[i].image!,
                                       fit: BoxFit.cover,
                                     )
                                   : const Center(

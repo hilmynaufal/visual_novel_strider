@@ -2,6 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:transparent_image/transparent_image.dart';
+import 'package:visual_novel_strider/shimmer_widget.dart';
 import 'package:visual_novel_strider/socket_server.dart';
 import 'package:visual_novel_strider/vn_detail.dart';
 
@@ -22,7 +25,7 @@ class ItemWidget extends StatelessWidget {
                   splashColor: Colors.blue[200],
                   child: Container(
                       margin: const EdgeInsets.symmetric(
-                          vertical: 11, horizontal: 16),
+                          vertical: 6, horizontal: 16),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -37,8 +40,9 @@ class ItemWidget extends StatelessWidget {
                                           _controller.result!.value.items[index]
                                               .imageFlagging!.violenceAvg ==
                                       0)
-                                  ? Image.network(
-                                      _controller
+                                  ? FadeInImage.memoryNetwork(
+                                      placeholder: kTransparentImage,
+                                      image: _controller
                                           .result!.value.items[index].image!,
                                       fit: BoxFit.cover,
                                     )
