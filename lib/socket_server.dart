@@ -16,9 +16,15 @@ class SocketServer extends GetxController {
   StreamController<Result> controller = StreamController<Result>();
   StreamController<CharacterResult> characterController =
       StreamController<CharacterResult>();
+  StreamController<Result> newReleasedController = StreamController<Result>();
   static const EOM = '\u0004';
 
   Function? functionCall;
+
+  @override
+  void onReady() async {
+    await connect();
+  }
 
   Future<void> connect() async {
     try {
@@ -63,7 +69,15 @@ class SocketServer extends GetxController {
                 .replaceAll('\u0004', "")));
             functionCall!.call();
             characterController.add(test);
-            log(test.num.toString());
+          }
+
+          if (type == "new") {
+            print("new released query");
+            Result temp = Result.fromJson(jsonDecode(message
+                .substring(delimiter)
+                .replaceAll("\n", "")
+                .replaceAll('\u0004', "")));
+            newReleasedController.add(temp);
           }
 
           isReady = true;
@@ -93,6 +107,13 @@ class SocketServer extends GetxController {
     socket.add(utf8.encode('get character basic,details (vn = ' +
         id.toString() +
         ') {"results":20, "page":1}'));
+    socket.add(utf8.encode(EOM));
+  }
+
+  Future<void> getNewReleased(String type) async {
+    this.type = type;
+    socket.add(utf8.encode(
+        ('get vn basic,details,stats,tags,screens (released<="2021-07-30" and released>="2021-07-25" and orig_lang="ja") {"results":20, "sort":"released", "reverse":true}')));
     socket.add(utf8.encode(EOM));
   }
 

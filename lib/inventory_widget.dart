@@ -20,6 +20,7 @@ class InventoryWidget extends StatelessWidget {
         ),
         backLayer: Container(),
         frontLayer: Container(
+          margin: EdgeInsets.only(top: 20),
           color: _theme.accentColor,
           child: GetBuilder<HiveRepository>(
             builder: (_repository) {
@@ -29,7 +30,8 @@ class InventoryWidget extends StatelessWidget {
                   itemCount: _repository.data!.length,
                   itemBuilder: (context, index) {
                     return Container(
-                      margin: const EdgeInsets.all(10),
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 4),
                       child: ElevatedButton(
                         clipBehavior: Clip.hardEdge,
                         style: ElevatedButton.styleFrom(

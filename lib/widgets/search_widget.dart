@@ -171,7 +171,6 @@ class SearchWidget extends StatelessWidget {
           backgroundColor: Theme.of(context).primaryColor,
           onPressed: () async {
             if (_searchController.text.isNotEmpty) {
-              await _serverSocket.connect();
               await _serverSocket.sendMessage(_searchController.text);
             }
           }),
