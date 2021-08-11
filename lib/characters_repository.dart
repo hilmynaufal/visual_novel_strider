@@ -24,7 +24,9 @@ class CharactersRepository extends GetxController {
   void getCharacters(int id) async {
     result.value = CharacterResult(num: 0, more: false, charaItems: null);
     isReady.value = false;
-    await _server.getCharaFromDatabase(id, "a", () async {}, "character");
+    await _server.getCharaFromDatabase(id, "a", () async {
+      return "a";
+    }, "character");
     isReady.value = true;
     update();
   }

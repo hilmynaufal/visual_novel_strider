@@ -17,12 +17,14 @@ class SocketServer extends GetxController {
   StreamController<CharacterResult> characterController =
       StreamController<CharacterResult>();
   StreamController<Result> newReleasedController = StreamController<Result>();
+  StreamController<Result> mostPopularController = StreamController<Result>();
   static const EOM = '\u0004';
 
   Function? functionCall;
 
   @override
-  void onReady() async {
+  void onInit() async {
+    super.onInit;
     await connect();
   }
 
@@ -36,7 +38,7 @@ class SocketServer extends GetxController {
           'login{"protocol":1,"client":"test","clientver":3.0,"username":"hilmyblaze","password":"Darkside1masamune"}'));
       socket.add(utf8.encode(EOM));
 
-      socket.listen((event) {
+      socket.listen((event) async {
         message += utf8.decode(event);
         log(message);
         if (message.endsWith("}" + EOM)) {
@@ -67,7 +69,7 @@ class SocketServer extends GetxController {
                 .substring(delimiter)
                 .replaceAll("\n", "")
                 .replaceAll('\u0004', "")));
-            functionCall!.call();
+            await functionCall!.call();
             characterController.add(test);
           }
 
@@ -78,6 +80,15 @@ class SocketServer extends GetxController {
                 .replaceAll("\n", "")
                 .replaceAll('\u0004', "")));
             newReleasedController.add(temp);
+          }
+
+          if (type == "popular") {
+            print("most popular query");
+            Result temp = Result.fromJson(jsonDecode(message
+                .substring(delimiter)
+                .replaceAll("\n", "")
+                .replaceAll('\u0004', "")));
+            mostPopularController.add(temp);
           }
 
           isReady = true;
@@ -114,6 +125,13 @@ class SocketServer extends GetxController {
     this.type = type;
     socket.add(utf8.encode(
         ('get vn basic,details,stats,tags,screens (released<="2021-07-30" and released>="2021-07-25" and orig_lang="ja") {"results":20, "sort":"released", "reverse":true}')));
+    socket.add(utf8.encode(EOM));
+  }
+
+  Future<void> getMostPopular(String type) async {
+    this.type = type;
+    socket.add(utf8.encode(
+        ('get vn basic,details,stats,tags,screens (title ~ ""){"results":20, "sort":"popularity", "reverse":false}')));
     socket.add(utf8.encode(EOM));
   }
 

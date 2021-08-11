@@ -7,18 +7,28 @@ class HomeRepository extends GetxController {
   final SocketServer _server = Get.find();
 
   Rx<Result> result = Result(items: [], more: false, num: 0).obs;
+  Rx<Result> popularResult = Result(items: [], more: false, num: 0).obs;
 
   RxBool isReady = false.obs;
 
   @override
-  void onReady() {
+  void onReady() async {
     result.bindStream(_server.newReleasedController.stream);
+    popularResult.bindStream(_server.mostPopularController.stream);
   }
 
-  void getNewReleased() async {
+  Future<void> getNewReleased() async {
     result.value = Result(items: [], more: false, num: 0);
     isReady.value = false;
     await _server.getNewReleased("new");
+    isReady.value = true;
+    update();
+  }
+
+  Future<void> getMostPopular() async {
+    popularResult.value = Result(items: [], more: false, num: 0);
+    isReady.value = false;
+    await _server.getMostPopular("popular");
     isReady.value = true;
     update();
   }
