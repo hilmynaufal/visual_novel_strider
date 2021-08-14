@@ -9,7 +9,7 @@ import 'package:visual_novel_strider/hive_repository.dart';
 
 import '../characters_repository.dart';
 import '../http_client.dart';
-import '../inventory_widget.dart';
+import 'inventory_widget.dart';
 import '../item_widget.dart';
 import '../socket_server.dart';
 import '../tags_repository.dart';
@@ -19,8 +19,10 @@ class SearchWidget extends StatelessWidget {
 
   final SocketServer _serverSocket = Get.find();
   final TextEditingController _searchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    final _theme = Theme.of(context);
     return BackdropScaffold(
       frontLayerBackgroundColor: Theme.of(context).accentColor,
       headerHeight: MediaQuery.of(context).size.height - 320,

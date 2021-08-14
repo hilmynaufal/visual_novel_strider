@@ -14,18 +14,22 @@ import 'package:visual_novel_strider/socket_server.dart';
 import 'package:readmore/readmore.dart';
 import 'package:visual_novel_strider/widgets/tags_widget.dart';
 
+import 'model/item.dart';
+
 class VnDetail extends StatelessWidget {
   VnDetail({Key? key, required this.i}) : super(key: key);
+
+  final SocketServer _controller = Get.find();
+
+  final CharactersRepository _charactersRepository = Get.find();
 
   int i;
 
   @override
   Widget build(BuildContext context) {
-    final SocketServer _controller = Get.find();
     final ThemeData _theme = Theme.of(context);
-    final CharactersRepository _charactersRepository = Get.find();
 
-    _charactersRepository.getCharacters(_controller.result!.value.items[i].id);
+    _charactersRepository.getCharacters(_controller.result.value.items[i].id);
 
     return (BackdropScaffold(
         backLayer: Container(),
@@ -53,20 +57,27 @@ class VnDetail extends StatelessWidget {
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Container(
-                            width: 130,
-                            height: 170,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: (_controller.result!.value.items[i]
+                        ElevatedButton(
+                          clipBehavior: Clip.antiAlias,
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            elevation: 4,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            padding: EdgeInsets.all(0),
+                          ),
+                          child: Container(
+                              width: 130,
+                              height: 170,
+                              child: (_controller.result.value.items[i]
                                               .imageFlagging!.sexualAvg +
-                                          _controller.result!.value.items[i]
+                                          _controller.result.value.items[i]
                                               .imageFlagging!.violenceAvg ==
                                       0)
                                   ? FadeInImage.memoryNetwork(
                                       placeholder: kTransparentImage,
                                       image: _controller
-                                          .result!.value.items[i].image!,
+                                          .result.value.items[i].image!,
                                       fit: BoxFit.cover,
                                     )
                                   : const Center(
@@ -74,8 +85,8 @@ class VnDetail extends StatelessWidget {
                                         "NSFW",
                                         style: TextStyle(fontSize: 22),
                                       ),
-                                    ),
-                            )),
+                                    )),
+                        ),
                         SizedBox(
                           width: 16,
                         ),
@@ -85,7 +96,7 @@ class VnDetail extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                _controller.result!.value.items[i].title,
+                                _controller.result.value.items[i].title,
                                 textAlign: TextAlign.center,
                                 overflow: TextOverflow.visible,
                                 style: const TextStyle(
@@ -105,7 +116,7 @@ class VnDetail extends StatelessWidget {
                                       ),
                                       Text(
                                         _controller
-                                            .result!.value.items[i].rating!
+                                            .result.value.items[i].rating!
                                             .toString(),
                                         style: const TextStyle(
                                           fontWeight: FontWeight.w300,
@@ -117,7 +128,7 @@ class VnDetail extends StatelessWidget {
                                   Column(
                                     children: [
                                       Text(
-                                        "#${_controller.result!.value.items[i].popularity}",
+                                        "#${_controller.result.value.items[i].popularity}",
                                         style: const TextStyle(
                                           fontWeight: FontWeight.w300,
                                           fontSize: 20,
@@ -135,7 +146,7 @@ class VnDetail extends StatelessWidget {
                                       ),
                                       Text(
                                         _controller
-                                            .result!.value.items[i].rating!
+                                            .result.value.items[i].rating!
                                             .toString(),
                                         style: const TextStyle(
                                           fontWeight: FontWeight.w300,
@@ -161,8 +172,8 @@ class VnDetail extends StatelessWidget {
                         )),
                     const SizedBox(height: 8),
                     ReadMoreText(
-                      _controller.result!.value.items[i].description != null
-                          ? _controller.result!.value.items[i].description!
+                      _controller.result.value.items[i].description != null
+                          ? _controller.result.value.items[i].description!
                           : "No Description",
                       style: TextStyle(
                         fontSize: 14,
@@ -181,7 +192,7 @@ class VnDetail extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     ScreensWidget(
-                        screenshot: _controller.result!.value.items[i].screens),
+                        screenshot: _controller.result.value.items[i].screens),
                     const SizedBox(
                       height: 20,
                     ),
@@ -194,7 +205,7 @@ class VnDetail extends StatelessWidget {
           () {
             return _charactersRepository.result.value.num != 0
                 ? ProgressFab(
-                    item: _controller.result!.value.items[i],
+                    item: _controller.result.value.items[i],
                     charaItem: _charactersRepository.result.value.charaItems!)
                 : FloatingActionButton(
                     backgroundColor: _theme.primaryColor,

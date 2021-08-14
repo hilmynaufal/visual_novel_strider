@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, unused_import
 
 import 'package:backdrop/backdrop.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,7 +8,8 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:visual_novel_strider/hive_repository.dart';
 import 'package:visual_novel_strider/http_client.dart';
-import 'package:visual_novel_strider/inventory_widget.dart';
+import 'package:visual_novel_strider/notification_service.dart';
+import 'package:visual_novel_strider/widgets/inventory_widget.dart';
 import 'package:visual_novel_strider/item_widget.dart';
 import 'package:get/get.dart';
 import 'package:visual_novel_strider/links.dart';
@@ -25,6 +26,8 @@ import 'package:visual_novel_strider/widgets/search_widget.dart';
 import 'characters_repository.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await NotificationService().init();
   await Hive.initFlutter();
   Hive.registerAdapter(HiveVNModelAdapter());
   Hive.registerAdapter(HiveCHaractersModelAdapter());
@@ -42,22 +45,19 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
         title: 'Flutter Demo',
+        darkTheme: ThemeData(
+            primaryColor: Colors.black,
+            brightness: Brightness.dark,
+            accentColor: const Color(0xFF29b6f6),
+            fontFamily: 'Nunito'),
         theme: ThemeData(
-            // This is the theme of your application.
-            //
-            // Try running your application with "flutter run". You'll see the
-            // application has a blue toolbar. Then, without quitting the app, try
-            // changing the primarySwatch below to Colors.green and then invoke
-            // "hot reload" (press "r" in the console where you ran "flutter run",
-            // or simply save your changes to "hot reload" in a Flutter IDE).
-            // Notice that the counter didn't reset back to zero; the application
-            // is not restarted.
             primaryColor: const Color(0xFF29b6f6),
             brightness: Brightness.light,
-            textTheme: TextTheme(),
-            primaryColorLight: const Color(0xFF73e8ff),
+            textTheme: TextTheme(headline1: TextStyle(color: Colors.white)),
+            primaryColorLight: const Color(0xFF68CEFE),
             accentColor: Colors.white,
-            primaryColorDark: const Color(0xFF0086c3),
+            primaryColorDark: const Color(0xFF29b6f6),
+            textSelectionColor: Colors.white,
             fontFamily: "Nunito"),
         home: const MyHome());
   }
@@ -90,7 +90,7 @@ class _MyHomeState extends State<MyHome> {
       body: _pages.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: _theme.primaryColor,
-        backgroundColor: Colors.white,
+        backgroundColor: _theme.accentColor,
         selectedFontSize: 10,
         unselectedFontSize: 10,
         iconSize: 20,

@@ -17,7 +17,7 @@ class TagsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _tagsRepository.getTags(_controller.result!.value.items[i].tags!);
+    _tagsRepository.getTags(_controller.result.value.items[i].tags!);
 
     final _theme = Theme.of(context);
 

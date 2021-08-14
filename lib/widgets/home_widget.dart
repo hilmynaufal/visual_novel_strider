@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:backdrop/backdrop.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -16,14 +18,22 @@ class HomeWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final _theme = Theme.of(context);
 
-    _repository.getNewReleased();
-    _repository.getMostPopular();
+    if (_repository.result.value.num == 0 ||
+        _repository.popularResult.value.num == 0) _repository.getNewReleased();
 
     return BackdropScaffold(
         frontLayerBackgroundColor: _theme.accentColor,
         appBar: BackdropAppBar(
           title: Text("Home"),
           backgroundColor: _theme.primaryColor,
+        ),
+        subHeader: BackdropSubHeader(
+          divider: Divider(
+            height: 1,
+          ),
+          padding: EdgeInsets.all(0),
+          title: BackdropToggleButton(
+              color: Colors.grey, icon: AnimatedIcons.close_menu),
         ),
         backLayer: Container(),
         frontLayer: Column(

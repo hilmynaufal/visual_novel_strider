@@ -11,7 +11,7 @@ import 'model/result.dart';
 class SocketServer extends GetxController {
   String? type;
   late Socket socket;
-  Rx<Result>? result;
+  Rx<Result> result = Result(items: [], more: false, num: 0).obs;
   var isReady = false;
   StreamController<Result> controller = StreamController<Result>();
   StreamController<CharacterResult> characterController =
@@ -37,6 +37,7 @@ class SocketServer extends GetxController {
       socket.add(utf8.encode(
           'login{"protocol":1,"client":"test","clientver":3.0,"username":"hilmyblaze","password":"Darkside1masamune"}'));
       socket.add(utf8.encode(EOM));
+      result.bindStream(controller.stream);
 
       socket.listen((event) async {
         message += utf8.decode(event);
@@ -47,14 +48,6 @@ class SocketServer extends GetxController {
           //   print(message);
           // }
           int delimiter = message.indexOf("{");
-
-          if (result == null) {
-            result = Rx<Result>(Result.fromJson(jsonDecode(message
-                .substring(delimiter)
-                .replaceAll("\n", "")
-                .replaceAll('\u0004', ""))));
-            result!.bindStream(controller.stream);
-          }
 
           if (result != null && type == "") {
             controller.add(Result.fromJson(jsonDecode(message
@@ -80,6 +73,7 @@ class SocketServer extends GetxController {
                 .replaceAll("\n", "")
                 .replaceAll('\u0004', "")));
             newReleasedController.add(temp);
+            functionCall!.call();
           }
 
           if (type == "popular") {
@@ -121,8 +115,9 @@ class SocketServer extends GetxController {
     socket.add(utf8.encode(EOM));
   }
 
-  Future<void> getNewReleased(String type) async {
+  Future<void> getNewReleased(String type, Function f) async {
     this.type = type;
+    functionCall = f;
     socket.add(utf8.encode(
         ('get vn basic,details,stats,tags,screens (released<="2021-07-30" and released>="2021-07-25" and orig_lang="ja") {"results":20, "sort":"released", "reverse":true}')));
     socket.add(utf8.encode(EOM));
@@ -131,7 +126,7 @@ class SocketServer extends GetxController {
   Future<void> getMostPopular(String type) async {
     this.type = type;
     socket.add(utf8.encode(
-        ('get vn basic,details,stats,tags,screens (title ~ ""){"results":20, "sort":"popularity", "reverse":false}')));
+        ('get vn basic,details,stats,tags,screens (title ~ ""){"results":20, "sort":"popularity", "reverse":true}')));
     socket.add(utf8.encode(EOM));
   }
 

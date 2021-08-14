@@ -41,8 +41,11 @@ dependencies:
   hive_flutter: ^1.1.0
   hive_generator: ^1.1.0
   flutter_launcher_icons: ^0.9.1
-  shimmer: ^2.0.0
+  fancy_shimmer_image: ^2.0.0+1
   transparent_image: ^2.0.0
+  flutter_local_notifications: ^8.1.1+1
+  palette_generator: ^0.3.0
+  percent_indicator: ^3.0.1
 
   cupertino_icons: ^1.0.2
 

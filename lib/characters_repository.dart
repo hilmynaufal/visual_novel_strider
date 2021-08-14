@@ -1,9 +1,5 @@
-import 'dart:developer';
-
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
-import 'package:visual_novel_strider/model/chara_item.dart';
-import 'package:visual_novel_strider/model/gender.dart';
 import 'package:visual_novel_strider/socket_server.dart';
 
 import 'model/character_result.dart';

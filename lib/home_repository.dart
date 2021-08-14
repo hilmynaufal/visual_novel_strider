@@ -20,7 +20,9 @@ class HomeRepository extends GetxController {
   Future<void> getNewReleased() async {
     result.value = Result(items: [], more: false, num: 0);
     isReady.value = false;
-    await _server.getNewReleased("new");
+    await _server.getNewReleased("new", () {
+      getMostPopular();
+    });
     isReady.value = true;
     update();
   }

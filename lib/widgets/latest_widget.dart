@@ -1,7 +1,11 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:visual_novel_strider/home_repository.dart';
+import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 
 class LatestWidget extends StatelessWidget {
   LatestWidget({Key? key}) : super(key: key);
@@ -24,14 +28,17 @@ class LatestWidget extends StatelessWidget {
                   Container(
                     height: 22,
                     width: 4,
-                    color: _theme.primaryColor,
+                    color: Colors.amber,
                   ),
                   SizedBox(
                     width: 4,
                   ),
                   Text(
                     "Latest Release",
-                    style: TextStyle(fontSize: 22),
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 22,
+                        color: _theme.primaryColor),
                   ),
                 ],
               ),
@@ -54,10 +61,11 @@ class LatestWidget extends StatelessWidget {
                               width: 100,
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
-                                child: FadeInImage.memoryNetwork(
-                                    placeholder: kTransparentImage,
-                                    fit: BoxFit.cover,
-                                    image: _repository
+                                child: FancyShimmerImage(
+                                    shimmerBaseColor: Colors.grey[300],
+                                    shimmerHighlightColor: Colors.grey[100],
+                                    boxFit: BoxFit.cover,
+                                    imageUrl: _repository
                                         .result.value.items[index].image!),
                               ),
                             ),

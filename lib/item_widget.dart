@@ -13,55 +13,72 @@ class ItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _theme = Theme.of(context);
+
     return GetBuilder<SocketServer>(
         builder: (_controller) => ListView.builder(
-            itemCount: _controller.result!.value.items.length,
+            itemCount: _controller.result.value.items.length,
             itemBuilder: (context, index) => InkWell(
                   onTap: () {
                     Get.to(() => VnDetail(
                           i: index,
                         ));
                   },
-                  splashColor: Colors.blue[200],
+                  splashColor: _theme.primaryColorLight,
                   child: Container(
                       margin: const EdgeInsets.symmetric(
                           vertical: 6, horizontal: 16),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Container(
-                            margin: const EdgeInsets.only(right: 16),
-                            height: 100,
-                            width: 70,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: (_controller.result!.value.items[index]
-                                              .imageFlagging!.sexualAvg +
-                                          _controller.result!.value.items[index]
-                                              .imageFlagging!.violenceAvg ==
-                                      0)
-                                  ? FadeInImage.memoryNetwork(
-                                      placeholder: kTransparentImage,
-                                      image: _controller
-                                          .result!.value.items[index].image!,
-                                      fit: BoxFit.cover,
-                                    )
-                                  : const Center(
-                                      child: Text(
-                                        "NSFW",
-                                        style: TextStyle(fontSize: 22),
+                          Hero(
+                            tag: 'heroImage',
+                            child: ElevatedButton(
+                              clipBehavior: Clip.antiAlias,
+                              style: ElevatedButton.styleFrom(
+                                  elevation: 4,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10)),
+                                  padding: EdgeInsets.all(0)),
+                              onPressed: () {},
+                              child: Container(
+                                height: 100,
+                                width: 70,
+                                child: (_controller.result.value.items[index]
+                                                .imageFlagging!.sexualAvg +
+                                            _controller
+                                                .result
+                                                .value
+                                                .items[index]
+                                                .imageFlagging!
+                                                .violenceAvg ==
+                                        0)
+                                    ? FadeInImage.memoryNetwork(
+                                        placeholder: kTransparentImage,
+                                        image: _controller
+                                            .result.value.items[index].image!,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : const Center(
+                                        child: Text(
+                                          "NSFW",
+                                          style: TextStyle(fontSize: 22),
+                                        ),
                                       ),
-                                    ),
+                              ),
                             ),
+                          ),
+                          SizedBox(
+                            width: 16,
                           ),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  _controller.result!.value.items[index].title,
+                                  _controller.result.value.items[index].title,
                                   overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                       fontSize: 17,
                                       fontWeight: FontWeight.bold),
                                 ),
@@ -75,24 +92,27 @@ class ItemWidget extends StatelessWidget {
                                       width: 60,
                                       child: OutlinedButton(
                                           style: OutlinedButton.styleFrom(
-                                              side: const BorderSide(
-                                                  color: Colors.blue,
-                                                  width: 0.5),
+                                              side: BorderSide(
+                                                  color: _theme.primaryColor,
+                                                  width: 1),
                                               shape: RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(
                                                           30))),
                                           onPressed: () {},
-                                          child: const Text(
+                                          child: Text(
                                             "EN",
-                                            style: TextStyle(fontSize: 8),
+                                            style: TextStyle(
+                                              fontSize: 8,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           )),
                                     ),
                                   ],
                                 ),
                                 Text(
                                   _controller
-                                      .result!.value.items[index].released!,
+                                      .result.value.items[index].released!,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w100,
                                       fontSize: 11),
@@ -106,7 +126,7 @@ class ItemWidget extends StatelessWidget {
                                     ),
                                     Text(
                                       _controller
-                                          .result!.value.items[index].rating!
+                                          .result.value.items[index].rating!
                                           .toString(),
                                       style: const TextStyle(
                                         fontWeight: FontWeight.w100,

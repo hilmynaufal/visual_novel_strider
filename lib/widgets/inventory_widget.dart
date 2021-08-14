@@ -1,14 +1,25 @@
 import 'package:backdrop/app_bar.dart';
+import 'package:backdrop/button.dart';
 import 'package:backdrop/scaffold.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:transparent_image/transparent_image.dart';
 import 'package:visual_novel_strider/hive_repository.dart';
+import 'package:visual_novel_strider/vn_detail.dart';
 
-class InventoryWidget extends StatelessWidget {
+import 'detail_widget.dart';
+
+class InventoryWidget extends StatefulWidget {
   const InventoryWidget({Key? key}) : super(key: key);
 
+  @override
+  State<InventoryWidget> createState() => _InventoryWidgetState();
+}
+
+class _InventoryWidgetState extends State<InventoryWidget> {
+  String _title = "Your Inventory";
   @override
   Widget build(BuildContext context) {
     var _theme = Theme.of(context);
@@ -16,7 +27,28 @@ class InventoryWidget extends StatelessWidget {
     return BackdropScaffold(
         appBar: BackdropAppBar(
           backgroundColor: _theme.primaryColor,
-          title: const Text("Your Inventory"),
+          title: Text(_title),
+          actions: [
+            IconButton(onPressed: () {}, icon: Icon(CupertinoIcons.add))
+          ],
+        ),
+        onBackLayerRevealed: () {
+          setState(() {
+            _title = "Your Notifications";
+          });
+        },
+        onBackLayerConcealed: () {
+          setState(() {
+            _title = "Your Inventory";
+          });
+        },
+        subHeader: Center(
+          child: Container(
+            child: BackdropToggleButton(
+              icon: AnimatedIcons.close_menu,
+              color: Colors.grey,
+            ),
+          ),
         ),
         backLayer: Container(),
         frontLayer: Container(
@@ -35,7 +67,8 @@ class InventoryWidget extends StatelessWidget {
                       child: ElevatedButton(
                         clipBehavior: Clip.hardEdge,
                         style: ElevatedButton.styleFrom(
-                            elevation: 0,
+                            splashFactory: NoSplash.splashFactory,
+                            elevation: 2,
                             padding: const EdgeInsets.all(0),
                             shape: RoundedRectangleBorder(
                                 side: BorderSide(color: _theme.primaryColor),
@@ -43,7 +76,10 @@ class InventoryWidget extends StatelessWidget {
                                     BorderRadius.all(Radius.circular(10))),
                             primary: _theme.accentColor,
                             onPrimary: Colors.black),
-                        onPressed: () {},
+                        onPressed: () {
+                          Get.to(() =>
+                              DetailWidget(item: _repository.data![index]));
+                        },
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -59,8 +95,10 @@ class InventoryWidget extends StatelessWidget {
                                             _repository.data![index]
                                                 .imageFlagging!.violenceAvg ==
                                         0)
-                                    ? Image.network(
-                                        _repository.data![index].image!,
+                                    ? FadeInImage.memoryNetwork(
+                                        placeholder: kTransparentImage,
+                                        imageScale: 3,
+                                        image: _repository.data![index].image!,
                                         fit: BoxFit.cover,
                                       )
                                     : const Center(

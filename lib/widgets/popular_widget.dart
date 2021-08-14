@@ -1,3 +1,4 @@
+import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -25,14 +26,17 @@ class PopularWidget extends StatelessWidget {
                   Container(
                     height: 22,
                     width: 4,
-                    color: _theme.primaryColor,
+                    color: Colors.amber,
                   ),
                   SizedBox(
                     width: 4,
                   ),
                   Text(
                     "Most Popular",
-                    style: TextStyle(fontSize: 22),
+                    style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: _theme.primaryColor),
                   ),
                 ],
               ),
@@ -50,18 +54,7 @@ class PopularWidget extends StatelessWidget {
                         SizedBox(width: 8),
                         Column(
                           children: [
-                            Container(
-                              height: 130,
-                              width: 100,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: FadeInImage.memoryNetwork(
-                                    placeholder: kTransparentImage,
-                                    fit: BoxFit.cover,
-                                    image: _repository.popularResult.value
-                                        .items[index].image!),
-                              ),
-                            ),
+                            itemSettings(index),
                             Container(
                               width: 100,
                               child: Text(
@@ -84,5 +77,63 @@ class PopularWidget extends StatelessWidget {
         return CircularProgressIndicator();
       },
     );
+  }
+
+  Stack itemSettings(int index) {
+    Color _background, _surface;
+    switch (index + 1) {
+      case 1:
+        {
+          _background = Colors.amber[300]!;
+          _surface = Colors.black;
+          break;
+        }
+      case 2:
+        {
+          _background = Colors.grey[300]!;
+          _surface = Colors.black;
+          break;
+        }
+      case 3:
+        {
+          _background = Colors.brown[400]!;
+          _surface = Colors.white;
+          break;
+        }
+      default:
+        {
+          _background = Colors.black87;
+          _surface = Colors.white;
+        }
+    }
+    return Stack(children: [
+      Container(
+        height: 130,
+        width: 100,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: FancyShimmerImage(
+              shimmerBaseColor: Colors.grey[300],
+              shimmerHighlightColor: Colors.grey[100],
+              boxFit: BoxFit.cover,
+              imageUrl: _repository.popularResult.value.items[index].image!),
+        ),
+      ),
+      Positioned(
+          child: Container(
+        child: Center(
+          child: Text(
+            "#${(index + 1).toString()}",
+            style: TextStyle(color: _surface, fontWeight: FontWeight.bold),
+          ),
+        ),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+            color: _background),
+        height: 20,
+        width: 40,
+      ))
+    ]);
   }
 }
