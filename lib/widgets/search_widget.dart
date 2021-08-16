@@ -5,19 +5,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
-import 'package:visual_novel_strider/hive_repository.dart';
 
-import '../characters_repository.dart';
-import '../http_client.dart';
 import 'inventory_widget.dart';
 import '../item_widget.dart';
 import '../socket_server.dart';
-import '../tags_repository.dart';
 
-class SearchWidget extends StatelessWidget {
+class SearchWidget extends StatefulWidget {
   SearchWidget({Key? key}) : super(key: key);
 
+  @override
+  State<SearchWidget> createState() => _SearchWidgetState();
+}
+
+class _SearchWidgetState extends State<SearchWidget> {
   final SocketServer _serverSocket = Get.find();
+
   final TextEditingController _searchController = TextEditingController();
 
   @override
@@ -178,5 +180,11 @@ class SearchWidget extends StatelessWidget {
           }),
       backLayerScrim: Colors.transparent,
     );
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 }

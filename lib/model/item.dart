@@ -31,7 +31,7 @@ class Item {
   Links? links;
   double? rating;
   List<String>? platforms;
-  dynamic? original;
+  dynamic original;
   List<List<double>>? tags;
   String? description;
   int? votecount;

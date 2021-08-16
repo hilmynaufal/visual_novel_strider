@@ -33,37 +33,42 @@ class CharactersWidget extends StatelessWidget {
                 direction: Axis.horizontal,
                 children: _repository.result.value.charaItems!
                     .map((e) {
-                      return Column(
-                        children: [
-                          ElevatedButton(
-                              clipBehavior: Clip.antiAlias,
-                              onPressed: () {
-                                //TODO: on pressed (CharacterDetailWidget)
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(16)),
-                                  side: BorderSide(
-                                      width: 1,
-                                      color: Theme.of(context).primaryColor),
-                                  elevation: 4,
-                                  primary: Theme.of(context).accentColor),
-                              child: e.image != null
-                                  ? FadeInImage.memoryNetwork(
-                                      imageScale: 2,
-                                      placeholder: kTransparentImage,
-                                      image: e.image!,
-                                      alignment: Alignment.topCenter,
-                                      fit: BoxFit.cover,
-                                    )
-                                  : Text("no image")),
-                          Text(
-                            e.name!,
-                            textAlign: TextAlign.center,
-                            overflow: TextOverflow.ellipsis,
-                          )
-                        ],
-                      );
+                      if (e.vns[0][2] == 0) {
+                        return Column(
+                          children: [
+                            ElevatedButton(
+                                clipBehavior: Clip.antiAlias,
+                                onPressed: () {
+                                  //TODO: on pressed (CharacterDetailWidget)
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(16)),
+                                    side: BorderSide(
+                                        width: 1,
+                                        color: Theme.of(context).primaryColor),
+                                    elevation: 4,
+                                    primary: Theme.of(context).accentColor),
+                                child: e.image != null
+                                    ? FadeInImage.memoryNetwork(
+                                        imageScale: 2,
+                                        placeholder: kTransparentImage,
+                                        image: e.image!,
+                                        alignment: Alignment.topCenter,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Text("no image")),
+                            Text(
+                              e.name!,
+                              textAlign: TextAlign.center,
+                              overflow: TextOverflow.ellipsis,
+                            )
+                          ],
+                        );
+                      } else {
+                        return SizedBox();
+                      }
                     })
                     .toList()
                     .cast<Widget>(),

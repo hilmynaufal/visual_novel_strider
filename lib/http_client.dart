@@ -51,8 +51,6 @@ class HttpClient {
   }
 
   Future<List<TagEntity?>> getTagsEntity(List<int> tags) {
-    List<TagEntity?> result;
-
     return tagDao.findTagById(tags);
   }
 

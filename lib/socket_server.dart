@@ -34,8 +34,8 @@ class SocketServer extends GetxController {
       socket = await Socket.connect("api.vndb.org", 19534);
       print("Connected");
       String message = "";
-      socket.add(utf8.encode(
-          'login{"protocol":1,"client":"test","clientver":3.0,"username":"hilmyblaze","password":"Darkside1masamune"}'));
+      socket.add(
+          utf8.encode('login{"protocol":1,"client":"test","clientver":3.0}'));
       socket.add(utf8.encode(EOM));
       result.bindStream(controller.stream);
 
@@ -109,7 +109,7 @@ class SocketServer extends GetxController {
       int id, String query, Function a, String type) async {
     this.type = type;
     functionCall = a;
-    socket.add(utf8.encode('get character basic,details (vn = ' +
+    socket.add(utf8.encode('get character basic,details,vns,traits (vn = ' +
         id.toString() +
         ') {"results":20, "page":1}'));
     socket.add(utf8.encode(EOM));

@@ -51,6 +51,10 @@ class LatestWidget extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   itemCount: _repository.result.value.num,
                   itemBuilder: (BuildContext context, int index) {
+                    dynamic _imageRating = _repository.result.value.items[index]
+                            .imageFlagging!.sexualAvg +
+                        _repository.result.value.items[index].imageFlagging!
+                            .violenceAvg;
                     return Row(
                       children: [
                         SizedBox(width: 8),
@@ -59,15 +63,23 @@ class LatestWidget extends StatelessWidget {
                             Container(
                               height: 130,
                               width: 100,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: FancyShimmerImage(
-                                    shimmerBaseColor: Colors.grey[300],
-                                    shimmerHighlightColor: Colors.grey[100],
-                                    boxFit: BoxFit.cover,
-                                    imageUrl: _repository
-                                        .result.value.items[index].image!),
-                              ),
+                              clipBehavior: Clip.antiAlias,
+                              decoration: BoxDecoration(
+                                  color: Colors.grey.shade200,
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: _imageRating == 0
+                                  ? FancyShimmerImage(
+                                      shimmerBaseColor: Colors.grey[300],
+                                      shimmerHighlightColor: Colors.grey[100],
+                                      boxFit: BoxFit.cover,
+                                      imageUrl: _repository
+                                          .result.value.items[index].image!)
+                                  : Center(
+                                      child: Text(
+                                        "NSFW",
+                                        style: TextStyle(fontSize: 22),
+                                      ),
+                                    ),
                             ),
                             Container(
                               width: 100,

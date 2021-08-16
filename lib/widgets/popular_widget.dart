@@ -80,6 +80,11 @@ class PopularWidget extends StatelessWidget {
   }
 
   Stack itemSettings(int index) {
+    String? _image = _repository.popularResult.value.items[index].image;
+    dynamic _imageRating =
+        (_repository.popularResult.value.items[index].imageFlagging!.sexualAvg +
+            _repository
+                .popularResult.value.items[index].imageFlagging!.violenceAvg);
     Color _background, _surface;
     switch (index + 1) {
       case 1:
@@ -110,14 +115,22 @@ class PopularWidget extends StatelessWidget {
       Container(
         height: 130,
         width: 100,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: FancyShimmerImage(
-              shimmerBaseColor: Colors.grey[300],
-              shimmerHighlightColor: Colors.grey[100],
-              boxFit: BoxFit.cover,
-              imageUrl: _repository.popularResult.value.items[index].image!),
-        ),
+        clipBehavior: Clip.antiAlias,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.grey.shade200),
+        child: _imageRating != 0
+            ? Center(
+                child: Text(
+                  "NSFW",
+                  style: TextStyle(fontSize: 22),
+                ),
+              )
+            : FancyShimmerImage(
+                shimmerBaseColor: Colors.grey[300],
+                shimmerHighlightColor: Colors.grey[100],
+                boxFit: BoxFit.cover,
+                imageUrl: _image!),
       ),
       Positioned(
           child: Container(

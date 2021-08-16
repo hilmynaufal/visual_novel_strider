@@ -43,18 +43,21 @@ class HiveCHaractersModel extends HiveObject {
   @HiveField(11)
   ImageFlagging? imageFlagging;
 
-  HiveCHaractersModel({
-    required this.id,
-    required this.spoilGender,
-    required this.gender,
-    required this.original,
-    required this.name,
-    required this.bloodt,
-    required this.birthday,
-    required this.imageFlagging,
-    required this.image,
-    required this.aliases,
-    required this.description,
-    required this.age,
-  });
+  @HiveField(12)
+  List<List<dynamic?>> vns;
+
+  HiveCHaractersModel(
+      {required this.id,
+      required this.spoilGender,
+      required this.gender,
+      required this.original,
+      required this.name,
+      required this.bloodt,
+      required this.birthday,
+      required this.imageFlagging,
+      required this.image,
+      required this.aliases,
+      required this.description,
+      required this.age,
+      required this.vns});
 }

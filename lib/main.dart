@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, unused_import
 
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:backdrop/backdrop.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,8 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:visual_novel_strider/hive_repository.dart';
 import 'package:visual_novel_strider/http_client.dart';
+import 'package:visual_novel_strider/model/hive_model/progress_model.dart';
+import 'package:visual_novel_strider/notification_controller.dart';
 import 'package:visual_novel_strider/notification_service.dart';
 import 'package:visual_novel_strider/widgets/inventory_widget.dart';
 import 'package:visual_novel_strider/item_widget.dart';
@@ -27,13 +30,25 @@ import 'characters_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await NotificationService().init();
+  // await NotificationService().init();
   await Hive.initFlutter();
   Hive.registerAdapter(HiveVNModelAdapter());
   Hive.registerAdapter(HiveCHaractersModelAdapter());
   Hive.registerAdapter(LinksAdapter());
   Hive.registerAdapter(ImageFlaggingAdapter());
   Hive.registerAdapter(ScreenAdapter());
+  Hive.registerAdapter(ProgressModelAdapter());
+  AwesomeNotifications().initialize(null, [
+    NotificationChannel(
+        channelKey: 'schedule_notification',
+        channelName: 'Route Schedule Notification',
+        channelDescription: 'Notification channel to send schedule reminder',
+        channelShowBadge: true,
+        onlyAlertOnce: true,
+        defaultColor: Color(0xFF9D50DD),
+        ledColor: Colors.yellow)
+  ]);
+
   runApp(const MyApp());
 }
 
@@ -45,11 +60,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
         title: 'Flutter Demo',
-        darkTheme: ThemeData(
-            primaryColor: Colors.black,
-            brightness: Brightness.dark,
-            accentColor: const Color(0xFF29b6f6),
-            fontFamily: 'Nunito'),
         theme: ThemeData(
             primaryColor: const Color(0xFF29b6f6),
             brightness: Brightness.light,
@@ -59,25 +69,24 @@ class MyApp extends StatelessWidget {
             primaryColorDark: const Color(0xFF29b6f6),
             textSelectionColor: Colors.white,
             fontFamily: "Nunito"),
-        home: const MyHome());
+        home: MyHome());
   }
 }
 
 class MyHome extends StatefulWidget {
-  const MyHome({Key? key}) : super(key: key);
+  MyHome({Key? key}) : super(key: key);
 
   @override
   State<MyHome> createState() => _MyHomeState();
 }
 
 class _MyHomeState extends State<MyHome> {
-  final HttpClient _httpClient = HttpClient();
-
   final SocketServer _serverSocket = Get.put(SocketServer());
   final TagsRepository _tagsRepository = Get.put(TagsRepository());
   final CharactersRepository _charactersRepository =
       Get.put(CharactersRepository());
   final HiveRepository _hiveRepository = Get.put(HiveRepository());
+  final NotificationController _controller = Get.put(NotificationController());
 
   int _selectedIndex = 0;
 

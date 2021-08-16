@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:core';
 import 'dart:developer';
 
 import 'package:get/get.dart';
@@ -5,25 +7,76 @@ import 'package:hive/hive.dart';
 import 'package:visual_novel_strider/model/chara_item.dart';
 import 'package:visual_novel_strider/model/hive_model/hive_characters_model.dart';
 import 'package:visual_novel_strider/model/hive_model/hive_model.dart';
+import 'package:visual_novel_strider/model/hive_model/progress_model.dart';
 import 'package:visual_novel_strider/model/item.dart';
 
 class HiveRepository extends GetxController {
   Box<HiveVNModel>? box;
+  Box<ProgressModel>? progressBox;
   bool isReady = false;
+
   List<HiveVNModel>? data = [];
+  List<ProgressModel>? progressData = [];
+
+  //initial
+  RxList<ProgressModel> result = [
+    ProgressModel(
+        id: 0,
+        character: null,
+        reminder: "",
+        playtime: "",
+        lastPlayed: DateTime.now(),
+        hexColor: 0xFF,
+        isCompleted: false,
+        endTime: "",
+        hasReminder: false,
+        isPlaying: false,
+        vnId: 0,
+        note: "")
+  ].obs;
+
+  StreamController<List<ProgressModel>> progressStreamController =
+      StreamController<List<ProgressModel>>();
 
   @override
   void onInit() async {
     box = await Hive.openBox<HiveVNModel>('inventory');
-    await getItem();
+    progressBox = await Hive.openBox<ProgressModel>('progress');
+    getItem();
+    result.bindStream(progressStreamController.stream);
   }
 
   Future<void> getItem() async {
     isReady = false;
     data = box!.values.toList();
+    progressData = progressBox!.values.toList();
     isReady = true;
-    log(data!.length.toString());
+    log("item get");
     update();
+  }
+
+  void getCharactersRoute(int vnId) {
+    List<ProgressModel> _temp =
+        progressBox!.values.where((element) => element.vnId == vnId).toList();
+    if (_temp.isNotEmpty) {
+      progressStreamController.add(_temp);
+    } else {
+      progressStreamController.add([
+        ProgressModel(
+            id: 0,
+            character: null,
+            reminder: "",
+            playtime: "",
+            lastPlayed: DateTime.now(),
+            hexColor: 0xFF,
+            isCompleted: false,
+            endTime: "",
+            hasReminder: false,
+            isPlaying: false,
+            vnId: 0,
+            note: "")
+      ]);
+    }
   }
 
   void addItem(List<CharaItem> _charaItem, Item _item) {
@@ -63,7 +116,8 @@ class HiveRepository extends GetxController {
           image: _charaItem[i].image,
           aliases: _charaItem[i].aliases,
           description: _charaItem[i].description,
-          age: _charaItem[i].age);
+          age: _charaItem[i].age,
+          vns: _charaItem[i].vns);
       _charactersList.add(characters);
     }
 
@@ -73,6 +127,30 @@ class HiveRepository extends GetxController {
       log('added');
       box!.add(temp);
     }
+  }
+
+  void addToProgress(HiveCHaractersModel hiveCHaractersModel, String reminder,
+      int hexColor, bool hasReminder, int vnID, Duration endTime, String note) {
+    var _value = ProgressModel(
+        id: hiveCHaractersModel.id,
+        character: hiveCHaractersModel,
+        reminder: reminder,
+        playtime: "0 hours 0 minutes",
+        lastPlayed: DateTime.now(),
+        hexColor: hexColor,
+        isCompleted: false,
+        endTime: endTime.toString(),
+        hasReminder: hasReminder,
+        isPlaying: true,
+        vnId: vnID,
+        note: note);
+    progressBox!.put(hiveCHaractersModel.id, _value);
+  }
+
+  Future<void> deleteProgressFromBox(int index) async {
+    await result[index].delete();
+
+    update();
   }
 
   bool checkIfAdded(Item item) {
