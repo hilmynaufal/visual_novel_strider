@@ -1,7 +1,7 @@
 import 'package:hive/hive.dart';
 import 'package:visual_novel_strider/model/hive_model/hive_characters_model.dart';
 
-import '../../links.dart';
+import '../links.dart';
 import '../image_flagging.dart';
 import '../screen.dart';
 
@@ -69,6 +69,9 @@ class HiveVNModel extends HiveObject {
   @HiveField(19)
   List<HiveCHaractersModel>? characters;
 
+  @HiveField(20)
+  bool? isComplete;
+
   HiveVNModel(
       {required this.id,
       required this.aliases,
@@ -88,5 +91,6 @@ class HiveVNModel extends HiveObject {
       required this.imageFlagging,
       required this.image,
       required this.length,
-      required this.screens});
+      required this.screens,
+      required this.isComplete});
 }

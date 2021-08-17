@@ -5,20 +5,24 @@ import 'dart:io';
 
 import 'package:get/get.dart';
 import 'package:visual_novel_strider/entity/tag_entity.dart';
+import 'package:visual_novel_strider/entity/trait_entity.dart';
 import 'package:visual_novel_strider/model/tags_result.dart';
 
 import 'package:http/http.dart' as http;
-import 'package:visual_novel_strider/tag_dao.dart';
+import 'package:visual_novel_strider/dao/tag_dao.dart';
+import 'package:visual_novel_strider/dao/trait_dao.dart';
 
-import 'database/database.dart';
+import '../database/database.dart';
 
 class HttpClient {
   late final database;
-  late List<TagEntity> tags;
 
   late final TagDao tagDao;
+  late final TraitsDao traitsDao;
 
   static const link = "https://dl.vndb.org/dump/vndb-tags-latest.json.gz";
+  static const traitLink =
+      "https://dl.vndb.org/dump/vndb-traits-latest.json.gz";
 
   HttpClient() {
     initTags();
@@ -28,12 +32,15 @@ class HttpClient {
     database =
         await $FloorAppDatabase.databaseBuilder('app_database.db').build();
     tagDao = database.tagDao;
+    traitsDao = database.traitDao;
+
     final response = await http.get(Uri.parse(link));
     String son = utf8.decode(GZipCodec().decode(response.bodyBytes));
-
     log("son");
+    final traitRespone = await http.get(Uri.parse(traitLink));
+    String traitJson = utf8.decode(GZipCodec().decode(traitRespone.bodyBytes));
+
     List<dynamic> list = jsonDecode(son);
-    // List<TagsResult> tagresult =
 
     for (int i = 0; i < list.length; i++) {
       final TagEntity tagEntity = TagEntity(
@@ -48,10 +55,30 @@ class HttpClient {
           vns: list[i]["vns"]);
       await tagDao.insertTag(tagEntity);
     }
+
+    list = jsonDecode(traitJson);
+
+    for (var i in list) {
+      final TraitEntity traitEntity = TraitEntity(
+          applicable: i['applicable'],
+          description: i['description'],
+          id: i['id'],
+          meta: i['meta'],
+          name: i['name'],
+          parents: i["parents"].length != 0 ? i["parents"][0] : 0,
+          searchable: i['searchable']);
+      await traitsDao.insertTraits(traitEntity);
+    }
+    log(list[0].toString());
+    log("message");
   }
 
   Future<List<TagEntity?>> getTagsEntity(List<int> tags) {
     return tagDao.findTagById(tags);
+  }
+
+  Future<List<TraitEntity?>> getTraitEntity(List<int> traits) {
+    return traitsDao.findTraitsById(traits);
   }
 
   // Future<void> getTagFromLocal() async {

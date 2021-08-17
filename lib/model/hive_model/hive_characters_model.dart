@@ -46,6 +46,9 @@ class HiveCHaractersModel extends HiveObject {
   @HiveField(12)
   List<List<dynamic?>> vns;
 
+  @HiveField(13)
+  List<List<dynamic?>> traits;
+
   HiveCHaractersModel(
       {required this.id,
       required this.spoilGender,
@@ -59,5 +62,6 @@ class HiveCHaractersModel extends HiveObject {
       required this.aliases,
       required this.description,
       required this.age,
-      required this.vns});
+      required this.vns,
+      required this.traits});
 }

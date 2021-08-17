@@ -4,8 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:transparent_image/transparent_image.dart';
-import 'package:visual_novel_strider/home_repository.dart';
+import 'package:visual_novel_strider/controller&repository/home_repository.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
+
+import 'vn_detail.dart';
 
 class LatestWidget extends StatelessWidget {
   LatestWidget({Key? key}) : super(key: key);
@@ -58,38 +60,45 @@ class LatestWidget extends StatelessWidget {
                     return Row(
                       children: [
                         SizedBox(width: 8),
-                        Column(
-                          children: [
-                            Container(
-                              height: 130,
-                              width: 100,
-                              clipBehavior: Clip.antiAlias,
-                              decoration: BoxDecoration(
-                                  color: Colors.grey.shade200,
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: _imageRating == 0
-                                  ? FancyShimmerImage(
-                                      shimmerBaseColor: Colors.grey[300],
-                                      shimmerHighlightColor: Colors.grey[100],
-                                      boxFit: BoxFit.cover,
-                                      imageUrl: _repository
-                                          .result.value.items[index].image!)
-                                  : Center(
-                                      child: Text(
-                                        "NSFW",
-                                        style: TextStyle(fontSize: 22),
+                        GestureDetector(
+                          onTap: () {
+                            Get.to(() => VnDetail(
+                                  item: _repository.result.value.items[index],
+                                ));
+                          },
+                          child: Column(
+                            children: [
+                              Container(
+                                height: 130,
+                                width: 100,
+                                clipBehavior: Clip.antiAlias,
+                                decoration: BoxDecoration(
+                                    color: Colors.grey.shade200,
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: _imageRating == 0
+                                    ? FancyShimmerImage(
+                                        shimmerBaseColor: Colors.grey[300],
+                                        shimmerHighlightColor: Colors.grey[100],
+                                        boxFit: BoxFit.cover,
+                                        imageUrl: _repository
+                                            .result.value.items[index].image!)
+                                    : Center(
+                                        child: Text(
+                                          "NSFW",
+                                          style: TextStyle(fontSize: 22),
+                                        ),
                                       ),
-                                    ),
-                            ),
-                            Container(
-                              width: 100,
-                              child: Text(
-                                _repository.result.value.items[index].title,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
                               ),
-                            )
-                          ],
+                              Container(
+                                width: 100,
+                                child: Text(
+                                  _repository.result.value.items[index].title,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ],
                     );

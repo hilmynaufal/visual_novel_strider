@@ -5,8 +5,8 @@ import 'dart:developer';
 import 'package:get/get.dart';
 import 'dart:io';
 
-import 'model/character_result.dart';
-import 'model/result.dart';
+import '../model/character_result.dart';
+import '../model/result.dart';
 
 class SocketServer extends GetxController {
   String? type;

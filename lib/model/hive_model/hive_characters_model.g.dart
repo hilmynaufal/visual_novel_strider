@@ -32,13 +32,16 @@ class HiveCHaractersModelAdapter extends TypeAdapter<HiveCHaractersModel> {
       vns: (fields[12] as List)
           .map((dynamic e) => (e as List).cast<dynamic>())
           .toList(),
+      traits: (fields[13] as List)
+          .map((dynamic e) => (e as List).cast<dynamic>())
+          .toList(),
     );
   }
 
   @override
   void write(BinaryWriter writer, HiveCHaractersModel obj) {
     writer
-      ..writeByte(13)
+      ..writeByte(14)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -64,7 +67,9 @@ class HiveCHaractersModelAdapter extends TypeAdapter<HiveCHaractersModel> {
       ..writeByte(11)
       ..write(obj.imageFlagging)
       ..writeByte(12)
-      ..write(obj.vns);
+      ..write(obj.vns)
+      ..writeByte(13)
+      ..write(obj.traits);
   }
 
   @override

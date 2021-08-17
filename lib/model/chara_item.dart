@@ -16,7 +16,8 @@ class CharaItem {
       required this.aliases,
       required this.description,
       required this.age,
-      required this.vns});
+      required this.vns,
+      required this.traits});
 
   dynamic spoilGender;
   Gender? gender;
@@ -31,12 +32,15 @@ class CharaItem {
   String? image;
   ImageFlagging? imageFlagging;
   List<List<dynamic>> vns;
+  List<List<dynamic>> traits;
 
   factory CharaItem.fromJson(Map<String, dynamic> json) => CharaItem(
       age: json["age"],
       aliases: json["aliases"],
       description: json["description"],
       image: json["image"],
+      traits: List<List<dynamic>>.from(
+          json["traits"].map((x) => List<dynamic>.from(x.map((x) => x)))),
       imageFlagging: json["image_flagging"] == null
           ? null
           : ImageFlagging.fromJson(json["image_flagging"]),

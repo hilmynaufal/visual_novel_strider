@@ -38,13 +38,14 @@ class HiveVNModelAdapter extends TypeAdapter<HiveVNModel> {
       image: fields[16] as String?,
       length: fields[17] as int?,
       screens: (fields[18] as List?)?.cast<Screen>(),
+      isComplete: fields[20] as bool?,
     )..characters = (fields[19] as List?)?.cast<HiveCHaractersModel>();
   }
 
   @override
   void write(BinaryWriter writer, HiveVNModel obj) {
     writer
-      ..writeByte(20)
+      ..writeByte(21)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -84,7 +85,9 @@ class HiveVNModelAdapter extends TypeAdapter<HiveVNModel> {
       ..writeByte(18)
       ..write(obj.screens)
       ..writeByte(19)
-      ..write(obj.characters);
+      ..write(obj.characters)
+      ..writeByte(20)
+      ..write(obj.isComplete);
   }
 
   @override

@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
-import 'package:visual_novel_strider/socket_server.dart';
+import 'package:visual_novel_strider/service/socket_server.dart';
 
-import 'model/character_result.dart';
+import '../model/character_result.dart';
 
 class CharactersRepository extends GetxController {
   final SocketServer _server = Get.find();

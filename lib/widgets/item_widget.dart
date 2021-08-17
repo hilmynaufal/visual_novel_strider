@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:transparent_image/transparent_image.dart';
-import 'package:visual_novel_strider/shimmer_widget.dart';
-import 'package:visual_novel_strider/socket_server.dart';
-import 'package:visual_novel_strider/vn_detail.dart';
+import 'package:visual_novel_strider/utils/shimmer_widget.dart';
+import 'package:visual_novel_strider/service/socket_server.dart';
+import 'package:visual_novel_strider/widgets/vn_detail.dart';
 
 class ItemWidget extends StatelessWidget {
   const ItemWidget({Key? key}) : super(key: key);
@@ -21,7 +21,7 @@ class ItemWidget extends StatelessWidget {
             itemBuilder: (context, index) => InkWell(
                   onTap: () {
                     Get.to(() => VnDetail(
-                          i: index,
+                          item: _controller.result.value.items[index],
                         ));
                   },
                   splashColor: _theme.primaryColorLight,
@@ -69,7 +69,7 @@ class ItemWidget extends StatelessWidget {
                             ),
                           ),
                           SizedBox(
-                            width: 16,
+                            width: 8,
                           ),
                           Expanded(
                             child: Column(
@@ -82,12 +82,21 @@ class ItemWidget extends StatelessWidget {
                                       fontSize: 17,
                                       fontWeight: FontWeight.bold),
                                 ),
+                                Text(
+                                  _controller
+                                          .result.value.items[index].original ??
+                                      _controller
+                                          .result.value.items[index].title,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      fontSize: 8, fontWeight: FontWeight.w300),
+                                ),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Container(
-                                      margin:
-                                          EdgeInsets.only(right: 8, bottom: 16),
+                                      margin: EdgeInsets.only(
+                                          right: 8, bottom: 8, top: 8),
                                       height: 18,
                                       width: 60,
                                       child: OutlinedButton(
@@ -101,7 +110,16 @@ class ItemWidget extends StatelessWidget {
                                                           30))),
                                           onPressed: () {},
                                           child: Text(
-                                            "EN",
+                                            _controller
+                                                    .result
+                                                    .value
+                                                    .items[index]
+                                                    .origLang!
+                                                    .isNotEmpty
+                                                ? _controller.result.value
+                                                    .items[index].origLang![0]
+                                                    .toUpperCase()
+                                                : "JA",
                                             style: TextStyle(
                                               fontSize: 8,
                                               fontWeight: FontWeight.bold,
@@ -110,29 +128,46 @@ class ItemWidget extends StatelessWidget {
                                     ),
                                   ],
                                 ),
-                                Text(
-                                  _controller
-                                      .result.value.items[index].released!,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w100,
-                                      fontSize: 11),
-                                ),
                                 Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    const Icon(
-                                      Icons.star,
-                                      size: 16,
-                                      color: Colors.blue,
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.calendar_today,
+                                          size: 16,
+                                          color: _theme.primaryColor,
+                                        ),
+                                        SizedBox(
+                                          width: 4,
+                                        ),
+                                        Text(
+                                          _controller.result.value.items[index]
+                                              .released!,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.w300,
+                                              fontSize: 11),
+                                        ),
+                                      ],
                                     ),
-                                    Text(
-                                      _controller
-                                          .result.value.items[index].rating!
-                                          .toString(),
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w100,
-                                        fontSize: 11,
-                                      ),
-                                    )
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.star,
+                                          size: 16,
+                                          color: _theme.primaryColor,
+                                        ),
+                                        Text(
+                                          _controller
+                                              .result.value.items[index].rating!
+                                              .toString(),
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.w100,
+                                            fontSize: 11,
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ],
                                 ),
                               ],

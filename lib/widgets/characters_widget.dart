@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:transparent_image/transparent_image.dart';
-import 'package:visual_novel_strider/characters_repository.dart';
+import 'package:visual_novel_strider/controller&repository/characters_repository.dart';
 
 class CharactersWidget extends StatelessWidget {
   CharactersWidget({Key? key}) : super(key: key);

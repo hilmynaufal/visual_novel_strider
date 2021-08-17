@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
-import 'package:visual_novel_strider/socket_server.dart';
+import 'package:visual_novel_strider/service/socket_server.dart';
 
-import 'model/result.dart';
+import '../model/result.dart';
 
 class HomeRepository extends GetxController {
   final SocketServer _server = Get.find();

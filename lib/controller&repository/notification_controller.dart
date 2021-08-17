@@ -3,21 +3,62 @@ import 'dart:developer';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:visual_novel_strider/hive_repository.dart';
+import 'package:stop_watch_timer/stop_watch_timer.dart';
+import 'package:visual_novel_strider/controller&repository/hive_repository.dart';
 import 'package:visual_novel_strider/model/hive_model/hive_characters_model.dart';
 
-import 'model/hive_model/progress_model.dart';
+import '../model/hive_model/progress_model.dart';
 
 class NotificationController extends GetxController {
   final Rx<ReceivedAction> action = ReceivedAction().obs;
 
   final HiveRepository hiveRepository = Get.find();
 
-  int hexColor = 0xFFB3BCEC;
+  final StopWatchTimer _stopWatchTimer = StopWatchTimer();
+  StopWatchTimer get stopWatchTimer => _stopWatchTimer;
+
+  // RxInt minutes = 0.obs, seconds = 0.obs;
+  RxBool isPlaying = false.obs;
+
+  RxInt hexColor = 0xFF29b6f6.obs;
   String reminder = "";
   RxBool hasReminder = false.obs;
   RxInt length = 1.obs;
   String note = "";
+
+  Map<int, int> hairColor = {
+    0: 0xFF,
+    8: 0xFFEAAEAE,
+    7: 0xFF29b6f6,
+    956: Colors.grey.shade400.value,
+    6: 0xFF8D5F51,
+    1305: Colors.orange.shade300.value,
+    10: 0xffB94E5C,
+    9: 0xFFBF6BA6,
+    4: 0xFF393B52,
+    50: 0xFFB1BA92,
+    919: Colors.cyan.shade400.value,
+    926: Colors.teal.shade300.value,
+    5: 0xFFFBDEB7,
+    11: 0xFF
+  };
+
+  Map<int, int> eyeColor = {
+    0: 0xFF,
+    110: 0xFF29b6f6,
+    53: 0xFF8D5F51,
+    113: 0xffa8b461,
+    727: 0xFFEAAEAE,
+    112: 0xFFB1BA92,
+    927: Colors.teal.shade300.value,
+    114: 0xFFBF6BA6,
+    115: 0xffB94E5C,
+    906: 0xff9A2A2A,
+    108: Colors.amber.shade900.withOpacity(0.5).value,
+    109: 0xFF393B52,
+    111: Colors.grey.shade400.value,
+    921: Colors.cyan.shade400.value,
+  };
 
   // @override
   // void onReady() {
@@ -54,7 +95,13 @@ class NotificationController extends GetxController {
       HiveCHaractersModel model, int vnID, String title) {
     Duration _endTime = Duration(hours: length.value);
     hiveRepository.addToProgress(
-        model, reminder, hexColor, hasReminder.value, vnID, _endTime, note);
+        model,
+        reminder,
+        hexColor.value == 0xFF ? 0xFF29b6f6 : hexColor.value,
+        hasReminder.value,
+        vnID,
+        _endTime,
+        note);
     setNotification(reminder, model.id, title, model.name!, model.image!);
   }
 
@@ -108,9 +155,15 @@ class NotificationController extends GetxController {
     update();
   }
 
-  Future<void> deleteProgress(int index) async {
-    await hiveRepository.deleteProgressFromBox(index);
-
+  Future<void> deleteProgress(int index, int vnID) async {
+    await hiveRepository.deleteProgressFromBox(index, vnID);
+    cancelReminder(hiveRepository.result[index].id);
     update();
+  }
+
+  void clearData() {
+    hexColor.value = 0xFF29b6f6;
+    reminder = "";
+    hasReminder.value = false;
   }
 }

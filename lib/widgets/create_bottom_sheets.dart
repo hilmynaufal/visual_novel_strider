@@ -3,11 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:get/get.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:visual_novel_strider/model/hive_model/hive_characters_model.dart';
-import 'package:visual_novel_strider/notification_controller.dart';
+import 'package:visual_novel_strider/controller&repository/notification_controller.dart';
+import 'package:visual_novel_strider/controller&repository/tags_repository.dart';
 
 class CreateBottomSheet extends StatelessWidget {
   CreateBottomSheet(
@@ -19,11 +19,14 @@ class CreateBottomSheet extends StatelessWidget {
   final int vnID;
   final String title;
   final TextEditingController _textField = TextEditingController();
+  final TagsRepository _tagsRepository = Get.find();
 
   @override
   Widget build(BuildContext context) {
     final DateTime _reminder = DateTime.now();
     final _theme = Theme.of(context);
+
+    _tagsRepository.getTraits(e.traits);
 
     return Container(
       margin: EdgeInsets.only(top: 100),
@@ -35,18 +38,20 @@ class CreateBottomSheet extends StatelessWidget {
           children: [
             Row(
               children: [
-                RotatedBox(
-                  quarterTurns: -1,
-                  child: Container(
-                    padding: EdgeInsets.only(left: 20, right: 20),
-                    color: _theme.primaryColor,
-                    child: Text(
-                      e.name!,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: _theme.accentColor,
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold),
+                Obx(
+                  () => RotatedBox(
+                    quarterTurns: -1,
+                    child: Container(
+                      padding: EdgeInsets.only(left: 20, right: 20),
+                      color: Color(_controller.hexColor.value),
+                      child: Text(
+                        e.name!,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: _theme.accentColor,
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
                 ),
@@ -74,70 +79,104 @@ class CreateBottomSheet extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
+                  child: GetBuilder<TagsRepository>(builder: (_) {
+                    if (_.isTraitReady.value) {
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Icon(
-                            Icons.remove_red_eye_rounded,
-                            color: _theme.primaryColor,
-                            size: 22,
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.face_retouching_natural_rounded,
+                                color: _theme.primaryColor,
+                                size: 18,
+                              ),
+                              SizedBox(
+                                width: 8,
+                              ),
+                              Text(
+                                _.traits.length >= 2
+                                    ? _.traits[1]!.name
+                                    : "None",
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.w300),
+                              ),
+                              SizedBox(
+                                width: 8,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  _controller.hexColor.value =
+                                      _controller.hairColor[_.traits[1]!.id] ??
+                                          0xFF;
+                                },
+                                child: Container(
+                                  height: 18,
+                                  width: 18,
+                                  decoration: BoxDecoration(
+                                      color: Color(_controller
+                                          .hairColor[_.traits[1]!.id]!),
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                          width: 1,
+                                          color: Colors.grey.shade300)),
+                                ),
+                              ),
+                            ],
                           ),
                           SizedBox(
-                            width: 8,
+                            height: 8,
                           ),
-                          Text(
-                            "Amber",
-                            style: TextStyle(
-                                fontSize: 22, fontWeight: FontWeight.w300),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: 8,
-                      ),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.face_retouching_natural_rounded,
-                            color: _theme.primaryColor,
-                            size: 22,
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.remove_red_eye_rounded,
+                                color: _theme.primaryColor,
+                                size: 18,
+                              ),
+                              SizedBox(
+                                width: 8,
+                              ),
+                              Text(
+                                _.traits[0]!.name,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w300,
+                                ),
+                              ),
+                              SizedBox(
+                                width: 8,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  _controller.hexColor.value =
+                                      _controller.eyeColor[_.traits[0]!.id] ??
+                                          0xFF;
+                                },
+                                child: Container(
+                                  height: 18,
+                                  width: 18,
+                                  decoration: BoxDecoration(
+                                      color: Color(_controller
+                                          .eyeColor[_.traits[0]!.id]!),
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                          width: 1,
+                                          color: Colors.grey.shade300)),
+                                ),
+                              ),
+                            ],
                           ),
                           SizedBox(
-                            width: 8,
+                            height: 8,
                           ),
-                          Text(
-                            "White",
-                            style: TextStyle(
-                                fontSize: 22, fontWeight: FontWeight.w300),
-                          )
                         ],
-                      ),
-                      SizedBox(
-                        height: 8,
-                      ),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.timer_rounded,
-                            color: _theme.primaryColor,
-                            size: 22,
-                          ),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          Text(
-                            "Amber",
-                            style: TextStyle(
-                                fontSize: 22, fontWeight: FontWeight.w300),
-                          )
-                        ],
-                      )
-                    ],
-                  ),
+                      );
+                    }
+                    return CircularProgressIndicator();
+                  }),
                 )
               ],
             ),
@@ -147,22 +186,24 @@ class CreateBottomSheet extends StatelessWidget {
                   quarterTurns: -1,
                   child: Container(
                     margin: EdgeInsets.only(left: 20, right: 20),
-                    child: Column(
-                      children: [
-                        Text(
-                          "Character Route Settings",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: _theme.primaryColor,
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Container(
-                          height: 5,
-                          width: 280,
-                          color: _theme.primaryColor,
-                        )
-                      ],
+                    child: Obx(
+                      () => Column(
+                        children: [
+                          Text(
+                            "Character Route Settings",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Color(_controller.hexColor.value),
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Container(
+                            height: 5,
+                            width: 280,
+                            color: Color(_controller.hexColor.value),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -186,7 +227,21 @@ class CreateBottomSheet extends StatelessWidget {
                           "Color: ",
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.w300),
-                        )
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        Obx(
+                          () => Container(
+                            height: 18,
+                            width: 18,
+                            decoration: BoxDecoration(
+                                color: Color(_controller.hexColor.value),
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                    width: 1, color: Colors.grey.shade300)),
+                          ),
+                        ),
                       ],
                     ),
                     SizedBox(

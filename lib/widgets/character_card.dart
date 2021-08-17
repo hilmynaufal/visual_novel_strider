@@ -1,14 +1,19 @@
 // ignore_for_file: unused_import
 
 import 'package:date_format/date_format.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:visual_novel_strider/controller&repository/player_controller.dart';
+
 import 'package:visual_novel_strider/model/chara_item.dart';
 import 'package:visual_novel_strider/model/hive_model/hive_model.dart';
-import 'package:visual_novel_strider/notification_controller.dart';
+import 'package:visual_novel_strider/controller&repository/notification_controller.dart';
 import 'package:visual_novel_strider/utils/duration_parse.dart';
+import 'package:visual_novel_strider/widgets/character_card_bottom_sheets.dart';
+import 'package:visual_novel_strider/widgets/player.dart';
 
 class CharacterCard extends StatelessWidget {
   CharacterCard({Key? key, required this.index, required this.item})
@@ -20,21 +25,11 @@ class CharacterCard extends StatelessWidget {
 
   final HiveVNModel item;
 
+  final PlayerController _playerController = Get.find();
+
   @override
   Widget build(BuildContext context) {
-    final TextEditingController _hoursController = TextEditingController();
-    final TextEditingController _minutesController = TextEditingController();
-
     final _theme = Theme.of(context);
-
-    final List<Color> colors = [
-      const Color(0xFFEAAEAE),
-      const Color(0xFFB3BCEC),
-      Color(0xFFE6A895),
-      Colors.grey.shade400,
-      Colors.orange.shade300,
-      Colors.orange.shade400,
-    ];
     return Column(
       children: [
         FractionallySizedBox(
@@ -42,280 +37,15 @@ class CharacterCard extends StatelessWidget {
             child: ElevatedButton(
               onPressed: () {
                 Get.bottomSheet(
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            Get.back();
-                            Get.bottomSheet(
-                                FractionallySizedBox(
-                                  widthFactor: 0.75,
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SizedBox(
-                                        height: 32,
-                                      ),
-                                      Text(
-                                        "How long do you play this route today?",
-                                        textAlign: TextAlign.center,
-                                        maxLines: 2,
-                                        style: TextStyle(
-                                            color: _theme.accentColor,
-                                            fontSize: 22),
-                                      ),
-                                      SizedBox(
-                                        height: 16,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            width: 20,
-                                            child: TextField(
-                                              controller: _hoursController,
-                                              keyboardType:
-                                                  TextInputType.number,
-                                              cursorColor: _theme.accentColor,
-                                              style: TextStyle(
-                                                  color: _theme.accentColor),
-                                              decoration: InputDecoration(
-                                                  isDense: true,
-                                                  contentPadding:
-                                                      EdgeInsets.all(0),
-                                                  enabledBorder:
-                                                      UnderlineInputBorder(
-                                                          borderSide: BorderSide(
-                                                              color: _theme
-                                                                  .accentColor)),
-                                                  focusedBorder:
-                                                      UnderlineInputBorder(
-                                                          borderSide: BorderSide(
-                                                              color: _theme
-                                                                  .accentColor)),
-                                                  border: UnderlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                          color: _theme
-                                                              .accentColor))),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 8,
-                                          ),
-                                          Text(
-                                            "hours",
-                                            style: TextStyle(
-                                                color: _theme.accentColor,
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w300),
-                                          ),
-                                          SizedBox(
-                                            width: 8,
-                                          ),
-                                          Container(
-                                            width: 20,
-                                            child: TextField(
-                                              controller: _minutesController,
-                                              keyboardType:
-                                                  TextInputType.number,
-                                              cursorColor: _theme.accentColor,
-                                              style: TextStyle(
-                                                  color: _theme.accentColor),
-                                              decoration: InputDecoration(
-                                                  isDense: true,
-                                                  contentPadding:
-                                                      EdgeInsets.all(0),
-                                                  enabledBorder:
-                                                      UnderlineInputBorder(
-                                                          borderSide: BorderSide(
-                                                              color: _theme
-                                                                  .accentColor)),
-                                                  focusedBorder:
-                                                      UnderlineInputBorder(
-                                                          borderSide: BorderSide(
-                                                              color: _theme
-                                                                  .accentColor)),
-                                                  border: UnderlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                          color: _theme
-                                                              .accentColor))),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 8,
-                                          ),
-                                          Text(
-                                            "minutes",
-                                            style: TextStyle(
-                                                color: _theme.accentColor,
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w300),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 32,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          ElevatedButton(
-                                              onPressed: () {
-                                                if (_hoursController
-                                                        .text.isNotEmpty ||
-                                                    _minutesController
-                                                        .text.isNotEmpty) {
-                                                  Get.back();
-                                                  _notificationController
-                                                      .addPlayTime(
-                                                          _hoursController.text,
-                                                          _minutesController
-                                                              .text,
-                                                          index);
-                                                } else {
-                                                  Get.back();
-                                                  Get.snackbar("Failed",
-                                                      "Add progress failed because hours or minutes is empty",
-                                                      backgroundColor:
-                                                          colors[index],
-                                                      colorText:
-                                                          _theme.accentColor,
-                                                      snackPosition:
-                                                          SnackPosition.TOP,
-                                                      snackStyle:
-                                                          SnackStyle.FLOATING);
-                                                }
-                                              },
-                                              style: ElevatedButton.styleFrom(
-                                                  splashFactory:
-                                                      NoSplash.splashFactory,
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8),
-                                                      side: BorderSide(
-                                                          color: _theme
-                                                              .accentColor)),
-                                                  elevation: 0,
-                                                  primary: Colors.transparent),
-                                              child: Text("Add")),
-                                          ElevatedButton(
-                                              onPressed: () {
-                                                Get.back();
-                                              },
-                                              style: ElevatedButton.styleFrom(
-                                                  splashFactory:
-                                                      NoSplash.splashFactory,
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8),
-                                                      side: BorderSide.none),
-                                                  elevation: 0,
-                                                  primary: Colors.transparent),
-                                              child: Text("Cancel"))
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 32,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                backgroundColor: colors[index]);
-                          },
-                          child: Container(
-                            margin: EdgeInsets.fromLTRB(16, 8, 0, 0),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.add_alarm_rounded,
-                                  color: _theme.accentColor,
-                                  size: 32,
-                                ),
-                                SizedBox(
-                                  width: 32,
-                                ),
-                                Text(
-                                  "Add Progress",
-                                  style: TextStyle(
-                                      color: _theme.accentColor,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                            margin: EdgeInsets.fromLTRB(16, 8, 0, 0),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.play_arrow_rounded,
-                                  color: _theme.accentColor,
-                                  size: 32,
-                                ),
-                                SizedBox(
-                                  width: 32,
-                                ),
-                                Text(
-                                  "Play",
-                                  style: TextStyle(
-                                      color: _theme.accentColor,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Get.back();
-                            _notificationController.deleteProgress(index);
-                          },
-                          child: Container(
-                            margin: EdgeInsets.fromLTRB(16, 8, 0, 0),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.delete,
-                                  color: _theme.accentColor,
-                                  size: 32,
-                                ),
-                                SizedBox(
-                                  width: 32,
-                                ),
-                                Text(
-                                  "Delete",
-                                  style: TextStyle(
-                                      color: _theme.accentColor,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                      ],
-                    ),
-                    backgroundColor: colors[index]);
+                    CharacterCardBottomSheet(index: index, item: item),
+                    backgroundColor: Color(_notificationController
+                        .hiveRepository.result[index].hexColor));
               },
               style: ElevatedButton.styleFrom(
                   elevation: 4,
                   padding: EdgeInsets.all(16),
-                  primary: colors[index],
+                  primary: Color(_notificationController
+                      .hiveRepository.result[index].hexColor),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16))),
               child: Column(
@@ -424,7 +154,8 @@ class CharacterCard extends StatelessWidget {
                       GetBuilder<NotificationController>(
                         builder: (_) => Column(children: [
                           FlutterSwitch(
-                            toggleColor: colors[index],
+                            toggleColor: Color(_notificationController
+                                .hiveRepository.result[index].hexColor),
                             activeColor: Colors.white.withOpacity(0.5),
                             height: 30,
                             width: 50,
@@ -464,18 +195,12 @@ class CharacterCard extends StatelessWidget {
                   SizedBox(
                     height: 16,
                   ),
-                  Text(
-                    _notificationController
-                            .hiveRepository.result[index].note.isEmpty
-                        ? _notificationController.hiveRepository.result[index]
-                                .character!.description ??
-                            "No description"
-                        : _notificationController
-                            .hiveRepository.result[index].note,
-                    maxLines: 4,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
-                  ),
+                  GetBuilder<PlayerController>(
+                      builder: (_) => _.hiveRepository.result[index].isPlaying
+                          ? Player(
+                              index: index,
+                            )
+                          : Text("l"))
                 ],
               ),
             )),

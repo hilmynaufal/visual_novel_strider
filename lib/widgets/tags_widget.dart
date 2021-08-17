@@ -2,14 +2,15 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:visual_novel_strider/socket_server.dart';
+import 'package:visual_novel_strider/model/item.dart';
+import 'package:visual_novel_strider/service/socket_server.dart';
 
-import '../tags_repository.dart';
+import '../controller&repository/tags_repository.dart';
 
 class TagsWidget extends StatelessWidget {
-  TagsWidget({Key? key, this.i}) : super(key: key);
+  TagsWidget({Key? key, required this.item}) : super(key: key);
 
-  final i;
+  final Item item;
 
   final TagsRepository _tagsRepository = Get.find();
 
@@ -17,7 +18,7 @@ class TagsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _tagsRepository.getTags(_controller.result.value.items[i].tags!);
+    _tagsRepository.getTags(item.tags!);
 
     final _theme = Theme.of(context);
 

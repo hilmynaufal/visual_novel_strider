@@ -2,7 +2,8 @@ import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:transparent_image/transparent_image.dart';
-import 'package:visual_novel_strider/home_repository.dart';
+import 'package:visual_novel_strider/controller&repository/home_repository.dart';
+import 'package:visual_novel_strider/widgets/vn_detail.dart';
 
 class PopularWidget extends StatelessWidget {
   PopularWidget({Key? key}) : super(key: key);
@@ -49,24 +50,32 @@ class PopularWidget extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   itemCount: _repository.popularResult.value.num,
                   itemBuilder: (BuildContext context, int index) {
-                    return Row(
-                      children: [
-                        SizedBox(width: 8),
-                        Column(
-                          children: [
-                            itemSettings(index),
-                            Container(
-                              width: 100,
-                              child: Text(
-                                _repository
-                                    .popularResult.value.items[index].title,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            )
-                          ],
-                        ),
-                      ],
+                    return GestureDetector(
+                      onTap: () {
+                        Get.to(() => VnDetail(
+                              item:
+                                  _repository.popularResult.value.items[index],
+                            ));
+                      },
+                      child: Row(
+                        children: [
+                          SizedBox(width: 8),
+                          Column(
+                            children: [
+                              itemSettings(index),
+                              Container(
+                                width: 100,
+                                child: Text(
+                                  _repository
+                                      .popularResult.value.items[index].title,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
                     );
                   },
                 ),

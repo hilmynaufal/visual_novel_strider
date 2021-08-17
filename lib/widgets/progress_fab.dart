@@ -1,7 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:visual_novel_strider/hive_repository.dart';
+import 'package:visual_novel_strider/controller&repository/hive_repository.dart';
 import 'package:visual_novel_strider/model/chara_item.dart';
 import 'package:visual_novel_strider/model/item.dart';
 
@@ -18,6 +20,8 @@ class ProgressFab extends StatelessWidget {
     final _theme = Theme.of(context);
     return FloatingActionButton.extended(
       onPressed: () {
+        log(charaItem[0].name!);
+        log(charaItem[0].traits[2][0].toString());
         _hiveRepository.addItem(charaItem, item);
         Get.showSnackbar(GetBar(
           backgroundColor: _theme.primaryColor,

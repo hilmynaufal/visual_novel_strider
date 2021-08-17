@@ -62,6 +62,8 @@ class _$AppDatabase extends AppDatabase {
 
   TagDao? _tagDaoInstance;
 
+  TraitsDao? _traitDaoInstance;
+
   Future<sqflite.Database> open(String path, List<Migration> migrations,
       [Callback? callback]) async {
     final databaseOptions = sqflite.OpenDatabaseOptions(
@@ -82,6 +84,8 @@ class _$AppDatabase extends AppDatabase {
       onCreate: (database, version) async {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `tags` (`id` INTEGER, `applicable` INTEGER NOT NULL, `cat` TEXT NOT NULL, `description` TEXT NOT NULL, `meta` INTEGER NOT NULL, `name` TEXT NOT NULL, `parents` INTEGER, `searchable` INTEGER NOT NULL, `vns` INTEGER NOT NULL, PRIMARY KEY (`id`))');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `traits` (`id` INTEGER NOT NULL, `applicable` INTEGER NOT NULL, `description` TEXT NOT NULL, `meta` INTEGER NOT NULL, `name` TEXT NOT NULL, `parents` INTEGER NOT NULL, `searchable` INTEGER NOT NULL, PRIMARY KEY (`id`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -92,6 +96,11 @@ class _$AppDatabase extends AppDatabase {
   @override
   TagDao get tagDao {
     return _tagDaoInstance ??= _$TagDao(database, changeListener);
+  }
+
+  @override
+  TraitsDao get traitDao {
+    return _traitDaoInstance ??= _$TraitsDao(database, changeListener);
   }
 }
 
@@ -159,6 +168,68 @@ class _$TagDao extends TagDao {
   @override
   Future<void> insertTag(TagEntity tagEntity) async {
     await _tagEntityInsertionAdapter.insert(
+        tagEntity, OnConflictStrategy.replace);
+  }
+}
+
+class _$TraitsDao extends TraitsDao {
+  _$TraitsDao(this.database, this.changeListener)
+      : _queryAdapter = QueryAdapter(database),
+        _traitEntityInsertionAdapter = InsertionAdapter(
+            database,
+            'traits',
+            (TraitEntity item) => <String, Object?>{
+                  'id': item.id,
+                  'applicable': item.applicable ? 1 : 0,
+                  'description': item.description,
+                  'meta': item.meta ? 1 : 0,
+                  'name': item.name,
+                  'parents': item.parents,
+                  'searchable': item.searchable ? 1 : 0
+                });
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  final InsertionAdapter<TraitEntity> _traitEntityInsertionAdapter;
+
+  @override
+  Future<List<TraitEntity>> findAllTags() async {
+    return _queryAdapter.queryList('select * from traits',
+        mapper: (Map<String, Object?> row) => TraitEntity(
+            applicable: (row['applicable'] as int) != 0,
+            description: row['description'] as String,
+            id: row['id'] as int,
+            meta: (row['meta'] as int) != 0,
+            name: row['name'] as String,
+            parents: row['parents'] as int,
+            searchable: (row['searchable'] as int) != 0));
+  }
+
+  @override
+  Future<List<TraitEntity?>> findTraitsById(List<int> id) async {
+    const offset = 1;
+    final _sqliteVariablesForId =
+        Iterable<String>.generate(id.length, (i) => '?${i + offset}').join(',');
+    return _queryAdapter.queryList(
+        'select * from traits where id in (' + _sqliteVariablesForId + ')',
+        mapper: (Map<String, Object?> row) => TraitEntity(
+            applicable: (row['applicable'] as int) != 0,
+            description: row['description'] as String,
+            id: row['id'] as int,
+            meta: (row['meta'] as int) != 0,
+            name: row['name'] as String,
+            parents: row['parents'] as int,
+            searchable: (row['searchable'] as int) != 0),
+        arguments: [...id]);
+  }
+
+  @override
+  Future<void> insertTraits(TraitEntity tagEntity) async {
+    await _traitEntityInsertionAdapter.insert(
         tagEntity, OnConflictStrategy.replace);
   }
 }

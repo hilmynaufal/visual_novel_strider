@@ -6,7 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:visual_novel_strider/model/hive_model/hive_model.dart';
-import 'package:visual_novel_strider/notification_controller.dart';
+import 'package:visual_novel_strider/controller&repository/notification_controller.dart';
 import 'package:visual_novel_strider/utils/duration_parse.dart';
 import 'package:visual_novel_strider/widgets/character_card.dart';
 import 'package:visual_novel_strider/widgets/create_bottom_sheets.dart';
@@ -96,7 +96,9 @@ class _DetailWidgetState extends State<DetailWidget> {
                   if (widget._notificationController.hiveRepository.result[0]
                           .id ==
                       0) {
-                    return const Text("no data");
+                    return Center(
+                        child: const Text(
+                            "Open Character's Drawer to Add Route Card"));
                   }
                   return ListView.builder(
                     shrinkWrap: true,
@@ -140,7 +142,7 @@ class _DetailWidgetState extends State<DetailWidget> {
               color: Colors.yellow.shade500,
               child: Center(
                 child: Text(
-                  "The route count analysis may not be accurate!",
+                  "Some spoiler may be not filtered!",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: Colors.yellow.shade900,
@@ -176,6 +178,7 @@ class _DetailWidgetState extends State<DetailWidget> {
                                     widget
                                         ._notificationController.hiveRepository
                                         .getCharactersRoute(widget.item.id);
+                                    widget._notificationController.clearData();
                                   });
                                 },
                                 clipBehavior: Clip.antiAlias,
