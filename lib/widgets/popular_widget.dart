@@ -1,7 +1,8 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:transparent_image/transparent_image.dart';
 import 'package:visual_novel_strider/controller&repository/home_repository.dart';
 import 'package:visual_novel_strider/widgets/vn_detail.dart';
 
@@ -21,7 +22,7 @@ class PopularWidget extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     width: 8,
                   ),
                   Container(
@@ -29,7 +30,7 @@ class PopularWidget extends StatelessWidget {
                     width: 4,
                     color: Colors.amber,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 4,
                   ),
                   Text(
@@ -41,10 +42,10 @@ class PopularWidget extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 8,
               ),
-              Container(
+              SizedBox(
                 height: 200,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
@@ -63,7 +64,7 @@ class PopularWidget extends StatelessWidget {
                           Column(
                             children: [
                               itemSettings(index),
-                              Container(
+                              SizedBox(
                                 width: 100,
                                 child: Text(
                                   _repository

@@ -1,10 +1,8 @@
-import 'dart:io';
+// ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:transparent_image/transparent_image.dart';
-import 'package:visual_novel_strider/utils/shimmer_widget.dart';
 import 'package:visual_novel_strider/service/socket_server.dart';
 import 'package:visual_novel_strider/widgets/vn_detail.dart';
 
@@ -39,9 +37,9 @@ class ItemWidget extends StatelessWidget {
                                   elevation: 4,
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10)),
-                                  padding: EdgeInsets.all(0)),
+                                  padding: const EdgeInsets.all(0)),
                               onPressed: () {},
-                              child: Container(
+                              child: SizedBox(
                                 height: 100,
                                 width: 70,
                                 child: (_controller.result.value.items[index]
@@ -68,7 +66,7 @@ class ItemWidget extends StatelessWidget {
                               ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 8,
                           ),
                           Expanded(
@@ -78,7 +76,7 @@ class ItemWidget extends StatelessWidget {
                                 Text(
                                   _controller.result.value.items[index].title,
                                   overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 17,
                                       fontWeight: FontWeight.bold),
                                 ),

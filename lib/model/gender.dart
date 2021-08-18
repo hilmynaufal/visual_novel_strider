@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:hive/hive.dart';
 
 enum Gender { M, F }

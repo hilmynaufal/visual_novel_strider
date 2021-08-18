@@ -1,4 +1,5 @@
-import 'dart:developer';
+// ignore_for_file: deprecated_member_use, sized_box_for_whitespace
+
 import 'dart:ui';
 
 import 'package:backdrop/scaffold.dart';
@@ -39,7 +40,7 @@ class VnDetail extends StatelessWidget {
           elevation: 0,
           title: Row(
             children: [
-              Icon(CupertinoIcons.bolt),
+              const Icon(CupertinoIcons.bolt),
               Text(
                 "Details",
                 style: TextStyle(
@@ -51,10 +52,10 @@ class VnDetail extends StatelessWidget {
         backgroundColor: Colors.white,
         frontLayer: _controller.isReady
             ? Container(
-                margin: EdgeInsets.symmetric(horizontal: 20),
+                margin: const EdgeInsets.symmetric(horizontal: 20),
                 child: ListView(
                   children: [
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -65,9 +66,9 @@ class VnDetail extends StatelessWidget {
                             elevation: 4,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)),
-                            padding: EdgeInsets.all(0),
+                            padding: const EdgeInsets.all(0),
                           ),
-                          child: Container(
+                          child: SizedBox(
                               width: 130,
                               height: 170,
                               child: (item.imageFlagging!.sexualAvg +
@@ -85,7 +86,7 @@ class VnDetail extends StatelessWidget {
                                       ),
                                     )),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 16,
                         ),
                         Expanded(
@@ -100,7 +101,7 @@ class VnDetail extends StatelessWidget {
                                 style: const TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),
-                              SizedBox(height: 8),
+                              const SizedBox(height: 8),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
@@ -130,7 +131,7 @@ class VnDetail extends StatelessWidget {
                                           fontSize: 20,
                                         ),
                                       ),
-                                      Text("Popularity")
+                                      const Text("Popularity")
                                     ],
                                   ),
                                   Column(
@@ -169,7 +170,7 @@ class VnDetail extends StatelessWidget {
                       item.description != null
                           ? item.description!
                           : "No Description",
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w300,
                       ),

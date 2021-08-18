@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:visual_novel_strider/model/hive_model/hive_characters_model.dart';
 

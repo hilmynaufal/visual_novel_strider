@@ -1,6 +1,5 @@
-import 'package:backdrop/app_bar.dart';
-import 'package:backdrop/button.dart';
-import 'package:backdrop/scaffold.dart';
+// ignore_for_file: deprecated_member_use, prefer_const_constructors
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -8,7 +7,6 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:visual_novel_strider/controller&repository/hive_repository.dart';
-import 'package:visual_novel_strider/widgets/vn_detail.dart';
 
 import 'detail_widget.dart';
 
@@ -20,14 +18,11 @@ class InventoryWidget extends StatefulWidget {
 }
 
 class _InventoryWidgetState extends State<InventoryWidget> {
-  String _title = "Your Inventory";
   @override
   Widget build(BuildContext context) {
     var _theme = Theme.of(context);
 
     return Container(
-        child: Container(
-      margin: EdgeInsets.only(top: 20),
       color: _theme.accentColor,
       child: GetBuilder<HiveRepository>(
         builder: (_repository) {
@@ -38,11 +33,11 @@ class _InventoryWidgetState extends State<InventoryWidget> {
               itemBuilder: (context, index) {
                 return Column(
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       height: 16,
                     ),
                     Container(
-                      margin: EdgeInsets.symmetric(horizontal: 16),
+                      margin: const EdgeInsets.symmetric(horizontal: 16),
                       child: ElevatedButton(
                         clipBehavior: Clip.hardEdge,
                         style: ElevatedButton.styleFrom(
@@ -52,8 +47,8 @@ class _InventoryWidgetState extends State<InventoryWidget> {
                             shape: RoundedRectangleBorder(
                                 side: BorderSide(
                                     color: _theme.primaryColor, width: 0),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(10))),
                             primary: _theme.accentColor,
                             onPrimary: Colors.black),
                         onPressed: () {
@@ -80,7 +75,8 @@ class _InventoryWidgetState extends State<InventoryWidget> {
                                       _repository.update();
                                     },
                                     child: Container(
-                                      margin: EdgeInsets.fromLTRB(16, 8, 0, 0),
+                                      margin: const EdgeInsets.fromLTRB(
+                                          16, 8, 0, 0),
                                       child: Row(
                                         children: [
                                           Icon(
@@ -88,7 +84,7 @@ class _InventoryWidgetState extends State<InventoryWidget> {
                                             color: _theme.accentColor,
                                             size: 32,
                                           ),
-                                          SizedBox(
+                                          const SizedBox(
                                             width: 32,
                                           ),
                                           Text(
@@ -111,7 +107,8 @@ class _InventoryWidgetState extends State<InventoryWidget> {
                                       _repository.update();
                                     },
                                     child: Container(
-                                      margin: EdgeInsets.fromLTRB(16, 8, 0, 0),
+                                      margin: const EdgeInsets.fromLTRB(
+                                          16, 8, 0, 0),
                                       child: Row(
                                         children: [
                                           Icon(
@@ -119,7 +116,7 @@ class _InventoryWidgetState extends State<InventoryWidget> {
                                             color: _theme.accentColor,
                                             size: 32,
                                           ),
-                                          SizedBox(
+                                          const SizedBox(
                                             width: 32,
                                           ),
                                           Text(
@@ -133,7 +130,7 @@ class _InventoryWidgetState extends State<InventoryWidget> {
                                       ),
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 8,
                                   ),
                                 ],
@@ -143,7 +140,7 @@ class _InventoryWidgetState extends State<InventoryWidget> {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Container(
+                            SizedBox(
                               height: 140,
                               width: 100,
                               child: ClipRRect(
@@ -189,7 +186,7 @@ class _InventoryWidgetState extends State<InventoryWidget> {
                                   ),
                                   Container(
                                     height: 121,
-                                    margin: EdgeInsets.only(left: 16),
+                                    margin: const EdgeInsets.only(left: 16),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       mainAxisAlignment:
@@ -322,6 +319,6 @@ class _InventoryWidgetState extends State<InventoryWidget> {
           return Text("no data");
         },
       ),
-    ));
+    );
   }
 }

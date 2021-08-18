@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use, prefer_const_constructors
+
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
@@ -29,7 +31,7 @@ class ProgressFab extends StatelessWidget {
             CupertinoIcons.check_mark_circled_solid,
             color: _theme.accentColor,
           ),
-          duration: Duration(seconds: 2),
+          duration: const Duration(seconds: 2),
           title: item.title,
           message: "Added to your Inventory",
         ));

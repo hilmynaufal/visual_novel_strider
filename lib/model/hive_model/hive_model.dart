@@ -34,7 +34,7 @@ class HiveVNModel extends HiveObject {
   List<String>? platforms;
 
   @HiveField(8)
-  dynamic? original;
+  dynamic original;
 
   @HiveField(9)
   List<List<double>>? tags;

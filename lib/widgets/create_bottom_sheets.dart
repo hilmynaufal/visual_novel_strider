@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, deprecated_member_use, unused_local_variable, sized_box_for_whitespace
 
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -60,7 +60,7 @@ class CreateBottomSheet extends StatelessWidget {
                     return LinearGradient(
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
-                            colors: [Colors.black, Colors.transparent])
+                            colors: const [Colors.black, Colors.transparent])
                         .createShader(
                             Rect.fromLTRB(0, 190, bounds.width, bounds.height));
                   },

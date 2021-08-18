@@ -9,7 +9,7 @@ class ScreensWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 200,
       child: ListView.builder(
           // shrinkWrap: true,
@@ -22,7 +22,7 @@ class ScreensWidget extends StatelessWidget {
                       0)
                   ? Container(
                       width: 320,
-                      margin: EdgeInsets.only(right: 8),
+                      margin: const EdgeInsets.only(right: 8),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: FadeInImage.memoryNetwork(

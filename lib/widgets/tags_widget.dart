@@ -1,9 +1,6 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:visual_novel_strider/model/item.dart';
-import 'package:visual_novel_strider/service/socket_server.dart';
 
 import '../controller&repository/tags_repository.dart';
 
@@ -13,8 +10,6 @@ class TagsWidget extends StatelessWidget {
   final Item item;
 
   final TagsRepository _tagsRepository = Get.find();
-
-  final SocketServer _controller = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +24,7 @@ class TagsWidget extends StatelessWidget {
             itemCount: _tags.entity.length,
             itemBuilder: (context, index) {
               return Container(
-                margin: EdgeInsets.fromLTRB(0, 0, 8, 0),
+                margin: const EdgeInsets.fromLTRB(0, 0, 8, 0),
                 height: 18,
                 child: OutlinedButton(
                     style: OutlinedButton.styleFrom(

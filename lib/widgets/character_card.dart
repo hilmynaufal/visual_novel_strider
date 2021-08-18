@@ -3,6 +3,7 @@
 import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -15,6 +16,7 @@ import 'package:visual_novel_strider/utils/duration_parse.dart';
 import 'package:visual_novel_strider/widgets/character_card_bottom_sheets.dart';
 import 'package:visual_novel_strider/widgets/player.dart';
 
+// ignore: must_be_immutable
 class CharacterCard extends StatelessWidget {
   CharacterCard({Key? key, required this.index, required this.item})
       : super(key: key);
@@ -25,11 +27,8 @@ class CharacterCard extends StatelessWidget {
 
   final HiveVNModel item;
 
-  final PlayerController _playerController = Get.find();
-
   @override
   Widget build(BuildContext context) {
-    final _theme = Theme.of(context);
     return Column(
       children: [
         FractionallySizedBox(
@@ -43,7 +42,7 @@ class CharacterCard extends StatelessWidget {
               },
               style: ElevatedButton.styleFrom(
                   elevation: 4,
-                  padding: EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(16),
                   primary: Color(_notificationController
                       .hiveRepository.result[index].hexColor),
                   shape: RoundedRectangleBorder(
@@ -66,7 +65,7 @@ class CharacterCard extends StatelessWidget {
                             image: _notificationController.hiveRepository
                                 .result[index].character!.image!),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 16,
                       ),
                       Expanded(
@@ -76,25 +75,25 @@ class CharacterCard extends StatelessWidget {
                             Text(
                               _notificationController.hiveRepository
                                   .result[index].character!.name!,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.bold),
                             ),
                             Text(
                               _notificationController.hiveRepository
                                   .result[index].character!.original!,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 8, fontWeight: FontWeight.w300),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 8,
                             ),
                             Row(
                               children: [
-                                Icon(
+                                const Icon(
                                   Icons.watch_later_outlined,
                                   size: 14,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 4,
                                 ),
                                 Text(
@@ -102,7 +101,7 @@ class CharacterCard extends StatelessWidget {
                                       _notificationController.hiveRepository
                                           .result[index].lastPlayed,
                                       [dd, ' ', M, ' ', yyyy]),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w300),
                                   maxLines: 2,
@@ -112,18 +111,18 @@ class CharacterCard extends StatelessWidget {
                             ),
                             Row(
                               children: [
-                                Icon(
+                                const Icon(
                                   Icons.gamepad_rounded,
                                   size: 14,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 4,
                                 ),
                                 GetBuilder<NotificationController>(
                                     builder: (_) {
                                   return Text(
                                     _.hiveRepository.result[index].playtime,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w300),
                                   );
@@ -132,17 +131,17 @@ class CharacterCard extends StatelessWidget {
                             ),
                             Row(
                               children: [
-                                Icon(
+                                const Icon(
                                   Icons.track_changes_outlined,
                                   size: 14,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 4,
                                 ),
                                 Text(
                                   durationToString(_notificationController
                                       .hiveRepository.result[index].endTime),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w300),
                                 ),
@@ -162,11 +161,11 @@ class CharacterCard extends StatelessWidget {
                             toggleSize: 20,
                             showOnOff: true,
                             valueFontSize: 11,
-                            activeIcon: Icon(
+                            activeIcon: const Icon(
                               Icons.remove_circle,
                               size: 11,
                             ),
-                            inactiveIcon: Icon(
+                            inactiveIcon: const Icon(
                               Icons.time_to_leave,
                               size: 11,
                             ),
@@ -176,35 +175,44 @@ class CharacterCard extends StatelessWidget {
                                   value, index, item.title!);
                             },
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 8,
                           ),
-                          Icon(
+                          const Icon(
                             Icons.alarm,
                             size: 16,
                           ),
                           Text(
                             _.hiveRepository.result[index].reminder,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                         ]),
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 16,
                   ),
                   GetBuilder<PlayerController>(
                       builder: (_) => _.hiveRepository.result[index].isPlaying
-                          ? Player(
-                              index: index,
-                            )
-                          : Text("l"))
+                          ? Player()
+                          : Text(
+                              _.hiveRepository.result[index].note.isNotEmpty
+                                  ? _.hiveRepository.result[index].note
+                                  : _.hiveRepository.result[index].character!
+                                          .description ??
+                                      "No description",
+                              maxLines: 4,
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ))
                 ],
               ),
             )),
-        SizedBox(
+        const SizedBox(
           height: 16,
         ),
       ],

@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -58,7 +60,7 @@ class CharactersWidget extends StatelessWidget {
                                         alignment: Alignment.topCenter,
                                         fit: BoxFit.cover,
                                       )
-                                    : Text("no image")),
+                                    : const Text("no image")),
                             Text(
                               e.name!,
                               textAlign: TextAlign.center,
@@ -67,7 +69,7 @@ class CharactersWidget extends StatelessWidget {
                           ],
                         );
                       } else {
-                        return SizedBox();
+                        return const SizedBox();
                       }
                     })
                     .toList()
@@ -80,7 +82,7 @@ class CharactersWidget extends StatelessWidget {
           ],
         );
       }
-      return Text("nodata");
+      return const Text("nodata");
     });
   }
 }

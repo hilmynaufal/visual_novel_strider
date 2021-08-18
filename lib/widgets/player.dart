@@ -4,11 +4,9 @@ import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:visual_novel_strider/controller&repository/player_controller.dart';
 
 class Player extends StatelessWidget {
-  Player({Key? key, required this.index}) : super(key: key);
+  Player({Key? key}) : super(key: key);
 
   final PlayerController _playerController = Get.find();
-
-  int index;
 
   @override
   Widget build(BuildContext context) {
@@ -20,15 +18,15 @@ class Player extends StatelessWidget {
             Text(
               StopWatchTimer.getDisplayTime(_playerController.stopList.value,
                   hours: true, milliSecond: false),
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
-            SizedBox(
+            const SizedBox(
               width: 4,
             ),
           ],
         );
       }
-      return Text("data");
+      return const Text("data");
     });
   }
 }

@@ -3,7 +3,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:transparent_image/transparent_image.dart';
 import 'package:visual_novel_strider/controller&repository/home_repository.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 
@@ -47,7 +46,7 @@ class LatestWidget extends StatelessWidget {
               SizedBox(
                 height: 8,
               ),
-              Container(
+              SizedBox(
                 height: 200,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
@@ -89,7 +88,7 @@ class LatestWidget extends StatelessWidget {
                                         ),
                                       ),
                               ),
-                              Container(
+                              SizedBox(
                                 width: 100,
                                 child: Text(
                                   _repository.result.value.items[index].title,

@@ -1,12 +1,12 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:get/get.dart';
 import 'package:visual_novel_strider/entity/tag_entity.dart';
 import 'package:visual_novel_strider/entity/trait_entity.dart';
-import 'package:visual_novel_strider/model/tags_result.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:visual_novel_strider/dao/tag_dao.dart';

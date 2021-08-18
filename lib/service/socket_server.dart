@@ -18,6 +18,7 @@ class SocketServer extends GetxController {
       StreamController<CharacterResult>();
   StreamController<Result> newReleasedController = StreamController<Result>();
   StreamController<Result> mostPopularController = StreamController<Result>();
+  // ignore: constant_identifier_names
   static const EOM = '\u0004';
 
   Function? functionCall;
@@ -32,7 +33,6 @@ class SocketServer extends GetxController {
     try {
       // socket = await Socket.connect("192.168.0.107", 19534);
       socket = await Socket.connect("api.vndb.org", 19534);
-      print("Connected");
       String message = "";
       socket.add(
           utf8.encode('login{"protocol":1,"client":"test","clientver":3.0}'));
@@ -49,7 +49,7 @@ class SocketServer extends GetxController {
           // }
           int delimiter = message.indexOf("{");
 
-          if (result != null && type == "") {
+          if (type == "") {
             controller.add(Result.fromJson(jsonDecode(message
                 .substring(delimiter)
                 .replaceAll("\n", "")
@@ -57,7 +57,6 @@ class SocketServer extends GetxController {
           }
 
           if (type == "character") {
-            print("masuk");
             CharacterResult test = CharacterResult.fromJson(jsonDecode(message
                 .substring(delimiter)
                 .replaceAll("\n", "")
@@ -67,7 +66,6 @@ class SocketServer extends GetxController {
           }
 
           if (type == "new") {
-            print("new released query");
             Result temp = Result.fromJson(jsonDecode(message
                 .substring(delimiter)
                 .replaceAll("\n", "")
@@ -77,7 +75,6 @@ class SocketServer extends GetxController {
           }
 
           if (type == "popular") {
-            print("most popular query");
             Result temp = Result.fromJson(jsonDecode(message
                 .substring(delimiter)
                 .replaceAll("\n", "")

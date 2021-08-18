@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:backdrop/backdrop.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -58,17 +60,17 @@ class _DetailWidgetState extends State<DetailWidget> {
           backgroundColor: _theme.primaryColor,
         ),
         backLayer: Container(
-          margin: EdgeInsets.only(bottom: 40),
+          margin: const EdgeInsets.only(bottom: 40),
           alignment: Alignment.center,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               Row(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     width: 8,
                   ),
                   Container(
@@ -76,7 +78,7 @@ class _DetailWidgetState extends State<DetailWidget> {
                     width: 4,
                     color: Colors.amber,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 4,
                   ),
                   Text(
@@ -88,7 +90,7 @@ class _DetailWidgetState extends State<DetailWidget> {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               Expanded(
@@ -96,9 +98,9 @@ class _DetailWidgetState extends State<DetailWidget> {
                   if (widget._notificationController.hiveRepository.result[0]
                           .id ==
                       0) {
-                    return Center(
-                        child: const Text(
-                            "Open Character's Drawer to Add Route Card"));
+                    return const Center(
+                        child:
+                            Text("Open Character's Drawer to Add Route Card"));
                   }
                   return ListView.builder(
                     shrinkWrap: true,
@@ -122,7 +124,7 @@ class _DetailWidgetState extends State<DetailWidget> {
         frontLayerBackgroundColor: _theme.accentColor,
         subHeader: Container(
           color: _theme.primaryColorDark,
-          child: Row(children: [
+          child: Row(children: const [
             SizedBox(
               width: 16,
             ),
@@ -154,7 +156,7 @@ class _DetailWidgetState extends State<DetailWidget> {
             Expanded(
               child: SingleChildScrollView(
                 child: Container(
-                  margin: EdgeInsets.only(top: 16, bottom: 16),
+                  margin: const EdgeInsets.only(top: 16, bottom: 16),
                   child: Wrap(
                       spacing: 20,
                       runSpacing: 20,
@@ -191,7 +193,7 @@ class _DetailWidgetState extends State<DetailWidget> {
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(14))),
-                                child: Container(
+                                child: SizedBox(
                                     height: 100,
                                     width: 70,
                                     child: ClipRRect(

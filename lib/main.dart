@@ -1,9 +1,10 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, unused_import
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, unused_import, deprecated_member_use, unused_field
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:backdrop/backdrop.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -22,6 +23,8 @@ import 'package:visual_novel_strider/model/image_flagging.dart';
 import 'package:visual_novel_strider/model/screen.dart';
 import 'package:visual_novel_strider/service/socket_server.dart';
 import 'package:visual_novel_strider/controller&repository/tags_repository.dart';
+import 'package:visual_novel_strider/widgets/player_card.dart';
+import 'package:visual_novel_strider/widgets/subheader_widget.dart';
 import 'package:visual_novel_strider/widgets/vn_detail.dart';
 import 'package:visual_novel_strider/widgets/home_widget.dart';
 import 'package:visual_novel_strider/widgets/search_widget.dart';
@@ -46,7 +49,16 @@ void main() async {
         channelShowBadge: true,
         onlyAlertOnce: true,
         defaultColor: Color(0xFF9D50DD),
-        ledColor: Colors.yellow)
+        ledColor: Colors.yellow),
+    NotificationChannel(
+        channelKey: 'media_player',
+        channelName: 'Media player controller',
+        channelDescription: 'Media player controller',
+        defaultPrivacy: NotificationPrivacy.Public,
+        enableVibration: false,
+        enableLights: false,
+        playSound: false,
+        locked: true),
   ]);
 
   runApp(const MyApp());
@@ -106,6 +118,7 @@ class _MyHomeState extends State<MyHome> {
   Widget build(BuildContext context) {
     // _httpClient.getTags();
     final _theme = Theme.of(context);
+    final _headerHeight = MediaQuery.of(context).size.height - 400;
 
     return BackdropScaffold(
       appBar: BackdropAppBar(
@@ -132,124 +145,32 @@ class _MyHomeState extends State<MyHome> {
           ),
         ),
       ),
-      headerHeight: MediaQuery.of(context).size.height - 360,
+      headerHeight: _headerHeight,
       frontLayerBackgroundColor: Theme.of(context).accentColor,
-      subHeader: Center(
-        child: Container(
-          child: BackdropToggleButton(
-            icon: AnimatedIcons.close_menu,
-            color: Colors.grey,
-          ),
-        ),
-      ),
+      subHeader: SubHeaderWidget(),
+      subHeaderAlwaysActive: false,
       backgroundColor: Colors.white,
-      backLayer: Container(
-        margin: EdgeInsets.fromLTRB(20, 20, 20, 10),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  elevation: 0,
-                  primary: Theme.of(context).accentColor,
-                  minimumSize: Size(double.infinity, 50)),
-              child: Row(
-                children: [
-                  Icon(
-                    CupertinoIcons.home,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  SizedBox(
-                    width: 20,
-                  ),
-                  Text("Home",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: Theme.of(context).primaryColor,
-                      )),
-                ],
+      backLayerBackgroundColor: _theme.primaryColor,
+      backLayer: GetBuilder<PlayerController>(builder: (_) {
+        if (_.nowPlaying == null) {
+          return Container(
+            margin: EdgeInsets.only(top: 40),
+            width: double.infinity,
+            child: FractionallySizedBox(
+              widthFactor: 0.8,
+              child: Text(
+                "When you playing a Characters Route, it's card will show up here!",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 22,
+                    color: _theme.accentColor,
+                    fontWeight: FontWeight.bold),
               ),
-              onPressed: () {
-                Backdrop.of(context).fling();
-                setState(() {
-                  _selectedIndex = 2;
-                });
-              },
             ),
-            SizedBox(
-              height: 10,
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  primary: Theme.of(context).accentColor,
-                  minimumSize: Size(double.infinity, 50)),
-              child: Row(
-                children: [
-                  Icon(
-                    CupertinoIcons.search,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  SizedBox(
-                    width: 20,
-                  ),
-                  Text("Search",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).primaryColor,
-                      )),
-                ],
-              ),
-              onPressed: () {
-                setState(() {
-                  _selectedIndex = 0;
-                });
-              },
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  elevation: 0,
-                  primary: Theme.of(context).accentColor,
-                  minimumSize: Size(double.infinity, 50)),
-              child: Row(
-                children: [
-                  Icon(
-                    CupertinoIcons.bag,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  SizedBox(
-                    width: 20,
-                  ),
-                  Text("Inventory",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).primaryColor,
-                      )),
-                ],
-              ),
-              onPressed: () {
-                setState(() {
-                  _selectedIndex = 1;
-                });
-              },
-            )
-          ],
-        ),
-      ),
+          );
+        }
+        return PlayerCard();
+      }),
       frontLayer: _pages.elementAt(_selectedIndex),
       bottomNavigationBar: SizedBox(
         height: 50,

@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:hive/hive.dart';
 import 'package:visual_novel_strider/model/image_flagging.dart';
 
@@ -44,10 +46,10 @@ class HiveCHaractersModel extends HiveObject {
   ImageFlagging? imageFlagging;
 
   @HiveField(12)
-  List<List<dynamic?>> vns;
+  List<List<dynamic>> vns;
 
   @HiveField(13)
-  List<List<dynamic?>> traits;
+  List<List<dynamic>> traits;
 
   HiveCHaractersModel(
       {required this.id,

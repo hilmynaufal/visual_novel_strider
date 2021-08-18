@@ -71,6 +71,7 @@ class HiveRepository extends GetxController {
 
   @override
   void onInit() async {
+    super.onInit();
     box = await Hive.openBox<HiveVNModel>('inventory');
     progressBox = await Hive.openBox<ProgressModel>('progress');
     getItem();
