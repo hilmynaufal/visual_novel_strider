@@ -18,10 +18,12 @@ class SocketServer extends GetxController {
       StreamController<CharacterResult>();
   StreamController<Result> newReleasedController = StreamController<Result>();
   StreamController<Result> mostPopularController = StreamController<Result>();
+  StreamController<Result> nakigeController = StreamController<Result>();
   // ignore: constant_identifier_names
   static const EOM = '\u0004';
 
   Function? functionCall;
+  Function? nakigeFunctionCall;
 
   @override
   void onInit() async {
@@ -80,6 +82,15 @@ class SocketServer extends GetxController {
                 .replaceAll("\n", "")
                 .replaceAll('\u0004', "")));
             mostPopularController.add(temp);
+            // nakigeFunctionCall!.call();
+          }
+
+          if (type == "nakige") {
+            Result temp = Result.fromJson(jsonDecode(message
+                .substring(delimiter)
+                .replaceAll("\n", "")
+                .replaceAll('\u0004', "")));
+            nakigeController.add(temp);
           }
 
           isReady = true;
@@ -120,10 +131,18 @@ class SocketServer extends GetxController {
     socket.add(utf8.encode(EOM));
   }
 
-  Future<void> getMostPopular(String type) async {
+  Future<void> getMostPopular(String type, Function f) async {
     this.type = type;
+    nakigeFunctionCall = f;
     socket.add(utf8.encode(
         ('get vn basic,details,stats,tags,screens (title ~ ""){"results":20, "sort":"popularity", "reverse":true}')));
+    socket.add(utf8.encode(EOM));
+  }
+
+  Future<void> getNakige(String type) async {
+    this.type = type;
+    socket.add(utf8.encode(
+        ('get vn basic,details,stats,tags,screens (tags = [596]) {"results":20, "page":1, "sort":"released", "reverse":true}')));
     socket.add(utf8.encode(EOM));
   }
 
