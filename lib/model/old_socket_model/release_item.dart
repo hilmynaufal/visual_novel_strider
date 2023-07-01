@@ -1,4 +1,4 @@
-import 'package:visual_novel_strider/model/producer.dart';
+import 'package:visual_novel_strider/model/old_socket_model/producer.dart';
 
 import 'media.dart';
 

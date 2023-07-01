@@ -1,4 +1,4 @@
-import 'package:visual_novel_strider/model/image_flagging.dart';
+import 'package:visual_novel_strider/model/old_socket_model/image_flagging.dart';
 
 import 'gender.dart';
 

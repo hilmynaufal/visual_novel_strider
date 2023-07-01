@@ -1,13 +1,13 @@
 import 'package:hive/hive.dart';
 import 'package:visual_novel_strider/model/hive_model/hive_characters_model.dart';
+import 'package:visual_novel_strider/model/old_socket_model/screen.dart';
 
-import '../links.dart';
-import '../image_flagging.dart';
-import '../screen.dart';
+import '../old_socket_model/image_flagging.dart';
+import '../old_socket_model/links.dart';
 
 part 'hive_model.g.dart';
 
-@HiveType(typeId: 0)
+// @HiveType(typeId: 0)
 class HiveVNModel extends HiveObject {
   @HiveField(0)
   int id;

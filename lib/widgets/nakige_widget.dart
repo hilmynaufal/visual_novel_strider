@@ -16,7 +16,7 @@ class NakigeWidget extends StatelessWidget {
 
     return Obx(
       () {
-        if (_repository.nakigeResult.value.num != 0) {
+        if (_repository.nakigeResult.value.results.isNotEmpty) {
           return Column(
             children: [
               Row(
@@ -35,8 +35,8 @@ class NakigeWidget extends StatelessWidget {
                   const Text(
                     "Nakige Selection",
                     style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
                     ),
                   ),
                 ],
@@ -48,13 +48,13 @@ class NakigeWidget extends StatelessWidget {
                 height: 200,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: _repository.nakigeResult.value.num,
+                  itemCount: _repository.nakigeResult.value.results.length,
                   itemBuilder: (BuildContext context, int index) {
                     return GestureDetector(
                       onTap: () {
-                        Get.to(() => VnDetail(
-                              item: _repository.nakigeResult.value.items[index],
-                            ));
+                        // Get.to(() => VnDetail(
+                        //       item: _repository.nakigeResult.value.results[index],
+                        //     ));
                       },
                       child: Row(
                         children: [
@@ -62,17 +62,30 @@ class NakigeWidget extends StatelessWidget {
                           Column(
                             children: [
                               itemSettings(index),
+                              const SizedBox(
+                                height: 4,
+                              ),
                               SizedBox(
                                 width: 100,
                                 child: Text(
-                                  _repository
-                                      .nakigeResult.value.items[index].title,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
+                                    _repository.nakigeResult.value
+                                        .results[index].title,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                    )),
                               )
                             ],
                           ),
+                          index ==
+                                  _repository
+                                          .nakigeResult.value.results.length -
+                                      1
+                              ? const SizedBox(
+                                  width: 8,
+                                )
+                              : const SizedBox()
                         ],
                       ),
                     );
@@ -81,17 +94,19 @@ class NakigeWidget extends StatelessWidget {
               ),
             ],
           );
+        } else {
+          _repository.getNakige();
+          return const CircularProgressIndicator();
         }
-        return const CircularProgressIndicator();
       },
     );
   }
 
   Widget itemSettings(int index) {
-    String? _image = _repository.nakigeResult.value.items[index].image;
-    dynamic _imageRating = (_repository
-            .nakigeResult.value.items[index].imageFlagging!.sexualAvg +
-        _repository.nakigeResult.value.items[index].imageFlagging!.violenceAvg);
+    String? _image = _repository.nakigeResult.value.results[index].image.url;
+    dynamic _imageRating =
+        (_repository.nakigeResult.value.results[index].image.sexual +
+            _repository.nakigeResult.value.results[index].image.violence);
     Color _background, _surface;
     switch (index + 1) {
       case 1:
@@ -143,7 +158,7 @@ class NakigeWidget extends StatelessWidget {
           ),
         ),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
+            borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
             color: _background),
         height: 20,

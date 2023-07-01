@@ -9,8 +9,8 @@ class NSFWWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text("NSFW",
         style: TextStyle(
-            fontSize: 22,
-            color: Colors.grey[500],
+            fontSize: 20,
+            color: Colors.grey[300],
             fontWeight: FontWeight.bold));
   }
 }

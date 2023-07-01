@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, unused_import, deprecated_member_use, unused_field
 
+import 'dart:io';
+
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:backdrop/backdrop.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,19 +10,24 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:visual_novel_strider/controller&repository/detail_repository.dart';
 import 'package:visual_novel_strider/controller&repository/player_controller.dart';
 import 'package:visual_novel_strider/controller&repository/hive_repository.dart';
+import 'package:visual_novel_strider/controller&repository/search_repository.dart';
 import 'package:visual_novel_strider/service/http_client.dart';
 import 'package:visual_novel_strider/model/hive_model/progress_model.dart';
 import 'package:visual_novel_strider/controller&repository/notification_controller.dart';
+import 'package:visual_novel_strider/service/vndb_api_kana_v2.dart';
+import 'package:visual_novel_strider/utils/myhttpoverrides.dart';
+import 'package:visual_novel_strider/widgets/empty_widget.dart';
 import 'package:visual_novel_strider/widgets/inventory_widget.dart';
 import 'package:visual_novel_strider/widgets/item_widget.dart';
 import 'package:get/get.dart';
-import 'package:visual_novel_strider/model/links.dart';
+// import 'package:visual_novel_strider/model/links.dart';
 import 'package:visual_novel_strider/model/hive_model/hive_characters_model.dart';
 import 'package:visual_novel_strider/model/hive_model/hive_model.dart';
-import 'package:visual_novel_strider/model/image_flagging.dart';
-import 'package:visual_novel_strider/model/screen.dart';
+// import 'package:visual_novel_strider/model/image_flagging.dart';
+// import 'package:visual_novel_strider/model/screen.dart';
 import 'package:visual_novel_strider/service/socket_server.dart';
 import 'package:visual_novel_strider/controller&repository/tags_repository.dart';
 import 'package:visual_novel_strider/widgets/player_card.dart';
@@ -33,14 +40,17 @@ import 'controller&repository/characters_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  //http override bad ssl
+  HttpOverrides.global = MyHttpOverrides();
+
   // await NotificationService().init();
   await Hive.initFlutter();
-  Hive.registerAdapter(HiveVNModelAdapter());
-  Hive.registerAdapter(HiveCHaractersModelAdapter());
-  Hive.registerAdapter(LinksAdapter());
-  Hive.registerAdapter(ImageFlaggingAdapter());
-  Hive.registerAdapter(ScreenAdapter());
-  Hive.registerAdapter(ProgressModelAdapter());
+  // Hive.registerAdapter(HiveVNModelAdapter());
+  // Hive.registerAdapter(HiveCHaractersModelAdapter());
+  // Hive.registerAdapter(LinksAdapter());
+  // Hive.registerAdapter(ImageFlaggingAdapter());
+  // Hive.registerAdapter(ScreenAdapter());
+  // Hive.registerAdapter(ProgressModelAdapter());
   AwesomeNotifications().initialize(null, [
     NotificationChannel(
         channelKey: 'schedule_notification',
@@ -93,7 +103,10 @@ class MyHome extends StatefulWidget {
 }
 
 class _MyHomeState extends State<MyHome> {
-  final SocketServer _serverSocket = Get.put(SocketServer());
+  // final SocketServer _serverSocket = Get.put(SocketServer());
+  final KanaServer _kanaServer = Get.put(KanaServer());
+  final SearchRepository _searchRepository = Get.put(SearchRepository());
+  final DetailRepository _detailRepository = Get.put(DetailRepository());
   final TagsRepository _tagsRepository = Get.put(TagsRepository());
   final CharactersRepository _charactersRepository =
       Get.put(CharactersRepository());
@@ -159,7 +172,7 @@ class _MyHomeState extends State<MyHome> {
             child: FractionallySizedBox(
               widthFactor: 0.8,
               child: Text(
-                "when you are playing the character route, the card will appear here!",
+                "When you are playing a character route, i'ts card will shows here!",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontSize: 22,
@@ -218,7 +231,7 @@ class _MyHomeState extends State<MyHome> {
                 FocusManager.instance.primaryFocus!.unfocus();
                 _selectedIndex = 2;
               });
-              await _serverSocket.sendMessage(_searchController.text);
+              await _searchRepository.getSearchResult(_searchController.text);
             }
           }),
       backLayerScrim: Colors.transparent,
@@ -239,8 +252,10 @@ class _MyHomeState extends State<MyHome> {
 
   // ignore: prefer_final_fields
   static List<Widget> _pages = <Widget>[
+    // HomeWidget(),
+    // InventoryWidget(),
+    EmptyWidget(),
     HomeWidget(),
-    InventoryWidget(),
     SearchWidget(),
   ];
 }

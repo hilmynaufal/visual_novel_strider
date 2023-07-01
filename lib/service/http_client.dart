@@ -68,7 +68,7 @@ class HttpClient {
           searchable: i['searchable']);
       await traitsDao.insertTraits(traitEntity);
     }
-    log("message");
+    log("json dump loaded");
   }
 
   Future<List<TagEntity?>> getTagsEntity(List<int> tags) {

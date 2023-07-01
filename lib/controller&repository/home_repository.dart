@@ -1,46 +1,59 @@
-import 'package:get/get.dart';
-import 'package:visual_novel_strider/service/socket_server.dart';
+import 'dart:developer';
 
-import '../model/result.dart';
+import 'package:get/get.dart';
+import 'package:visual_novel_strider/model/kana_model/response_result.dart';
+import 'package:visual_novel_strider/service/socket_server.dart';
+import 'package:visual_novel_strider/utils/datetime_parse.dart';
+
+import '../model/old_socket_model/result.dart';
+import '../service/vndb_api_kana_v2.dart';
 
 class HomeRepository extends GetxController {
-  final SocketServer server = Get.find();
+  // final SocketServer server = Get.find();
 
-  Rx<Result> result = Result(items: [], more: false, num: 0).obs;
-  Rx<Result> popularResult = Result(items: [], more: false, num: 0).obs;
-  Rx<Result> nakigeResult = Result(items: [], more: false, num: 0).obs;
+  final KanaServer _server = Get.find();
 
-  RxBool isReady = false.obs;
+  Rx<ResponseResult> result = ResponseResult(results: [], more: false).obs;
+  Rx<ResponseResult> popularResult =
+      ResponseResult(results: [], more: false).obs;
+  Rx<ResponseResult> nakigeResult =
+      ResponseResult(results: [], more: false).obs;
+
+  RxBool isReady = true.obs;
 
   @override
   void onReady() async {
-    result.bindStream(server.newReleasedController.stream);
-    popularResult.bindStream(server.mostPopularController.stream);
-    nakigeResult.bindStream(server.nakigeController.stream);
+    result.bindStream(_server.newReleasedController.stream);
+    popularResult.bindStream(_server.popularController.stream);
+    nakigeResult.bindStream(_server.nakigeController.stream);
+    // isReady.value = true;
   }
 
   Future<void> getNewReleased() async {
-    result.value = Result(items: [], more: false, num: 0);
-    isReady.value = false;
-    await server.getNewReleased("new", () {
-      getMostPopular();
-    });
+    // isReady.value = false;
+    log("requesting kana api home");
+    await _server.getBatchVisualNovel("rating", "new",
+        releaseDate: DateTimeParse.getFirstDayInMonth(),
+        olang: "ja",
+        filterCount: 2);
+    isReady.value = true;
     update();
   }
 
   Future<void> getMostPopular() async {
-    popularResult.value = Result(items: [], more: false, num: 0);
-    isReady.value = false;
-    await server.getMostPopular("popular", () {
-      getNakige();
-    });
-    // update();
+    // isReady.value = false;
+    log("requesting kana api popular");
+    await _server.getBatchVisualNovel("popularity", "popularity",
+        filterCount: 0);
+    isReady.value = true;
+    update();
   }
 
   Future<void> getNakige() async {
-    nakigeResult.value = Result(items: [], more: false, num: 0);
-    isReady.value = false;
-    await server.getNakige("nakige");
+    // isReady.value = false;
+    log("requesting kana api nakige");
+    await _server.getBatchVisualNovel("rating", "nakige",
+        tags: "g596", filterCount: 1);
     isReady.value = true;
     update();
   }

@@ -9,7 +9,6 @@ import 'package:get/get.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:visual_novel_strider/controller&repository/player_controller.dart';
 
-import 'package:visual_novel_strider/model/chara_item.dart';
 import 'package:visual_novel_strider/model/hive_model/hive_model.dart';
 import 'package:visual_novel_strider/controller&repository/notification_controller.dart';
 import 'package:visual_novel_strider/utils/duration_parse.dart';
@@ -39,7 +38,9 @@ class CharacterCard extends StatelessWidget {
                     .hiveRepository.result[index].hexColor));
           },
           style: ElevatedButton.styleFrom(
-              elevation: 4,
+              elevation: 2,
+              shadowColor: Color(_notificationController
+                  .hiveRepository.result[index].hexColor),
               padding: const EdgeInsets.all(16),
               primary: Color(_notificationController
                   .hiveRepository.result[index].hexColor),

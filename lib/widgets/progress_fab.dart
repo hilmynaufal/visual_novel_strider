@@ -6,8 +6,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:visual_novel_strider/controller&repository/hive_repository.dart';
-import 'package:visual_novel_strider/model/chara_item.dart';
-import 'package:visual_novel_strider/model/item.dart';
+
+import '../model/old_socket_model/chara_item.dart';
+import '../model/old_socket_model/item.dart';
 
 class ProgressFab extends StatelessWidget {
   ProgressFab({Key? key, required this.charaItem, required this.item})

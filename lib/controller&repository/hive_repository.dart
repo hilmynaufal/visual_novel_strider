@@ -5,11 +5,13 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
-import 'package:visual_novel_strider/model/chara_item.dart';
+import 'package:visual_novel_strider/model/old_socket_model/chara_item.dart';
 import 'package:visual_novel_strider/model/hive_model/hive_characters_model.dart';
 import 'package:visual_novel_strider/model/hive_model/hive_model.dart';
 import 'package:visual_novel_strider/model/hive_model/progress_model.dart';
-import 'package:visual_novel_strider/model/item.dart';
+import 'package:visual_novel_strider/model/old_socket_model/item.dart';
+
+import '../model/old_socket_model/chara_item.dart';
 
 class HiveRepository extends GetxController {
   Box<HiveVNModel>? box;

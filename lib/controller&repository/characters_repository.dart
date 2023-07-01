@@ -1,39 +1,34 @@
-import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
-import 'package:visual_novel_strider/model/release_result.dart';
-import 'package:visual_novel_strider/service/socket_server.dart';
+import 'dart:developer';
 
-import '../model/character_result.dart';
+import 'package:get/get.dart';
+import 'package:visual_novel_strider/model/kana_model/response_result.dart';
+import 'package:visual_novel_strider/service/socket_server.dart';
+import 'package:visual_novel_strider/service/vndb_api_kana_v2.dart';
+
+import '../model/old_socket_model/character_result.dart';
+import '../model/old_socket_model/release_result.dart';
 
 class CharactersRepository extends GetxController {
-  final SocketServer _server = Get.find();
+  // final SocketServer _server = Get.find();
+  final KanaServer _kanaServer = Get.find();
 
-  Rx<CharacterResult> result =
-      CharacterResult(num: 0, more: false, charaItems: null).obs;
-  Rx<ReleaseResult> releaseResult =
-      ReleaseResult(num: 0, more: false, items: null).obs;
+  Rx<ResponseResult> result = ResponseResult(more: false, results: []).obs;
+  // Rx<ReleaseResult> releaseResult =
+  //     ReleaseResult(num: 0, more: false, items: null).obs;
 
   RxBool isReady = false.obs;
 
   @override
   void onReady() {
-    result.bindStream(_server.characterController.stream);
-    releaseResult.bindStream(_server.firstReleaseController.stream);
+    result.bindStream(_kanaServer.charactersController.stream);
+    // releaseResult.bindStream(_server.firstReleaseController.stream);
   }
 
-  void getCharacters(int id) async {
-    isReady.value = false;
-    await _server.getCharaFromDatabase(id, "a", () async {
-      await getFirstRelease(id);
-      isReady.value = true;
-      update();
-    }, "character");
+  Future<void> getCharacters(String id) async {
+    log("requesting api characters");
+    await _kanaServer.getCharacters(id);
+    update();
   }
 
-  Future<void> getFirstRelease(int id) async {
-    await _server.getRelease("release", id, () {
-      isReady.value = true;
-      update();
-    });
-  }
+  Future<void> getFirstRelease(int id) async {}
 }

@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:visual_novel_strider/controller&repository/player_controller.dart';
@@ -207,8 +208,19 @@ class CharacterCardBottomSheet extends StatelessWidget {
         GestureDetector(
           onTap: () {
             Get.back();
-            _playerController.starTimer(index);
-            Get.snackbar("Play", "Now Playihn", backgroundColor: Colors.grey);
+            _playerController.isPlaying.value
+                ? Get.showSnackbar(GetBar(
+                    backgroundColor: _theme.primaryColor,
+                    icon: Icon(
+                      CupertinoIcons.xmark_circle,
+                      color: _theme.accentColor,
+                    ),
+                    duration: const Duration(seconds: 5),
+                    title: "No, you can't!",
+                    message:
+                        "Unfortunately, you can't play two girl at the same time! :(",
+                  ))
+                : _playerController.starTimer(index);
           },
           child: Container(
             margin: const EdgeInsets.fromLTRB(16, 8, 0, 0),

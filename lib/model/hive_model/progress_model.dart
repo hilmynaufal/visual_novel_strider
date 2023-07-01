@@ -3,7 +3,7 @@ import 'package:visual_novel_strider/model/hive_model/hive_characters_model.dart
 
 part 'progress_model.g.dart';
 
-@HiveType(typeId: 5)
+@HiveType(typeId: 10)
 class ProgressModel extends HiveObject {
   @HiveField(0)
   int id;

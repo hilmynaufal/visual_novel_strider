@@ -1,13 +1,12 @@
 // ignore_for_file: unused_import
 
 import 'package:hive/hive.dart';
-import 'package:visual_novel_strider/model/image_flagging.dart';
 
-import '../gender.dart';
+import '../old_socket_model/image_flagging.dart';
 
 part 'hive_characters_model.g.dart';
 
-@HiveType(typeId: 1)
+// @HiveType(typeId: 1)
 class HiveCHaractersModel extends HiveObject {
   @HiveField(0)
   int id;

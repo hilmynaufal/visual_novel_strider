@@ -1,27 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:visual_novel_strider/model/item.dart';
+import 'package:visual_novel_strider/model/old_socket_model/item.dart';
+import 'package:visual_novel_strider/model/old_socket_model/tags_result.dart';
 
 import '../controller&repository/tags_repository.dart';
+import '../model/kana_model/tag_result.dart';
 
 class TagsWidget extends StatelessWidget {
-  TagsWidget({Key? key, required this.item}) : super(key: key);
+  TagsWidget({Key? key, required this.tags}) : super(key: key);
 
-  final Item item;
+  final List<TagResult> tags;
 
-  final TagsRepository _tagsRepository = Get.find();
+  // final TagsRepository _tagsRepository = Get.find();
 
   @override
   Widget build(BuildContext context) {
-    _tagsRepository.getTags(item.tags!);
+    // _tagsRepository.getTags(item.tags!);
 
     final _theme = Theme.of(context);
 
     return GetBuilder<TagsRepository>(builder: (_tags) {
-      if (_tags.isReady) {
+      if (tags.isNotEmpty) {
         return ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: _tags.entity.length,
+            itemCount: tags.length,
             itemBuilder: (context, index) {
               return Container(
                 margin: const EdgeInsets.fromLTRB(0, 0, 8, 0),
@@ -34,7 +36,7 @@ class TagsWidget extends StatelessWidget {
                             borderRadius: BorderRadius.circular(30))),
                     onPressed: () {},
                     child: Text(
-                      _tags.entity[index]!.name,
+                      tags[index].name,
                       style:
                           TextStyle(fontSize: 12, color: _theme.primaryColor),
                     )),
