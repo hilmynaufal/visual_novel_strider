@@ -54,10 +54,10 @@ void main() async {
         channelKey: 'media_player',
         channelName: 'Media player controller',
         channelDescription: 'Media player controller',
-        defaultPrivacy: NotificationPrivacy.Public,
-        enableVibration: false,
-        enableLights: false,
-        playSound: false,
+        channelShowBadge: true,
+        onlyAlertOnce: true,
+        defaultColor: Color(0xFF9D50DD),
+        ledColor: Colors.yellow,
         locked: true),
   ]);
 
@@ -79,7 +79,7 @@ class MyApp extends StatelessWidget {
             primaryColorLight: const Color(0xFF68CEFE),
             accentColor: Colors.white,
             primaryColorDark: const Color(0xFF29b6f6),
-            textSelectionColor: Colors.white,
+            // textSelectionColor: Colors.white,
             fontFamily: "Nunito"),
         home: MyHome());
   }
@@ -159,7 +159,7 @@ class _MyHomeState extends State<MyHome> {
             child: FractionallySizedBox(
               widthFactor: 0.8,
               child: Text(
-                "When you playing a Characters Route, it's card will show up here!",
+                "when you are playing the character route, the card will appear here!",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontSize: 22,
@@ -216,7 +216,7 @@ class _MyHomeState extends State<MyHome> {
                 myFocusNode.hasFocus) {
               setState(() {
                 FocusManager.instance.primaryFocus!.unfocus();
-                _selectedIndex = 0;
+                _selectedIndex = 2;
               });
               await _serverSocket.sendMessage(_searchController.text);
             }
@@ -239,8 +239,8 @@ class _MyHomeState extends State<MyHome> {
 
   // ignore: prefer_final_fields
   static List<Widget> _pages = <Widget>[
-    SearchWidget(),
-    InventoryWidget(),
     HomeWidget(),
+    InventoryWidget(),
+    SearchWidget(),
   ];
 }

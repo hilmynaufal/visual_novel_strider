@@ -20,8 +20,8 @@ class CharactersWidget extends StatelessWidget {
           children: [
             const Text("Characters",
                 style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
                 )),
             const SizedBox(
               height: 16,

@@ -22,8 +22,6 @@ class ProgressFab extends StatelessWidget {
     final _theme = Theme.of(context);
     return FloatingActionButton.extended(
       onPressed: () {
-        log(charaItem[0].name!);
-        log(charaItem[0].traits[2][0].toString());
         _hiveRepository.addItem(charaItem, item);
         Get.showSnackbar(GetBar(
           backgroundColor: _theme.primaryColor,

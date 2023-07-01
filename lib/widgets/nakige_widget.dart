@@ -2,6 +2,7 @@ import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:visual_novel_strider/controller&repository/home_repository.dart';
+import 'package:visual_novel_strider/widgets/text/nsfw_widget.dart';
 import 'package:visual_novel_strider/widgets/vn_detail.dart';
 
 class NakigeWidget extends StatelessWidget {
@@ -26,17 +27,17 @@ class NakigeWidget extends StatelessWidget {
                   Container(
                     height: 22,
                     width: 4,
-                    color: Colors.amber,
+                    color: _theme.primaryColor,
                   ),
                   const SizedBox(
                     width: 4,
                   ),
-                  Text(
+                  const Text(
                     "Nakige Selection",
                     style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: _theme.primaryColor),
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               ),
@@ -57,7 +58,7 @@ class NakigeWidget extends StatelessWidget {
                       },
                       child: Row(
                         children: [
-                          SizedBox(width: 8),
+                          const SizedBox(width: 8),
                           Column(
                             children: [
                               itemSettings(index),
@@ -81,12 +82,12 @@ class NakigeWidget extends StatelessWidget {
             ],
           );
         }
-        return CircularProgressIndicator();
+        return const CircularProgressIndicator();
       },
     );
   }
 
-  Stack itemSettings(int index) {
+  Widget itemSettings(int index) {
     String? _image = _repository.nakigeResult.value.items[index].image;
     dynamic _imageRating = (_repository
             .nakigeResult.value.items[index].imageFlagging!.sexualAvg +
@@ -125,13 +126,8 @@ class NakigeWidget extends StatelessWidget {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: Colors.grey.shade200),
-        child: _imageRating != 0
-            ? Center(
-                child: Text(
-                  "NSFW",
-                  style: TextStyle(fontSize: 22),
-                ),
-              )
+        child: _imageRating >= 2
+            ? const Center(child: NSFWWidget())
             : FancyShimmerImage(
                 shimmerBaseColor: Colors.grey[300],
                 shimmerHighlightColor: Colors.grey[100],

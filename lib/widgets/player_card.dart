@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +32,7 @@ class PlayerCard extends StatelessWidget {
               width: 140,
               color: _theme.accentColor,
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
             SizedBox(
@@ -152,7 +154,7 @@ class PlayerCard extends StatelessWidget {
                                   onTap: () {
                                     _.resumeTimer();
                                   },
-                                  child: Icon(
+                                  child: const Icon(
                                     Icons.play_arrow_rounded,
                                     size: 48,
                                   ),
@@ -161,7 +163,7 @@ class PlayerCard extends StatelessWidget {
                                   onTap: () {
                                     _.pauseTimer();
                                   },
-                                  child: Icon(
+                                  child: const Icon(
                                     Icons.pause,
                                     size: 40,
                                   ),
@@ -180,7 +182,7 @@ class PlayerCard extends StatelessWidget {
                             Column(
                               children: [
                                 Player(),
-                                Text(
+                                const Text(
                                   "Time Elapsed",
                                   style: TextStyle(fontSize: 10),
                                 )

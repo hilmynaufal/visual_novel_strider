@@ -68,6 +68,7 @@ class TagsRepository extends GetxController {
 
   void getTags(List<List<double>> a) async {
     isReady = false;
+
     List<int> id = [0];
     for (int i = 0; i < a.length; i++) {
       id.add(a[i][0].toInt());
@@ -77,12 +78,16 @@ class TagsRepository extends GetxController {
 
     entity = [];
 
+    a.sort((x, y) => x.indexOf(1).compareTo(y.indexOf(1)));
+    a = a.reversed.toList();
+
+    log(a[0][1].toString());
+
     for (int i = 0; i < _temp.length; i++) {
       if (_temp[i]!.cat == "cont") {
         entity.add(_temp[i]);
       }
     }
-    log(entity[0]!.name.toString());
 
     isReady = true;
 

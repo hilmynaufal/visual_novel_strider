@@ -17,14 +17,13 @@ class ScreensWidget extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           itemCount: screenshot!.length,
           itemBuilder: (context, index) =>
-              (screenshot![index].flagging!.sexualAvg! +
-                          screenshot![index].flagging!.violenceAvg! ==
-                      0)
+              (screenshot![index].flagging!.sexualAvg! <= 1 &&
+                      screenshot![index].flagging!.violenceAvg! <= 1)
                   ? Container(
-                      width: 320,
+                      width: 340,
                       margin: const EdgeInsets.only(right: 8),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(8),
                         child: FadeInImage.memoryNetwork(
                           placeholder: kTransparentImage,
                           image: screenshot![index].image!,

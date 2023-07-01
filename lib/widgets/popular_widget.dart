@@ -4,6 +4,7 @@ import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:visual_novel_strider/controller&repository/home_repository.dart';
+import 'package:visual_novel_strider/widgets/text/nsfw_widget.dart';
 import 'package:visual_novel_strider/widgets/vn_detail.dart';
 
 class PopularWidget extends StatelessWidget {
@@ -15,77 +16,68 @@ class PopularWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final _theme = Theme.of(context);
 
-    return Obx(
-      () {
-        if (_repository.popularResult.value.num != 0) {
-          return Column(
-            children: [
-              Row(
-                children: [
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  Container(
-                    height: 22,
-                    width: 4,
-                    color: Colors.amber,
-                  ),
-                  const SizedBox(
-                    width: 4,
-                  ),
-                  Text(
-                    "Most Popular",
-                    style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: _theme.primaryColor),
-                  ),
-                ],
+    return Column(
+      children: [
+        Row(
+          children: [
+            const SizedBox(
+              width: 8,
+            ),
+            Container(
+              height: 22,
+              width: 4,
+              color: _theme.primaryColor,
+            ),
+            const SizedBox(
+              width: 4,
+            ),
+            Text(
+              "Most Popular",
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
               ),
-              const SizedBox(
-                height: 8,
-              ),
-              SizedBox(
-                height: 200,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: _repository.popularResult.value.num,
-                  itemBuilder: (BuildContext context, int index) {
-                    return GestureDetector(
-                      onTap: () {
-                        Get.to(() => VnDetail(
-                              item:
-                                  _repository.popularResult.value.items[index],
-                            ));
-                      },
-                      child: Row(
-                        children: [
-                          SizedBox(width: 8),
-                          Column(
-                            children: [
-                              itemSettings(index),
-                              SizedBox(
-                                width: 100,
-                                child: Text(
-                                  _repository
-                                      .popularResult.value.items[index].title,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              )
-                            ],
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 8,
+        ),
+        SizedBox(
+          height: 180,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: _repository.popularResult.value.num,
+            itemBuilder: (BuildContext context, int index) {
+              return GestureDetector(
+                onTap: () {
+                  Get.to(() => VnDetail(
+                        item: _repository.popularResult.value.items[index],
+                      ));
+                },
+                child: Row(
+                  children: [
+                    SizedBox(width: 8),
+                    Column(
+                      children: [
+                        itemSettings(index),
+                        SizedBox(
+                          width: 100,
+                          child: Text(
+                            _repository.popularResult.value.items[index].title,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                        ],
-                      ),
-                    );
-                  },
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          );
-        }
-        return CircularProgressIndicator();
-      },
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 
@@ -129,12 +121,9 @@ class PopularWidget extends StatelessWidget {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: Colors.grey.shade200),
-        child: _imageRating != 0
+        child: _imageRating >= 2
             ? Center(
-                child: Text(
-                  "NSFW",
-                  style: TextStyle(fontSize: 22),
-                ),
+                child: NSFWWidget(),
               )
             : FancyShimmerImage(
                 shimmerBaseColor: Colors.grey[300],

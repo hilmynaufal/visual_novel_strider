@@ -67,11 +67,11 @@ class _InventoryWidgetState extends State<InventoryWidget> {
                                           .data![index].isComplete!) {
                                         _repository.data![index].isComplete =
                                             false;
-                                        _repository.data![index].save();
                                       } else {
                                         _repository.data![index].isComplete =
                                             true;
                                       }
+                                      _repository.data![index].save();
                                       _repository.update();
                                     },
                                     child: Container(

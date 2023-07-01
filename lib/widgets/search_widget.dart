@@ -20,7 +20,7 @@ class _SearchWidgetState extends State<SearchWidget> {
       margin: const EdgeInsets.symmetric(vertical: 16),
       child: Center(
         child: GetBuilder<SocketServer>(builder: (_controller) {
-          if (!_controller.isReady) {
+          if (!_controller.isReady.value) {
             return const Text("No Data");
           }
           return const ItemWidget();

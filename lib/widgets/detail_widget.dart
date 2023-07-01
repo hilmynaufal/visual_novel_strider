@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:visual_novel_strider/model/hive_model/hive_model.dart';
@@ -63,8 +64,38 @@ class _DetailWidgetState extends State<DetailWidget> {
           margin: const EdgeInsets.only(bottom: 40),
           alignment: Alignment.center,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const SizedBox(
+                height: 16,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.amber.shade700,
+                          padding: EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 20),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16))),
+                      onPressed: () {},
+                      child: Column(
+                        children: [
+                          const Icon(
+                            Icons.animation_sharp,
+                            size: 40,
+                          ),
+                          Text(
+                            "Share",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      )),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                ],
+              ),
               const SizedBox(
                 height: 16,
               ),
@@ -107,11 +138,9 @@ class _DetailWidgetState extends State<DetailWidget> {
                     scrollDirection: Axis.vertical,
                     itemCount: widget
                         ._notificationController.hiveRepository.result.length,
-                    itemBuilder: (context, index) => Column(
-                      children: [
-                        CharacterCard(index: index, item: widget.item)
-                      ],
-                    ),
+                    itemBuilder: (context, index) => SizedBox(
+                        height: 215,
+                        child: CharacterCard(index: index, item: widget.item)),
                   );
                 }),
               ),

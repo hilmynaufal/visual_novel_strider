@@ -15,6 +15,7 @@ class HiveRepository extends GetxController {
   Box<HiveVNModel>? box;
   Box<ProgressModel>? progressBox;
   bool isReady = false;
+  bool isLatestScheduleReady = false;
 
   List<HiveVNModel>? data = [];
   List<ProgressModel>? progressData = [];
@@ -85,6 +86,35 @@ class HiveRepository extends GetxController {
     isReady = true;
     log("item get");
     update();
+  }
+
+  void getLatestSchedule() {
+    List<ProgressModel> _temp = progressBox!.values
+        .where((element) => element.hasReminder == true)
+        .toList();
+
+    _temp.sort((x, y) => x.reminder.compareTo(y.reminder));
+
+    if (_temp.isNotEmpty) {
+      progressStreamController.add(_temp);
+    } else {
+      progressStreamController.add([
+        ProgressModel(
+            id: 0,
+            character: null,
+            reminder: "",
+            playtime: "",
+            lastPlayed: DateTime.now(),
+            hexColor: 0xFF,
+            isCompleted: false,
+            endTime: "",
+            hasReminder: false,
+            isPlaying: false,
+            vnId: 0,
+            note: "")
+      ]);
+    }
+    isLatestScheduleReady = true;
   }
 
   void getCharactersRoute(int vnId) {

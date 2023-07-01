@@ -29,41 +29,34 @@ class ItemWidget extends StatelessWidget {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Hero(
-                            tag: 'heroImage',
-                            child: ElevatedButton(
-                              clipBehavior: Clip.antiAlias,
-                              style: ElevatedButton.styleFrom(
-                                  elevation: 4,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10)),
-                                  padding: const EdgeInsets.all(0)),
-                              onPressed: () {},
-                              child: SizedBox(
-                                height: 100,
-                                width: 70,
-                                child: (_controller.result.value.items[index]
-                                                .imageFlagging!.sexualAvg +
-                                            _controller
-                                                .result
-                                                .value
-                                                .items[index]
-                                                .imageFlagging!
-                                                .violenceAvg ==
-                                        0)
-                                    ? FadeInImage.memoryNetwork(
-                                        placeholder: kTransparentImage,
-                                        image: _controller
-                                            .result.value.items[index].image!,
-                                        fit: BoxFit.cover,
-                                      )
-                                    : const Center(
-                                        child: Text(
-                                          "NSFW",
-                                          style: TextStyle(fontSize: 22),
-                                        ),
+                          ElevatedButton(
+                            clipBehavior: Clip.antiAlias,
+                            style: ElevatedButton.styleFrom(
+                                elevation: 4,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                padding: const EdgeInsets.all(0)),
+                            onPressed: () {},
+                            child: SizedBox(
+                              height: 100,
+                              width: 70,
+                              child: (_controller.result.value.items[index]
+                                              .imageFlagging!.sexualAvg +
+                                          _controller.result.value.items[index]
+                                              .imageFlagging!.violenceAvg ==
+                                      0)
+                                  ? FadeInImage.memoryNetwork(
+                                      placeholder: kTransparentImage,
+                                      image: _controller
+                                          .result.value.items[index].image!,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : const Center(
+                                      child: Text(
+                                        "NSFW",
+                                        style: TextStyle(fontSize: 22),
                                       ),
-                              ),
+                                    ),
                             ),
                           ),
                           const SizedBox(
@@ -141,7 +134,10 @@ class ItemWidget extends StatelessWidget {
                                         ),
                                         Text(
                                           _controller.result.value.items[index]
-                                              .released!,
+                                                  .released!.isNotEmpty
+                                              ? _controller.result.value
+                                                  .items[index].released!
+                                              : "None",
                                           style: const TextStyle(
                                               fontWeight: FontWeight.w300,
                                               fontSize: 11),

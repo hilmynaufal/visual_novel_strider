@@ -26,7 +26,7 @@ class Player extends StatelessWidget {
           ],
         );
       }
-      return const Text("data");
+      return const Text("Error: Something Happens.");
     });
   }
 }

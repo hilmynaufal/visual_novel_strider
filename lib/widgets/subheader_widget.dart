@@ -1,4 +1,5 @@
 import 'package:backdrop/backdrop.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -20,7 +21,7 @@ class SubHeaderWidget extends StatelessWidget {
             padding: EdgeInsets.zero,
             automaticallyImplyTrailing: false,
             title: Container(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               child: Row(
                 children: [
                   Container(
@@ -36,14 +37,23 @@ class SubHeaderWidget extends StatelessWidget {
                           image: _.nowPlaying!.character!.image!),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 8,
                   ),
-                  Text(
-                    "Playing",
-                    style: TextStyle(color: Colors.white),
+                  Row(
+                    children: [
+                      Text(
+                        "Now Playing",
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                      Icon(
+                        Icons.play_arrow,
+                        color: Colors.white,
+                      )
+                    ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 8,
                   ),
                 ],
@@ -53,7 +63,7 @@ class SubHeaderWidget extends StatelessWidget {
           ),
         );
       }
-      return BackdropSubHeader(
+      return const BackdropSubHeader(
           padding: EdgeInsets.all(0),
           automaticallyImplyTrailing: false,
           title: BackdropToggleButton(

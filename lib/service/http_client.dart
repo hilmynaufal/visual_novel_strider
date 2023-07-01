@@ -36,7 +36,6 @@ class HttpClient {
 
     final response = await http.get(Uri.parse(link));
     String son = utf8.decode(GZipCodec().decode(response.bodyBytes));
-    log("son");
     final traitRespone = await http.get(Uri.parse(traitLink));
     String traitJson = utf8.decode(GZipCodec().decode(traitRespone.bodyBytes));
 
@@ -69,7 +68,6 @@ class HttpClient {
           searchable: i['searchable']);
       await traitsDao.insertTraits(traitEntity);
     }
-    log(list[0].toString());
     log("message");
   }
 
