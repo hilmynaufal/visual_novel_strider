@@ -8,7 +8,7 @@ part of 'progress_model.dart';
 
 class ProgressModelAdapter extends TypeAdapter<ProgressModel> {
   @override
-  final int typeId = 5;
+  final int typeId = 8;
 
   @override
   ProgressModel read(BinaryReader reader) {
@@ -17,8 +17,8 @@ class ProgressModelAdapter extends TypeAdapter<ProgressModel> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return ProgressModel(
-      id: fields[0] as int,
-      character: fields[2] as HiveCHaractersModel?,
+      id: fields[0] as String,
+      character: fields[2] as IndividualResult?,
       reminder: fields[3] as String,
       playtime: fields[4] as String,
       lastPlayed: fields[5] as DateTime,
@@ -27,7 +27,7 @@ class ProgressModelAdapter extends TypeAdapter<ProgressModel> {
       endTime: fields[10] as String,
       hasReminder: fields[9] as bool,
       isPlaying: fields[8] as bool,
-      vnId: fields[1] as int,
+      vnId: fields[1] as String,
       note: fields[11] as String,
     );
   }

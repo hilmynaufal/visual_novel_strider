@@ -1,5 +1,7 @@
 import 'package:hive/hive.dart';
 
+part 'screenshot_result.g.dart';
+
 @HiveType(typeId: 4)
 class Screenshot {
   @HiveField(1)

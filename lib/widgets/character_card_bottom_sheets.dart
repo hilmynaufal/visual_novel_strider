@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:visual_novel_strider/controller&repository/player_controller.dart';
 import 'package:visual_novel_strider/model/hive_model/hive_model.dart';
+import 'package:visual_novel_strider/model/kana_model/detail_result.dart';
 
 import '../controller&repository/notification_controller.dart';
 
@@ -16,7 +17,7 @@ class CharacterCardBottomSheet extends StatelessWidget {
 
   final int index;
 
-  final HiveVNModel item;
+  final DetailResult item;
 
   final PlayerController _playerController = Get.find();
 

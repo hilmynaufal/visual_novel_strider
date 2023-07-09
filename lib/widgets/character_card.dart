@@ -7,10 +7,12 @@ import 'package:flutter/painting.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:visual_novel_strider/controller&repository/detail_repository.dart';
 import 'package:visual_novel_strider/controller&repository/player_controller.dart';
 
 import 'package:visual_novel_strider/model/hive_model/hive_model.dart';
 import 'package:visual_novel_strider/controller&repository/notification_controller.dart';
+import 'package:visual_novel_strider/model/kana_model/detail_result.dart';
 import 'package:visual_novel_strider/utils/duration_parse.dart';
 import 'package:visual_novel_strider/widgets/character_card_bottom_sheets.dart';
 import 'package:visual_novel_strider/widgets/player.dart';
@@ -24,7 +26,7 @@ class CharacterCard extends StatelessWidget {
 
   final NotificationController _notificationController = Get.find();
 
-  final HiveVNModel item;
+  final DetailResult item;
 
   @override
   Widget build(BuildContext context) {
@@ -61,8 +63,8 @@ class CharacterCard extends StatelessWidget {
                         height: 100,
                         imageScale: 3,
                         alignment: Alignment.topCenter,
-                        image: _notificationController
-                            .hiveRepository.result[index].character!.image!),
+                        image: _notificationController.hiveRepository
+                            .result[index].character!.image!.url),
                   ),
                   const SizedBox(
                     width: 16,
@@ -73,7 +75,7 @@ class CharacterCard extends StatelessWidget {
                       children: [
                         Text(
                           _notificationController
-                              .hiveRepository.result[index].character!.name!,
+                              .hiveRepository.result[index].character!.name,
                           style: const TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),
@@ -166,7 +168,7 @@ class CharacterCard extends StatelessWidget {
                         ),
                         value: _.hiveRepository.result[index].hasReminder,
                         onToggle: (value) async {
-                          _.setReminderFromButton(value, index, item.title!);
+                          _.setReminderFromButton(value, index, item.title);
                         },
                       ),
                       const SizedBox(

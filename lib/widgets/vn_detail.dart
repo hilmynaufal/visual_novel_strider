@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use, sized_box_for_whitespace
+// ignore_for_file: deprecated_member_use, sized_box_for_whitespace, prefer_const_constructors
 
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +7,7 @@ import 'package:transparent_image/transparent_image.dart';
 import 'package:visual_novel_strider/controller&repository/characters_repository.dart';
 import 'package:visual_novel_strider/controller&repository/detail_repository.dart';
 import 'package:visual_novel_strider/model/kana_model/detail_result.dart';
+import 'package:visual_novel_strider/model/kana_model/individual_result.dart';
 import 'package:visual_novel_strider/utils/length_convert.dart';
 import 'package:visual_novel_strider/widgets/characters_widget.dart';
 import 'package:readmore/readmore.dart';
@@ -279,17 +280,15 @@ class VnDetail extends StatelessWidget {
                           ],
                         ),
                         Container(
-                          height: 20,
-                          child: TagsWidget(
-                            tags: item.tags,
-                          ),
+                          child: TagsWidget(tags: item.tags),
+                          height: 50,
                         ),
                         const SizedBox(height: 16),
                         ScreensWidget(screenshot: item.screenshots),
                         const SizedBox(
                           height: 30,
                         ),
-                        CharactersWidget(),
+                        CharactersWidget(vnId: id),
                       ],
                     ),
                   );
@@ -312,11 +311,15 @@ class VnDetail extends StatelessWidget {
           ),
         ]),
         floatingActionButton: Obx(() {
-          if (_charactersRepository.result.value.results.isNotEmpty) {
-            return FloatingActionButton(
-                backgroundColor: _theme.primaryColor,
-                onPressed: () {},
-                child: Icon(Icons.abc));
+          if (_charactersRepository.isReady.isTrue &&
+              _detailRepository.isReady.isTrue) {
+            List<IndividualResult> _individualResult = _charactersRepository
+                .result.value.results
+                .map((e) => e as IndividualResult)
+                .toList();
+            return ProgressFab(
+                charaItem: _individualResult,
+                item: _detailRepository.detailResult.value.results[0]);
           } else {
             // _charactersRepository.getCharacters(id);
             return FloatingActionButton(

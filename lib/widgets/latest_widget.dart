@@ -5,6 +5,9 @@ import 'package:get/get.dart';
 import 'package:visual_novel_strider/controller&repository/home_repository.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:visual_novel_strider/widgets/text/nsfw_widget.dart';
+import 'package:visual_novel_strider/widgets/vn_detail.dart';
+
+import '../model/kana_model/result.dart';
 
 class LatestWidget extends StatelessWidget {
   LatestWidget({Key? key}) : super(key: key);
@@ -42,7 +45,7 @@ class LatestWidget extends StatelessWidget {
               ],
             ),
             SizedBox(
-              height: 8,
+              height: 16,
             ),
             SizedBox(
               height: 180,
@@ -58,9 +61,12 @@ class LatestWidget extends StatelessWidget {
                       SizedBox(width: 8),
                       GestureDetector(
                         onTap: () {
-                          // Get.to(() => VnDetail(
-                          //       item: _repository.result.value.results[index],
-                          //     ));
+                          Result _e = _repository.result.value.results[index];
+                          Get.to(() => VnDetail(
+                                id: _e.id,
+                                image: _e.image.url,
+                                title: _e.title,
+                              ));
                         },
                         child: Column(
                           children: [
@@ -83,7 +89,7 @@ class LatestWidget extends StatelessWidget {
                                     ),
                             ),
                             SizedBox(
-                              height: 4,
+                              height: 8,
                             ),
                             SizedBox(
                               width: 100,
@@ -92,6 +98,7 @@ class LatestWidget extends StatelessWidget {
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
+                                    fontSize: 14,
                                     fontWeight: FontWeight.w600,
                                   )),
                             )

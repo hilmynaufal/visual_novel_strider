@@ -47,7 +47,7 @@ class PopularWidget extends StatelessWidget {
                 ],
               ),
               const SizedBox(
-                height: 8,
+                height: 16,
               ),
               SizedBox(
                 height: 180,
@@ -72,7 +72,7 @@ class PopularWidget extends StatelessWidget {
                             children: [
                               itemSettings(index),
                               SizedBox(
-                                height: 4,
+                                height: 8,
                               ),
                               SizedBox(
                                 width: 100,

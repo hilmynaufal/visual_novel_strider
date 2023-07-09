@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:visual_novel_strider/controller&repository/hive_repository.dart';
 import 'package:visual_novel_strider/model/hive_model/hive_characters_model.dart';
+import 'package:visual_novel_strider/model/kana_model/individual_result.dart';
 
 import '../model/hive_model/progress_model.dart';
 
@@ -67,8 +68,8 @@ class NotificationController extends GetxController {
 
   void listenToScheduleNotification() {}
 
-  void setNotification(
-      String? schedule, int id, String title, String name, String icon) async {
+  void setNotification(String? schedule, String id, String title, String name,
+      String icon) async {
     log(schedule.toString());
     int hour = int.parse(schedule!.split(" ").removeAt(0).split(":").first);
     int minute = int.parse(schedule.split(" ").removeAt(0).split(":").last);
@@ -77,7 +78,7 @@ class NotificationController extends GetxController {
             hour: hour, minute: minute, second: 0, repeats: true),
         content: NotificationContent(
             largeIcon: icon,
-            id: id,
+            id: int.parse(id.replaceAll("c", "")),
             channelKey: 'schedule_notification',
             title: title,
             body: '$name is waiting for you!',
@@ -92,17 +93,11 @@ class NotificationController extends GetxController {
   }
 
   void addToProgressRepository(
-      HiveCHaractersModel model, int vnID, String title) {
+      IndividualResult model, String vnID, String title) {
     Duration _endTime = Duration(hours: length.value);
-    hiveRepository.addToProgress(
-        model,
-        reminder,
-        hexColor.value == 0xFF ? 0xFF29b6f6 : hexColor.value,
-        hasReminder.value,
-        vnID,
-        _endTime,
-        note);
-    setNotification(reminder, model.id, title, model.name!, model.image!);
+    hiveRepository.addToProgress(model, reminder, hexColor.value,
+        hasReminder.value, vnID, _endTime, note);
+    setNotification(reminder, model.id, title, model.name, model.image!.url);
   }
 
   void clear() {
@@ -119,10 +114,11 @@ class NotificationController extends GetxController {
           hiveRepository.result[index].reminder,
           hiveRepository.result[index].id,
           title,
-          hiveRepository.result[index].character!.name!,
-          hiveRepository.result[index].character!.image!);
+          hiveRepository.result[index].character!.name,
+          hiveRepository.result[index].character!.image!.url);
     } else {
-      cancelReminder(hiveRepository.result[index].id);
+      cancelReminder(
+          int.parse(hiveRepository.result[index].id.replaceAll("c", '')));
     }
     update();
   }
@@ -155,9 +151,10 @@ class NotificationController extends GetxController {
     update();
   }
 
-  Future<void> deleteProgress(int index, int vnID) async {
+  Future<void> deleteProgress(int index, vnID) async {
     await hiveRepository.deleteProgressFromBox(index, vnID);
-    cancelReminder(hiveRepository.result[index].id);
+    cancelReminder(
+        int.parse(hiveRepository.result[index].id.replaceAll("c", '')));
     update();
   }
 

@@ -1,5 +1,7 @@
 import 'package:hive/hive.dart';
 
+part 'tag_result.g.dart';
+
 @HiveType(typeId: 5)
 class TagResult {
   @HiveField(1)

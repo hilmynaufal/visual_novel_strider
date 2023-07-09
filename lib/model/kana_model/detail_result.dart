@@ -1,10 +1,13 @@
 import 'package:hive/hive.dart';
 import 'package:visual_novel_strider/model/kana_model/image.dart';
+import 'package:visual_novel_strider/model/kana_model/individual_result.dart';
 import 'package:visual_novel_strider/model/kana_model/screenshot_result.dart';
 import 'package:visual_novel_strider/model/kana_model/tag_result.dart';
 
+part 'detail_result.g.dart';
+
 @HiveType(typeId: 0)
-class DetailResult {
+class DetailResult extends HiveObject {
   @HiveField(1)
   double? rating;
   @HiveField(2)
@@ -33,6 +36,10 @@ class DetailResult {
   String? olang;
   @HiveField(14)
   int? length;
+  @HiveField(19)
+  List<IndividualResult>? characters;
+  @HiveField(20)
+  bool? isComplete;
 
   DetailResult(
       {this.rating,
@@ -83,8 +90,7 @@ class DetailResult {
             : List<dynamic>.from(screenshots!.map((x) => x.toJson())),
         "image": image?.toJson(),
         "id": id,
-        "tags":
-            tags == null ? [] : List<dynamic>.from(tags.map((x) => x.toJson())),
+        "tags": List<dynamic>.from(tags.map((x) => x.toJson())),
         "languages": languages == null
             ? []
             : List<dynamic>.from(languages!.map((x) => x)),

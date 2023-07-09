@@ -56,7 +56,7 @@ class PlayerCard extends StatelessWidget {
                                   height: 100,
                                   imageScale: 3,
                                   alignment: Alignment.topCenter,
-                                  image: _.nowPlaying!.character!.image!),
+                                  image: _.nowPlaying!.character!.image!.url),
                             ),
                             const SizedBox(
                               width: 16,
@@ -66,7 +66,7 @@ class PlayerCard extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    _.nowPlaying!.character!.name!,
+                                    _.nowPlaying!.character!.name,
                                     style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold),

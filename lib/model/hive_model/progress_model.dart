@@ -1,18 +1,20 @@
 import 'package:hive/hive.dart';
 import 'package:visual_novel_strider/model/hive_model/hive_characters_model.dart';
 
+import '../kana_model/individual_result.dart';
+
 part 'progress_model.g.dart';
 
-@HiveType(typeId: 10)
+@HiveType(typeId: 8)
 class ProgressModel extends HiveObject {
   @HiveField(0)
-  int id;
+  String id;
 
   @HiveField(1)
-  int vnId;
+  String vnId;
 
   @HiveField(2)
-  HiveCHaractersModel? character;
+  IndividualResult? character;
 
   @HiveField(3)
   String reminder;

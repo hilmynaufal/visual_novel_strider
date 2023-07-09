@@ -55,12 +55,13 @@ class KanaServer extends GetxController {
             ["id", "=", id]
           ],
           "fields":
-              "name, description, sex, age, vns.role, image.url, vns.spoiler"
+              "name, original, description, sex, age, vns.role, image.url, vns.spoiler, traits.name, traits.group_name, birthday",
+          "results": "100"
         }));
 
     if (response.statusCode == 200) {
-      charactersController
-          .add(ResponseResult.fromCharactersJson(jsonDecode(response.body)));
+      charactersController.add(
+          ResponseResult.fromIndividualDetailJson(jsonDecode(response.body)));
     } else {
       log("error");
       log(response.body);
@@ -143,5 +144,25 @@ class KanaServer extends GetxController {
     if (olang != null) newFilters.add(["olang", "=", olang]);
 
     return newFilters;
+  }
+
+  //testing new algorithm
+  Future<ResponseResult> getIndividual(
+      {required String jsonBody, required String headers}) async {
+    final _response = await http.post(Uri.parse(URL + "character"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonBody);
+
+    if (_response.statusCode == 200) {
+      log(_response.body);
+      return ResponseResult.fromIndividualDetailJson(
+          jsonDecode(_response.body));
+    } else {
+      log("error");
+      log(_response.body);
+      return ResponseResult(results: [], more: false);
+    }
   }
 }

@@ -4,7 +4,7 @@ import 'package:hive/hive.dart';
 
 import '../old_socket_model/image_flagging.dart';
 
-part 'hive_characters_model.g.dart';
+// part 'hive_characters_model.g.dart';
 
 // @HiveType(typeId: 1)
 class HiveCHaractersModel extends HiveObject {

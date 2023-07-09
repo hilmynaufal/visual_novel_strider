@@ -1,22 +1,21 @@
 // ignore_for_file: deprecated_member_use, prefer_const_constructors
 
-import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:visual_novel_strider/controller&repository/hive_repository.dart';
+import 'package:visual_novel_strider/model/kana_model/detail_result.dart';
+import 'package:visual_novel_strider/model/kana_model/individual_result.dart';
 
-import '../model/old_socket_model/chara_item.dart';
-import '../model/old_socket_model/item.dart';
 
 class ProgressFab extends StatelessWidget {
   ProgressFab({Key? key, required this.charaItem, required this.item})
       : super(key: key);
 
   final HiveRepository _hiveRepository = Get.find();
-  final List<CharaItem> charaItem;
-  final Item item;
+  final List<IndividualResult> charaItem;
+  final DetailResult item;
 
   @override
   Widget build(BuildContext context) {

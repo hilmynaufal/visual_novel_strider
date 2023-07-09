@@ -34,7 +34,7 @@ class SubHeaderWidget extends StatelessWidget {
                           fit: BoxFit.none,
                           imageScale: 5,
                           alignment: Alignment.topCenter,
-                          image: _.nowPlaying!.character!.image!),
+                          image: _.nowPlaying!.character!.image!.url),
                     ),
                   ),
                   const SizedBox(

@@ -6,6 +6,7 @@ part of 'database.dart';
 // FloorGenerator
 // **************************************************************************
 
+// ignore: avoid_classes_with_only_static_members
 class $FloorAppDatabase {
   /// Creates a database builder for a persistent database.
   /// Once a database is built, you should keep a reference to it and re-use it.
@@ -64,8 +65,11 @@ class _$AppDatabase extends AppDatabase {
 
   TraitsDao? _traitDaoInstance;
 
-  Future<sqflite.Database> open(String path, List<Migration> migrations,
-      [Callback? callback]) async {
+  Future<sqflite.Database> open(
+    String path,
+    List<Migration> migrations, [
+    Callback? callback,
+  ]) async {
     final databaseOptions = sqflite.OpenDatabaseOptions(
       version: 1,
       onConfigure: (database) async {
@@ -105,8 +109,10 @@ class _$AppDatabase extends AppDatabase {
 }
 
 class _$TagDao extends TagDao {
-  _$TagDao(this.database, this.changeListener)
-      : _queryAdapter = QueryAdapter(database),
+  _$TagDao(
+    this.database,
+    this.changeListener,
+  )   : _queryAdapter = QueryAdapter(database),
         _tagEntityInsertionAdapter = InsertionAdapter(
             database,
             'tags',
@@ -173,8 +179,10 @@ class _$TagDao extends TagDao {
 }
 
 class _$TraitsDao extends TraitsDao {
-  _$TraitsDao(this.database, this.changeListener)
-      : _queryAdapter = QueryAdapter(database),
+  _$TraitsDao(
+    this.database,
+    this.changeListener,
+  )   : _queryAdapter = QueryAdapter(database),
         _traitEntityInsertionAdapter = InsertionAdapter(
             database,
             'traits',

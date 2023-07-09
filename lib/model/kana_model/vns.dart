@@ -1,5 +1,7 @@
 import 'package:hive/hive.dart';
 
+part 'vns.g.dart';
+
 @HiveType(typeId: 6)
 class Vns {
   @HiveField(1)

@@ -2,6 +2,10 @@ import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:visual_novel_strider/controller&repository/home_repository.dart';
+import 'package:visual_novel_strider/model/kana_model/detail_result.dart';
+import 'package:visual_novel_strider/model/kana_model/individual_result.dart';
+import 'package:visual_novel_strider/model/kana_model/response_result.dart';
+import 'package:visual_novel_strider/model/kana_model/result.dart';
 import 'package:visual_novel_strider/widgets/text/nsfw_widget.dart';
 import 'package:visual_novel_strider/widgets/vn_detail.dart';
 
@@ -42,7 +46,7 @@ class NakigeWidget extends StatelessWidget {
                 ],
               ),
               const SizedBox(
-                height: 8,
+                height: 16,
               ),
               SizedBox(
                 height: 200,
@@ -50,11 +54,11 @@ class NakigeWidget extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   itemCount: _repository.nakigeResult.value.results.length,
                   itemBuilder: (BuildContext context, int index) {
+                    Result _e = _repository.nakigeResult.value.results[index];
                     return GestureDetector(
                       onTap: () {
-                        // Get.to(() => VnDetail(
-                        //       item: _repository.nakigeResult.value.results[index],
-                        //     ));
+                        Get.to(() => VnDetail(
+                            id: _e.id, title: _e.title, image: _e.image.url));
                       },
                       child: Row(
                         children: [
@@ -63,7 +67,7 @@ class NakigeWidget extends StatelessWidget {
                             children: [
                               itemSettings(index),
                               const SizedBox(
-                                height: 4,
+                                height: 8,
                               ),
                               SizedBox(
                                 width: 100,

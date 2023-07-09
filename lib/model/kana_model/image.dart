@@ -1,6 +1,14 @@
-class Image {
+import 'package:hive/hive.dart';
+
+part 'image.g.dart';
+
+@HiveType(typeId: 2)
+class Image extends HiveObject {
+  @HiveField(0)
   dynamic violence;
+  @HiveField(1)
   dynamic sexual;
+  @HiveField(2)
   String url;
 
   Image({

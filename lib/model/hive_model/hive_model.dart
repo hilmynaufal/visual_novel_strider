@@ -5,8 +5,6 @@ import 'package:visual_novel_strider/model/old_socket_model/screen.dart';
 import '../old_socket_model/image_flagging.dart';
 import '../old_socket_model/links.dart';
 
-part 'hive_model.g.dart';
-
 // @HiveType(typeId: 0)
 class HiveVNModel extends HiveObject {
   @HiveField(0)

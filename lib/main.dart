@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, unused_import, deprecated_member_use, unused_field
 
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:backdrop/backdrop.dart';
@@ -14,6 +15,12 @@ import 'package:visual_novel_strider/controller&repository/detail_repository.dar
 import 'package:visual_novel_strider/controller&repository/player_controller.dart';
 import 'package:visual_novel_strider/controller&repository/hive_repository.dart';
 import 'package:visual_novel_strider/controller&repository/search_repository.dart';
+import 'package:visual_novel_strider/model/kana_model/image.dart' as ImageP;
+import 'package:visual_novel_strider/model/kana_model/individual_result.dart';
+import 'package:visual_novel_strider/model/kana_model/screenshot_result.dart';
+import 'package:visual_novel_strider/model/kana_model/tag_result.dart';
+import 'package:visual_novel_strider/model/kana_model/trait.dart';
+import 'package:visual_novel_strider/model/kana_model/vns.dart';
 import 'package:visual_novel_strider/service/http_client.dart';
 import 'package:visual_novel_strider/model/hive_model/progress_model.dart';
 import 'package:visual_novel_strider/controller&repository/notification_controller.dart';
@@ -37,20 +44,39 @@ import 'package:visual_novel_strider/widgets/home_widget.dart';
 import 'package:visual_novel_strider/widgets/search_widget.dart';
 
 import 'controller&repository/characters_repository.dart';
+import 'model/kana_model/detail_result.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   //http override bad ssl
   HttpOverrides.global = MyHttpOverrides();
 
+  //navigation draw oerlay
+  //Setting SysemUIOverlay
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
+    systemStatusBarContrastEnforced: true,
+    // systemNavigationBarDividerColor: Colors.transparent,
+    systemNavigationBarIconBrightness: Brightness.dark,
+    statusBarIconBrightness: Brightness.dark,
+    // systemNavigationBarContrastEnforced: true,
+    // systemNavigationBarColor: Colors.white,
+    // statusBarColor: Color(0xFF29b6f6)
+  ));
+
+//Setting SystmeUIMode
+  // SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge,
+  //     overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
+
   // await NotificationService().init();
   await Hive.initFlutter();
-  // Hive.registerAdapter(HiveVNModelAdapter());
-  // Hive.registerAdapter(HiveCHaractersModelAdapter());
-  // Hive.registerAdapter(LinksAdapter());
-  // Hive.registerAdapter(ImageFlaggingAdapter());
-  // Hive.registerAdapter(ScreenAdapter());
-  // Hive.registerAdapter(ProgressModelAdapter());
+  Hive.registerAdapter(DetailResultAdapter());
+  Hive.registerAdapter(IndividualResultAdapter());
+  Hive.registerAdapter(TraitAdapter());
+  Hive.registerAdapter(ImageP.ImageAdapter());
+  Hive.registerAdapter(ScreenshotAdapter());
+  Hive.registerAdapter(TagResultAdapter());
+  Hive.registerAdapter(VnsAdapter());
+  Hive.registerAdapter(ProgressModelAdapter());
   AwesomeNotifications().initialize(null, [
     NotificationChannel(
         channelKey: 'schedule_notification',
@@ -134,17 +160,24 @@ class _MyHomeState extends State<MyHome> {
     final _headerHeight = MediaQuery.of(context).size.height - 400;
 
     return BackdropScaffold(
+      extendBody: true,
       appBar: BackdropAppBar(
-        leading: const BackdropToggleButton(
-          icon: AnimatedIcons.close_menu,
-        ),
+        leading: Image.asset('assets/logo_small_invert_light.png'),
         backgroundColor: Theme.of(context).primaryColor,
+        actions: [
+          Icon(CupertinoIcons.search),
+          SizedBox(
+            width: 24,
+          )
+        ],
         title: TextField(
           focusNode: myFocusNode,
           cursorColor: Theme.of(context).accentColor,
           controller: _searchController,
           style: TextStyle(fontSize: 16, color: Theme.of(context).accentColor),
           decoration: InputDecoration(
+            // isDense: true,
+            // contentPadding: EdgeInsets.symmetric(vertical: 4),
             hintStyle: TextStyle(color: Theme.of(context).accentColor),
             hintText: "Search visual novel",
             prefixIcon: Icon(
@@ -152,9 +185,9 @@ class _MyHomeState extends State<MyHome> {
               size: 16,
               color: Theme.of(context).accentColor,
             ),
+            focusedBorder: InputBorder.none,
             border: InputBorder.none,
-            enabledBorder: InputBorder.none,
-            disabledBorder: InputBorder.none,
+            // disabledBorder: InputBorder.none,
           ),
         ),
       ),
@@ -192,25 +225,32 @@ class _MyHomeState extends State<MyHome> {
           backgroundColor: _theme.accentColor,
           selectedFontSize: 10,
           unselectedFontSize: 10,
+          showUnselectedLabels: true,
+          unselectedItemColor: Colors.grey[800],
           iconSize: 22,
           onTap: onItemTapped,
           currentIndex: _selectedIndex,
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(Icons.home_rounded),
-              activeIcon: Icon(CupertinoIcons.home),
+              icon: Icon(CupertinoIcons.house),
+              activeIcon: Icon(CupertinoIcons.house_fill),
               label: 'Home',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.cases_rounded),
+              icon: Icon(CupertinoIcons.bag),
               activeIcon: Icon(
-                CupertinoIcons.bag,
+                CupertinoIcons.bag_fill,
               ),
               label: 'Inventory',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.explore),
-              activeIcon: Icon(Icons.explore_outlined),
+              icon: Icon(Icons.explore_outlined),
+              activeIcon: Icon(Icons.explore),
+              label: 'Search',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(CupertinoIcons.gear_alt),
+              activeIcon: Icon(CupertinoIcons.gear_alt_fill),
               label: 'Search',
             ),
           ],
@@ -252,10 +292,9 @@ class _MyHomeState extends State<MyHome> {
 
   // ignore: prefer_final_fields
   static List<Widget> _pages = <Widget>[
-    // HomeWidget(),
-    // InventoryWidget(),
-    EmptyWidget(),
     HomeWidget(),
+    InventoryWidget(),
     SearchWidget(),
+    EmptyWidget()
   ];
 }

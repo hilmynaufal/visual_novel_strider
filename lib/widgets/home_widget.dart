@@ -3,7 +3,6 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:visual_novel_strider/controller&repository/hive_repository.dart';
 import 'package:visual_novel_strider/controller&repository/home_repository.dart';
@@ -21,63 +20,84 @@ class HomeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      if (_repository.isReady.value) {
-        log("hehe");
-        return Obx(() {
-          _hiveRepository.getLatestSchedule();
-          if (_repository.isReady.value) {
-            return SingleChildScrollView(
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 16,
-                  ),
-                  Obx(() {
-                    if (_hiveRepository.result[0].id == 0) {
-                      _hiveRepository.getLatestSchedule();
-                      return Text("Asw");
-                    } else {
-                      return SizedBox(
-                        height: 220,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: _hiveRepository.result.length,
-                          itemBuilder: (context, index) => SizedBox(
-                            width: 360,
-                            child: CharacterCard(
-                                index: index,
-                                item: _hiveRepository.data![index]),
-                          ),
+    final _theme = Theme.of(context);
+    return Obx(
+      () {
+        if (_repository.isReady.value) {
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 16,
+                ),
+                Row(
+                  children: [
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    Container(
+                      height: 22,
+                      width: 4,
+                      color: _theme.primaryColor,
+                    ),
+                    const SizedBox(
+                      width: 4,
+                    ),
+                    Text(
+                      "Latest Schedule",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                Obx(() {
+                  if (_hiveRepository.isReady.isTrue &&
+                      _hiveRepository.result[0].id == '0') {
+                    _hiveRepository.getLatestSchedule();
+                    return Text("Your latest schedule will show up here.");
+                  } else {
+                    return SizedBox(
+                      height: 220,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: _hiveRepository.result.length,
+                        itemBuilder: (context, index) => SizedBox(
+                          width: 360,
+                          child: CharacterCard(
+                              index: index, item: _hiveRepository.data![index]),
                         ),
-                      );
-                    }
-                  }),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  LatestWidget(),
-                  SizedBox(
-                    height: 1,
-                  ),
-                  PopularWidget(),
-                  SizedBox(
-                    height: 1,
-                  ),
-                  NakigeWidget()
-                ],
-              ),
-            );
-          } else {
-            return Center(child: CircularProgressIndicator());
-          }
-        });
-      } else {
-        // _repository.getNewReleased();
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      }
-    });
+                      ),
+                    );
+                  }
+                }),
+                SizedBox(
+                  height: 16,
+                ),
+                LatestWidget(),
+                SizedBox(
+                  height: 16,
+                ),
+                PopularWidget(),
+                SizedBox(
+                  height: 16,
+                ),
+                NakigeWidget(),
+                SizedBox(
+                  height: 32,
+                )
+              ],
+            ),
+          );
+        } else {
+          return Center(child: CircularProgressIndicator());
+        }
+      },
+    );
+    // _hiveRepository.getLatestSchedule();
   }
 }

@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -7,6 +9,9 @@ import 'package:transparent_image/transparent_image.dart';
 import 'package:visual_novel_strider/controller&repository/search_repository.dart';
 import 'package:visual_novel_strider/utils/datetime_parse.dart';
 import 'package:visual_novel_strider/widgets/text/nsfw_widget.dart';
+import 'package:visual_novel_strider/widgets/vn_detail.dart';
+
+import '../model/kana_model/result.dart';
 
 class ItemWidget extends StatelessWidget {
   const ItemWidget({Key? key}) : super(key: key);
@@ -23,9 +28,15 @@ class ItemWidget extends StatelessWidget {
                   itemCount: _controller.searchResult.value.results.length,
                   itemBuilder: (context, index) => InkWell(
                         onTap: () {
-                          // Get.to(() => VnDetail(
-                          //       item: _controller.searchResult.value.results[index],
-                          //     ));
+                          log("message");
+                          Result _e =
+                              _controller.searchResult.value.results[index];
+
+                          Get.to(() => VnDetail(
+                                id: _e.id,
+                                image: _e.image.url,
+                                title: _e.title,
+                              ));
                         },
                         splashColor: _splashColor,
                         child: Container(

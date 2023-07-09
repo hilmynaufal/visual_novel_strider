@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:visual_novel_strider/model/hive_model/hive_model.dart';
 import 'package:visual_novel_strider/controller&repository/notification_controller.dart';
+import 'package:visual_novel_strider/model/kana_model/detail_result.dart';
 import 'package:visual_novel_strider/utils/duration_parse.dart';
 import 'package:visual_novel_strider/widgets/character_card.dart';
 import 'package:visual_novel_strider/widgets/create_bottom_sheets.dart';
@@ -17,7 +18,7 @@ import 'package:visual_novel_strider/widgets/create_bottom_sheets.dart';
 class DetailWidget extends StatefulWidget {
   DetailWidget({Key? key, required this.item}) : super(key: key);
 
-  final HiveVNModel item;
+  final DetailResult item;
 
   final NotificationController _notificationController = Get.find();
 
@@ -49,7 +50,7 @@ class _DetailWidgetState extends State<DetailWidget> {
     final _theme = Theme.of(context);
 
     widget._notificationController.hiveRepository
-        .getCharactersRoute(widget.item.id);
+        .getCharactersRoute(widget.item.id!);
 
     return BackdropScaffold(
         appBar: BackdropAppBar(
@@ -67,34 +68,6 @@ class _DetailWidgetState extends State<DetailWidget> {
             children: [
               const SizedBox(
                 height: 16,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          primary: Colors.amber.shade700,
-                          padding: EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 20),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16))),
-                      onPressed: () {},
-                      child: Column(
-                        children: [
-                          const Icon(
-                            Icons.animation_sharp,
-                            size: 40,
-                          ),
-                          Text(
-                            "Share",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          )
-                        ],
-                      )),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                ],
               ),
               const SizedBox(
                 height: 16,
@@ -128,7 +101,7 @@ class _DetailWidgetState extends State<DetailWidget> {
                 child: Obx(() {
                   if (widget._notificationController.hiveRepository.result[0]
                           .id ==
-                      0) {
+                      '0') {
                     return const Center(
                         child:
                             Text("Open Character's Drawer to Add Route Card"));
@@ -195,49 +168,41 @@ class _DetailWidgetState extends State<DetailWidget> {
                           .asMap()
                           .entries
                           .map((e) {
-                            if (e.value.vns[0][2] == 0) {
-                              return ElevatedButton(
-                                onPressed: () {
-                                  Get.bottomSheet(
-                                    CreateBottomSheet(
-                                      e: e.value,
-                                      vnID: widget.item.id,
-                                      title: widget.item.title!,
-                                    ),
-                                    isScrollControlled: true,
-                                  ).whenComplete(() {
-                                    widget
-                                        ._notificationController.hiveRepository
-                                        .getCharactersRoute(widget.item.id);
-                                    widget._notificationController.clearData();
-                                  });
-                                },
-                                clipBehavior: Clip.antiAlias,
-                                style: ElevatedButton.styleFrom(
-                                    elevation: 4,
-                                    side: BorderSide(
-                                        width: 0, color: _theme.accentColor),
-                                    padding: const EdgeInsets.all(0),
-                                    primary: _theme.accentColor,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(14))),
-                                child: SizedBox(
-                                    height: 100,
-                                    width: 70,
-                                    child: ClipRRect(
-                                        child: FadeInImage.memoryNetwork(
-                                            fit: BoxFit.cover,
-                                            imageScale: 3,
-                                            alignment: Alignment.topCenter,
-                                            placeholder: kTransparentImage,
-                                            image: e.value.image != null
-                                                ? e.value.image!
-                                                : ""))),
-                              );
-                            } else {
-                              return const SizedBox.shrink();
-                            }
+                            return ElevatedButton(
+                              onPressed: () {
+                                Get.bottomSheet(
+                                  CreateBottomSheet(
+                                    e: e.value,
+                                    vnID: widget.item.id!,
+                                    title: widget.item.title,
+                                  ),
+                                  isScrollControlled: true,
+                                ).whenComplete(() {
+                                  widget._notificationController.hiveRepository
+                                      .getCharactersRoute(widget.item.id!);
+                                  widget._notificationController.clearData();
+                                });
+                              },
+                              clipBehavior: Clip.antiAlias,
+                              style: ElevatedButton.styleFrom(
+                                  elevation: 4,
+                                  side: BorderSide(
+                                      width: 0, color: _theme.accentColor),
+                                  padding: const EdgeInsets.all(0),
+                                  primary: _theme.accentColor,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(14))),
+                              child: SizedBox(
+                                  height: 100,
+                                  width: 70,
+                                  child: ClipRRect(
+                                      child: FadeInImage.memoryNetwork(
+                                          fit: BoxFit.cover,
+                                          imageScale: 3,
+                                          alignment: Alignment.topCenter,
+                                          placeholder: kTransparentImage,
+                                          image: e.value.image!.url))),
+                            );
                           })
                           .toList()
                           .cast<Widget>()),

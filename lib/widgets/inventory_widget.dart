@@ -27,7 +27,7 @@ class _InventoryWidgetState extends State<InventoryWidget> {
       child: GetBuilder<HiveRepository>(
         builder: (_repository) {
           _repository.getItem();
-          if (_repository.isReady) {
+          if (_repository.isReady.isTrue) {
             return ListView.builder(
               itemCount: _repository.data!.length,
               itemBuilder: (context, index) {
@@ -147,15 +147,15 @@ class _InventoryWidgetState extends State<InventoryWidget> {
                                 borderRadius: const BorderRadius.only(
                                     topLeft: Radius.circular(10),
                                     bottomLeft: Radius.circular(10)),
-                                child: (_repository.data![index].imageFlagging!
-                                                .sexualAvg +
-                                            _repository.data![index]
-                                                .imageFlagging!.violenceAvg ==
+                                child: (_repository.data![index].image?.sexual +
+                                            _repository
+                                                .data![index].image?.violence ==
                                         0)
                                     ? FadeInImage.memoryNetwork(
                                         placeholder: kTransparentImage,
                                         imageScale: 3,
-                                        image: _repository.data![index].image!,
+                                        image:
+                                            _repository.data![index].image!.url,
                                         fit: BoxFit.cover,
                                       )
                                     : const Center(
@@ -195,7 +195,7 @@ class _InventoryWidgetState extends State<InventoryWidget> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          _repository.data![index].title!,
+                                          _repository.data![index].title,
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 2,
                                           style: const TextStyle(
@@ -203,7 +203,7 @@ class _InventoryWidgetState extends State<InventoryWidget> {
                                               fontWeight: FontWeight.bold),
                                         ),
                                         Text(
-                                          _repository.data![index].original ??
+                                          _repository.data![index].alttitle ??
                                               _repository.data![index].title,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
@@ -233,13 +233,10 @@ class _InventoryWidgetState extends State<InventoryWidget> {
                                                                           30))),
                                                   onPressed: () {},
                                                   child: Text(
-                                                    _repository
-                                                            .data![index]
-                                                            .origLang!
-                                                            .isNotEmpty
+                                                    _repository.data![index]
+                                                            .olang!.isNotEmpty
                                                         ? _repository
-                                                            .data![index]
-                                                            .origLang![0]
+                                                            .data![index].olang!
                                                             .toUpperCase()
                                                         : "JA",
                                                     style: TextStyle(

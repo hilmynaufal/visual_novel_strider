@@ -48,7 +48,7 @@ class PlayerController extends GetxController {
   }
 
   void stopPlaying() async {
-    await AwesomeNotifications().cancel(_nowPlaying!.id);
+    // await AwesomeNotifications().cancel(int.parse(_nowPlaying!.id));
     isPlaying.value = false;
 
     _stopWatchTimer.onExecute.add(StopWatchExecute.stop);
@@ -95,7 +95,7 @@ class PlayerController extends GetxController {
     log("aw");
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
-          id: _nowPlaying!.id,
+          id: int.parse(_nowPlaying!.id),
           channelKey: 'media_player',
           title: "tes",
           body: "test",

@@ -1,5 +1,6 @@
 import 'package:visual_novel_strider/model/kana_model/characters_result.dart';
 import 'package:visual_novel_strider/model/kana_model/detail_result.dart';
+import 'package:visual_novel_strider/model/kana_model/individual_result.dart';
 import 'package:visual_novel_strider/model/kana_model/result.dart';
 
 class ResponseResult {
@@ -24,10 +25,17 @@ class ResponseResult {
         more: json["more"],
       );
 
-  factory ResponseResult.fromCharactersJson(Map<String, dynamic> json) =>
+  // factory ResponseResult.fromCharactersJson(Map<String, dynamic> json) =>
+  //     ResponseResult(
+  //       results: List<IndividualResult>.from(
+  //           json["results"].map((x) => IndividualResult.fromJson(x))),
+  //       more: json["more"],
+  //     );
+
+  factory ResponseResult.fromIndividualDetailJson(Map<String, dynamic> json) =>
       ResponseResult(
-        results: List<CharactersResult>.from(
-            json["results"].map((x) => CharactersResult.fromJson(x))),
+        results: List<IndividualResult>.from(
+            json["results"].map((x) => IndividualResult.fromJson(x))),
         more: json["more"],
       );
 
