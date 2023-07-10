@@ -19,6 +19,7 @@ class HiveRepository extends GetxController {
   List<ProgressModel>? progressData = [];
 
   //initial
+  //TODO: #1 bug fix
   RxList<ProgressModel> result = [
     ProgressModel(
         id: '0',
