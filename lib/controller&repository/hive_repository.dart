@@ -94,6 +94,8 @@ class HiveRepository extends GetxController {
 
     _temp.sort((x, y) => x.reminder.compareTo(y.reminder));
 
+    log("schedule length = " + _temp.length.toString());
+
     if (_temp.isNotEmpty) {
       progressStreamController.add(_temp);
     } else {

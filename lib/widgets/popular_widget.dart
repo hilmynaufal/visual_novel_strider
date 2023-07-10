@@ -27,7 +27,7 @@ class PopularWidget extends StatelessWidget {
               Row(
                 children: [
                   const SizedBox(
-                    width: 8,
+                    width: 16,
                   ),
                   Container(
                     height: 22,
@@ -67,7 +67,7 @@ class PopularWidget extends StatelessWidget {
                       },
                       child: Row(
                         children: [
-                          SizedBox(width: 8),
+                          SizedBox(width: 16),
                           Column(
                             children: [
                               itemSettings(index),
@@ -82,6 +82,7 @@ class PopularWidget extends StatelessWidget {
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
+                                    fontSize: 14,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),

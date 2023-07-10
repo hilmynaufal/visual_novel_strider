@@ -85,11 +85,15 @@ class CharactersWidget extends StatelessWidget {
                               clipBehavior: Clip.antiAlias,
                               onPressed: () {
                                 //TODO: on pressed (CharacterDetailWidget)
-                                Get.bottomSheet(CharacterDetailBottomSheet(
-                                  id: _e.id,
-                                  name: _e.name,
-                                  image: _e.image != null ? _e.image!.url : '',
-                                ));
+                                Get.bottomSheet(
+                                    CharacterDetailBottomSheet(
+                                      id: _e.id,
+                                      name: _e.name,
+                                      image:
+                                          _e.image != null ? _e.image!.url : '',
+                                    ),
+                                    isScrollControlled: true,
+                                    enableDrag: true);
                               },
                               style: ElevatedButton.styleFrom(
                                   shape: RoundedRectangleBorder(

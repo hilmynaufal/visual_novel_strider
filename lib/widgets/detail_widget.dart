@@ -176,6 +176,7 @@ class _DetailWidgetState extends State<DetailWidget> {
                                     vnID: widget.item.id!,
                                     title: widget.item.title,
                                   ),
+                                  enableDrag: true,
                                   isScrollControlled: true,
                                 ).whenComplete(() {
                                   widget._notificationController.hiveRepository
@@ -192,16 +193,22 @@ class _DetailWidgetState extends State<DetailWidget> {
                                   primary: _theme.accentColor,
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(14))),
-                              child: SizedBox(
-                                  height: 100,
-                                  width: 70,
-                                  child: ClipRRect(
-                                      child: FadeInImage.memoryNetwork(
-                                          fit: BoxFit.cover,
-                                          imageScale: 3,
-                                          alignment: Alignment.topCenter,
-                                          placeholder: kTransparentImage,
-                                          image: e.value.image!.url))),
+                              child: e.value.image != null
+                                  ? SizedBox(
+                                      height: 100,
+                                      width: 70,
+                                      child: ClipRRect(
+                                          child: FadeInImage.memoryNetwork(
+                                              fit: BoxFit.cover,
+                                              imageScale: 3,
+                                              alignment: Alignment.topCenter,
+                                              placeholder: kTransparentImage,
+                                              image: e.value.image!.url)))
+                                  : Container(
+                                      height: 100,
+                                      width: 70,
+                                      child: Text("No Image"),
+                                    ),
                             );
                           })
                           .toList()

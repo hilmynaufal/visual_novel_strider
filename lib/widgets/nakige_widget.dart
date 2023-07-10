@@ -26,7 +26,7 @@ class NakigeWidget extends StatelessWidget {
               Row(
                 children: [
                   const SizedBox(
-                    width: 8,
+                    width: 16,
                   ),
                   Container(
                     height: 22,
@@ -62,7 +62,7 @@ class NakigeWidget extends StatelessWidget {
                       },
                       child: Row(
                         children: [
-                          const SizedBox(width: 8),
+                          const SizedBox(width: 16),
                           Column(
                             children: [
                               itemSettings(index),
@@ -77,6 +77,7 @@ class NakigeWidget extends StatelessWidget {
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
+                                      fontSize: 14,
                                       fontWeight: FontWeight.w600,
                                     )),
                               )

@@ -25,7 +25,7 @@ class LatestWidget extends StatelessWidget {
             Row(
               children: [
                 SizedBox(
-                  width: 8,
+                  width: 16,
                 ),
                 Container(
                   height: 22,
@@ -58,7 +58,7 @@ class LatestWidget extends StatelessWidget {
                       _repository.result.value.results[index].image.violence;
                   return Row(
                     children: [
-                      SizedBox(width: 8),
+                      SizedBox(width: 16),
                       GestureDetector(
                         onTap: () {
                           Result _e = _repository.result.value.results[index];

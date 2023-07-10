@@ -33,7 +33,7 @@ class HomeWidget extends StatelessWidget {
                 Row(
                   children: [
                     const SizedBox(
-                      width: 8,
+                      width: 16,
                     ),
                     Container(
                       height: 22,
@@ -67,7 +67,7 @@ class HomeWidget extends StatelessWidget {
                         scrollDirection: Axis.horizontal,
                         itemCount: _hiveRepository.result.length,
                         itemBuilder: (context, index) => SizedBox(
-                          width: 360,
+                          width: 340,
                           child: CharacterCard(
                               index: index, item: _hiveRepository.data![index]),
                         ),
@@ -76,7 +76,7 @@ class HomeWidget extends StatelessWidget {
                   }
                 }),
                 SizedBox(
-                  height: 16,
+                  height: 24,
                 ),
                 LatestWidget(),
                 SizedBox(

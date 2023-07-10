@@ -71,13 +71,15 @@ class CreateBottomSheet extends StatelessWidget {
                   child: Container(
                     height: 220,
                     width: 170,
-                    child: FadeInImage.memoryNetwork(
-                      placeholder: kTransparentImage,
-                      image: e.image!.url,
-                      fit: BoxFit.none,
-                      alignment: Alignment.topCenter,
-                      imageScale: 1.3,
-                    ),
+                    child: e.image != null
+                        ? FadeInImage.memoryNetwork(
+                            placeholder: kTransparentImage,
+                            image: e.image!.url,
+                            fit: BoxFit.none,
+                            alignment: Alignment.topCenter,
+                            imageScale: 1.3,
+                          )
+                        : SizedBox(),
                   ),
                 ),
                 Padding(

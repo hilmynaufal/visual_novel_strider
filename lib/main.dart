@@ -56,8 +56,8 @@ void main() async {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
     systemStatusBarContrastEnforced: true,
     // systemNavigationBarDividerColor: Colors.transparent,
-    systemNavigationBarIconBrightness: Brightness.dark,
-    statusBarIconBrightness: Brightness.dark,
+    systemNavigationBarIconBrightness: Brightness.light,
+    statusBarIconBrightness: Brightness.light,
     // systemNavigationBarContrastEnforced: true,
     // systemNavigationBarColor: Colors.white,
     // statusBarColor: Color(0xFF29b6f6)
