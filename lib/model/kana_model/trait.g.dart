@@ -20,7 +20,7 @@ class TraitAdapter extends TypeAdapter<Trait> {
       groupName: fields[0] as String,
       name: fields[1] as String,
       id: fields[2] as String,
-      description: fields[3] as String?,
+      charCount: fields[3] as int?,
     );
   }
 
@@ -35,7 +35,7 @@ class TraitAdapter extends TypeAdapter<Trait> {
       ..writeByte(2)
       ..write(obj.id)
       ..writeByte(3)
-      ..write(obj.description);
+      ..write(obj.charCount);
   }
 
   @override

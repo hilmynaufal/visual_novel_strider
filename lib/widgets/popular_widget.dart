@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:visual_novel_strider/controller&repository/home_repository.dart';
@@ -23,7 +24,16 @@ class PopularWidget extends StatelessWidget {
       () {
         if (_repository.popularResult.value.results.isNotEmpty) {
           return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  "Most played Visual novel around the world".toUpperCase(),
+                  maxLines: 2,
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w300),
+                ),
+              ),
               Row(
                 children: [
                   const SizedBox(
@@ -50,27 +60,27 @@ class PopularWidget extends StatelessWidget {
                 height: 16,
               ),
               SizedBox(
-                height: 180,
+                height: 200,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: _repository.popularResult.value.results.length,
                   itemBuilder: (BuildContext context, int index) {
+                    Result _e = _repository.popularResult.value.results[index];
                     return GestureDetector(
                       onTap: () {
-                        Result _result =
-                            _repository.popularResult.value.results[index];
                         Get.to(() => VnDetail(
-                              id: _result.id,
-                              image: _result.image.url,
-                              title: _result.title,
+                              id: _e.id,
+                              image: _e.image.url,
+                              title: _e.title,
                             ));
                       },
                       child: Row(
                         children: [
                           SizedBox(width: 16),
                           Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              itemSettings(index),
+                              itemSettings(index, _e),
                               SizedBox(
                                 height: 8,
                               ),
@@ -87,6 +97,25 @@ class PopularWidget extends StatelessWidget {
                                   ),
                                 ),
                               ),
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    CupertinoIcons.star_fill,
+                                    size: 10,
+                                    color: _theme.primaryColor,
+                                  ),
+                                  SizedBox(
+                                    width: 4,
+                                  ),
+                                  Text(
+                                    _e.rating.toString(),
+                                    style: TextStyle(fontSize: 12),
+                                  )
+                                ],
+                              )
                             ],
                           ),
                           index ==
@@ -94,7 +123,7 @@ class PopularWidget extends StatelessWidget {
                                           .popularResult.value.results.length -
                                       1
                               ? SizedBox(
-                                  width: 8,
+                                  width: 16,
                                 )
                               : SizedBox()
                         ],
@@ -113,7 +142,7 @@ class PopularWidget extends StatelessWidget {
     );
   }
 
-  Stack itemSettings(int index) {
+  Stack itemSettings(int index, Result _e) {
     String? _image = _repository.popularResult.value.results[index].image.url;
     dynamic _imageRating =
         (_repository.popularResult.value.results[index].image.sexual +
@@ -145,22 +174,36 @@ class PopularWidget extends StatelessWidget {
         }
     }
     return Stack(children: [
-      Container(
-        height: 130,
-        width: 100,
+      ElevatedButton(
+        onPressed: () {
+          Get.to(() => VnDetail(
+                id: _e.id,
+                image: _e.image.url,
+                title: _e.title,
+              ));
+        },
         clipBehavior: Clip.antiAlias,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: Colors.grey.shade200),
-        child: _imageRating >= 2
-            ? Center(
-                child: NSFWWidget(),
-              )
-            : FancyShimmerImage(
-                shimmerBaseColor: Colors.grey[300],
-                shimmerHighlightColor: Colors.grey[100],
-                boxFit: BoxFit.cover,
-                imageUrl: _image!),
+        style: ElevatedButton.styleFrom(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          elevation: 4,
+          padding: EdgeInsets.all(0),
+        ),
+        child: SizedBox(
+          height: 130,
+          width: 100,
+          child: _imageRating <= 1
+              ? FancyShimmerImage(
+                  shimmerBaseColor: Colors.grey[300],
+                  shimmerHighlightColor: Colors.grey[100],
+                  boxFit: BoxFit.cover,
+                  alignment: Alignment.topCenter,
+                  imageUrl:
+                      _repository.popularResult.value.results[index].image.url)
+              : Center(
+                  child: NSFWWidget(),
+                ),
+        ),
       ),
       Positioned(
           child: Container(

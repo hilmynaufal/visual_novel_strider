@@ -49,6 +49,7 @@ dependencies:
   flutter_datetime_picker: ^1.5.1
   date_format: ^2.0.4
   intl: ^0.18.1
+  dotted_border: ^2.0.0+3
   
   
 
@@ -57,6 +58,7 @@ dependencies:
 flutter_icons:
   android: true
   image_path: "assets/logo_size_invert.jpg"
+
 
 
   # The following adds the Cupertino Icons font to your application.

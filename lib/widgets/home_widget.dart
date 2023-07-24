@@ -2,14 +2,18 @@
 
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:visual_novel_strider/controller&repository/hive_repository.dart';
 import 'package:visual_novel_strider/controller&repository/home_repository.dart';
 import 'package:visual_novel_strider/widgets/character_card.dart';
+import 'package:visual_novel_strider/widgets/key_widget.dart';
 import 'package:visual_novel_strider/widgets/latest_widget.dart';
 import 'package:visual_novel_strider/widgets/nakige_widget.dart';
 import 'package:visual_novel_strider/widgets/popular_widget.dart';
+import 'package:visual_novel_strider/widgets/vn_highlight.dart';
+import 'package:visual_novel_strider/widgets/yuzusoft_widget.dart';
 
 class HomeWidget extends StatelessWidget {
   HomeWidget({Key? key}) : super(key: key);
@@ -20,6 +24,8 @@ class HomeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    _hiveRepository.getLatestSchedule();
+
     final _theme = Theme.of(context);
     return Obx(
       () {
@@ -56,9 +62,7 @@ class HomeWidget extends StatelessWidget {
                   height: 8,
                 ),
                 Obx(() {
-                  if (_hiveRepository.isReady.isTrue &&
-                      _hiveRepository.result[0].id == '0') {
-                    _hiveRepository.getLatestSchedule();
+                  if (_hiveRepository.result.isEmpty) {
                     return Text("Your latest schedule will show up here.");
                   } else {
                     return SizedBox(
@@ -78,18 +82,65 @@ class HomeWidget extends StatelessWidget {
                 SizedBox(
                   height: 24,
                 ),
+                VNHighlightWidget(
+                  id: "",
+                  imageAssetUrl: 'assets/sorcery_jokers.jpg',
+                  developer: "3rdEye",
+                  title: "Sorcery Jokers",
+                ),
+                SizedBox(
+                  height: 32,
+                ),
                 LatestWidget(),
                 SizedBox(
                   height: 16,
+                ),
+                VNHighlightWidget(
+                  id: "",
+                  developer: "RASK",
+                  title: "Re: LieF ~Shin'ainaru Anata e~",
+                  imageAssetUrl: 'assets/relief.jpg',
+                ),
+                SizedBox(
+                  height: 32,
                 ),
                 PopularWidget(),
                 SizedBox(
                   height: 16,
                 ),
-                NakigeWidget(),
+                VNHighlightWidget(
+                  id: "",
+                  developer: "Yuzusoft",
+                  title: "Café Stella to Shinigami no Chou",
+                  imageAssetUrl: 'assets/cafe_stella.jpg',
+                ),
                 SizedBox(
                   height: 32,
-                )
+                ),
+                NakigeWidget(),
+                SizedBox(
+                  height: 16,
+                ),
+                YuzusoftWidget(),
+                SizedBox(
+                  height: 16,
+                ),
+                VNHighlightWidget(
+                  id: "",
+                  developer: "Key",
+                  title: "Summer Pockets",
+                  imageAssetUrl: 'assets/summer_pockets.jpg',
+                ),
+                SizedBox(
+                  height: 32,
+                ),
+                KeyWidget(),
+                SizedBox(
+                  height: 16,
+                ),
+                SizedBox(
+                  height: 120,
+                ),
               ],
             ),
           );

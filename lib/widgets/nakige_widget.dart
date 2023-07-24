@@ -22,7 +22,17 @@ class NakigeWidget extends StatelessWidget {
       () {
         if (_repository.nakigeResult.value.results.isNotEmpty) {
           return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  "A story of an emotional impact".toUpperCase(),
+                  maxLines: 2,
+                  style: const TextStyle(
+                      fontSize: 12, fontWeight: FontWeight.w300),
+                ),
+              ),
               Row(
                 children: [
                   const SizedBox(
@@ -65,7 +75,7 @@ class NakigeWidget extends StatelessWidget {
                           const SizedBox(width: 16),
                           Column(
                             children: [
-                              itemSettings(index),
+                              itemSettings(index, _e),
                               const SizedBox(
                                 height: 8,
                               ),
@@ -107,7 +117,7 @@ class NakigeWidget extends StatelessWidget {
     );
   }
 
-  Widget itemSettings(int index) {
+  Widget itemSettings(int index, Result _e) {
     String? _image = _repository.nakigeResult.value.results[index].image.url;
     dynamic _imageRating =
         (_repository.nakigeResult.value.results[index].image.sexual +
@@ -139,20 +149,33 @@ class NakigeWidget extends StatelessWidget {
         }
     }
     return Stack(children: [
-      Container(
-        height: 130,
-        width: 100,
+      ElevatedButton(
+        onPressed: () {
+          Get.to(
+              () => VnDetail(id: _e.id, title: _e.title, image: _e.image.url));
+        },
         clipBehavior: Clip.antiAlias,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: Colors.grey.shade200),
-        child: _imageRating >= 2
-            ? const Center(child: NSFWWidget())
-            : FancyShimmerImage(
-                shimmerBaseColor: Colors.grey[300],
-                shimmerHighlightColor: Colors.grey[100],
-                boxFit: BoxFit.cover,
-                imageUrl: _image!),
+        style: ElevatedButton.styleFrom(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          elevation: 4,
+          padding: const EdgeInsets.all(0),
+        ),
+        child: SizedBox(
+          height: 130,
+          width: 100,
+          child: _imageRating <= 1
+              ? FancyShimmerImage(
+                  shimmerBaseColor: Colors.grey[300],
+                  shimmerHighlightColor: Colors.grey[100],
+                  boxFit: BoxFit.cover,
+                  alignment: Alignment.topCenter,
+                  imageUrl:
+                      _repository.nakigeResult.value.results[index].image.url)
+              : const Center(
+                  child: const NSFWWidget(),
+                ),
+        ),
       ),
       Positioned(
           child: Container(

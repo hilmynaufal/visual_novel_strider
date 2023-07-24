@@ -21,7 +21,17 @@ class LatestWidget extends StatelessWidget {
     return Obx(() {
       if (_repository.result.value.results.isNotEmpty) {
         return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                "update your game".toUpperCase(),
+                maxLines: 2,
+                style:
+                    const TextStyle(fontSize: 12, fontWeight: FontWeight.w300),
+              ),
+            ),
             Row(
               children: [
                 SizedBox(
@@ -48,7 +58,7 @@ class LatestWidget extends StatelessWidget {
               height: 16,
             ),
             SizedBox(
-              height: 180,
+              height: 200,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: _repository.result.value.results.length,
@@ -59,51 +69,56 @@ class LatestWidget extends StatelessWidget {
                   return Row(
                     children: [
                       SizedBox(width: 16),
-                      GestureDetector(
-                        onTap: () {
-                          Result _e = _repository.result.value.results[index];
-                          Get.to(() => VnDetail(
-                                id: _e.id,
-                                image: _e.image.url,
-                                title: _e.title,
-                              ));
-                        },
-                        child: Column(
-                          children: [
-                            Container(
+                      Column(
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              Result _e =
+                                  _repository.result.value.results[index];
+                              Get.to(() => VnDetail(
+                                    id: _e.id,
+                                    image: _e.image.url,
+                                    title: _e.title,
+                                  ));
+                            },
+                            clipBehavior: Clip.antiAlias,
+                            style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16)),
+                                elevation: 4,
+                                padding: EdgeInsets.all(0),
+                                primary: Theme.of(context).accentColor),
+                            child: SizedBox(
                               height: 130,
                               width: 100,
-                              clipBehavior: Clip.antiAlias,
-                              decoration: BoxDecoration(
-                                  color: Colors.grey.shade200,
-                                  borderRadius: BorderRadius.circular(10)),
                               child: _imageRating <= 1
                                   ? FancyShimmerImage(
                                       shimmerBaseColor: Colors.grey[300],
                                       shimmerHighlightColor: Colors.grey[100],
                                       boxFit: BoxFit.cover,
+                                      alignment: Alignment.topCenter,
                                       imageUrl: _repository.result.value
                                           .results[index].image.url)
                                   : Center(
                                       child: NSFWWidget(),
                                     ),
                             ),
-                            SizedBox(
-                              height: 8,
-                            ),
-                            SizedBox(
-                              width: 100,
-                              child: Text(
-                                  _repository.result.value.results[index].title,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                  )),
-                            )
-                          ],
-                        ),
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          SizedBox(
+                            width: 100,
+                            child: Text(
+                                _repository.result.value.results[index].title,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                )),
+                          )
+                        ],
                       ),
                       index == _repository.result.value.results.length - 1
                           ? SizedBox(

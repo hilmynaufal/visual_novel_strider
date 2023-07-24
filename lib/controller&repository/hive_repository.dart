@@ -17,57 +17,14 @@ class HiveRepository extends GetxController {
 
   List<DetailResult>? data = [];
   List<ProgressModel>? progressData = [];
+  var scheduleData = [].obs;
 
   //initial
   //TODO: #1 bug fix
-  RxList<ProgressModel> result = [
-    ProgressModel(
-        id: '0',
-        character: null,
-        reminder: "",
-        playtime: "",
-        lastPlayed: DateTime.now(),
-        hexColor: 0xFF,
-        isCompleted: false,
-        endTime: "",
-        hasReminder: false,
-        isPlaying: false,
-        vnId: '',
-        note: "")
-  ].obs;
+  var result = [].obs;
 
-  Map<int, int> hairColor = {
-    8: 0xFFEAAEAE,
-    7: 0xFFB3BCEC,
-    956: Colors.grey.shade400.value,
-    6: 0xFF8D5F51,
-    1305: Colors.orange.shade300.value,
-    10: 0xffB94E5C,
-    9: 0xFFBF6BA6,
-    4: 0xFF393B52,
-    50: 0xFFB1BA92,
-    919: Colors.cyan.shade400.value,
-    926: Colors.teal.shade300.value,
-    5: 0xFFFBDEB7
-  };
-
-  Map<int, int> eyeColor = {
-    110: 0xFFB3BCEC,
-    53: 0xFF8D5F51,
-    113: 0xffa8b461,
-    727: 0xFFEAAEAE,
-    112: 0xFFB1BA92,
-    927: Colors.teal.shade300.value,
-    114: 0xFFBF6BA6,
-    115: 0xffB94E5C,
-    906: 0xff9A2A2A,
-    108: Colors.amber.shade900.withOpacity(0.5).value,
-    109: 0xFF393B52,
-    111: Colors.grey.shade400.value
-  };
-
-  StreamController<List<ProgressModel>> progressStreamController =
-      StreamController<List<ProgressModel>>();
+  // StreamController<List<ProgressModel>> progressStreamController =
+  //     StreamController<List<ProgressModel>>();
 
   @override
   void onInit() async {
@@ -75,7 +32,7 @@ class HiveRepository extends GetxController {
     box = await Hive.openBox<DetailResult>('inventory');
     progressBox = await Hive.openBox<ProgressModel>('progress');
     getItem();
-    result.bindStream(progressStreamController.stream);
+    // result.bindStream(progressStreamController.stream);
   }
 
   Future<void> getItem() async {
@@ -97,25 +54,8 @@ class HiveRepository extends GetxController {
 
     log("schedule length = " + _temp.length.toString());
 
-    if (_temp.isNotEmpty) {
-      progressStreamController.add(_temp);
-    } else {
-      progressStreamController.add([
-        ProgressModel(
-            id: '0',
-            character: null,
-            reminder: "",
-            playtime: "",
-            lastPlayed: DateTime.now(),
-            hexColor: 0xFF,
-            isCompleted: false,
-            endTime: "",
-            hasReminder: false,
-            isPlaying: false,
-            vnId: '',
-            note: "")
-      ]);
-    }
+    scheduleData.value = _temp;
+
     isLatestScheduleReady.value = true;
   }
 
@@ -123,9 +63,9 @@ class HiveRepository extends GetxController {
     List<ProgressModel> _temp =
         progressBox!.values.where((element) => element.vnId == vnId).toList();
     if (_temp.isNotEmpty) {
-      progressStreamController.add(_temp);
+      result.value = _temp;
     } else {
-      progressStreamController.add([
+      result.value = [
         ProgressModel(
             id: '0',
             character: null,
@@ -139,7 +79,7 @@ class HiveRepository extends GetxController {
             isPlaying: false,
             vnId: '',
             note: "")
-      ]);
+      ];
     }
   }
 

@@ -11,24 +11,24 @@ class Trait extends HiveObject {
   @HiveField(2)
   String id;
   @HiveField(3)
-  String? description;
+  int? charCount;
 
   Trait(
       {required this.groupName,
       required this.name,
       required this.id,
-      this.description});
+      this.charCount});
 
   factory Trait.fromJson(Map<String, dynamic> json) => Trait(
       groupName: json["group_name"],
       name: json["name"],
       id: json["id"],
-      description: json["description"]);
+      charCount: json["char_count"]);
 
   Map<String, dynamic> toJson() => {
         "group_name": groupName,
         "name": name,
         "id": id,
-        "description": description
+        "char_count": charCount
       };
 }

@@ -34,21 +34,17 @@ class _InventoryWidgetState extends State<InventoryWidget> {
                 return Column(
                   children: [
                     const SizedBox(
-                      height: 16,
+                      height: 8,
                     ),
                     Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                      margin: const EdgeInsets.symmetric(horizontal: 8),
+                      // padding:
+                      //     EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       child: ElevatedButton(
-                        clipBehavior: Clip.hardEdge,
                         style: ElevatedButton.styleFrom(
                             splashFactory: NoSplash.splashFactory,
-                            elevation: 4,
+                            elevation: 0,
                             padding: const EdgeInsets.all(0),
-                            shape: RoundedRectangleBorder(
-                                side: BorderSide(
-                                    color: _theme.primaryColor, width: 0),
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(10))),
                             primary: _theme.accentColor,
                             onPrimary: Colors.black),
                         onPressed: () {
@@ -140,13 +136,12 @@ class _InventoryWidgetState extends State<InventoryWidget> {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            SizedBox(
-                              height: 140,
-                              width: 100,
-                              child: ClipRRect(
-                                borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10)),
+                            Container(
+                              padding: EdgeInsets.all(4),
+                              color: Colors.grey[200],
+                              child: SizedBox(
+                                height: 140,
+                                width: 100,
                                 child: (_repository.data![index].image?.sexual +
                                             _repository
                                                 .data![index].image?.violence ==

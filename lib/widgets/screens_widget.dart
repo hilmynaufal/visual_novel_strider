@@ -27,12 +27,13 @@ class ScreensWidget extends StatelessWidget {
                     Container(
                       width: 340,
                       margin: const EdgeInsets.only(right: 8),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
-                        child: FancyShimmerImage(
-                          imageUrl: screenshot![index].url!,
-                          boxFit: BoxFit.cover,
-                        ),
+                      padding: EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                          color: Colors.grey[100],
+                          border: Border.all(color: Colors.grey[300]!)),
+                      child: FancyShimmerImage(
+                        imageUrl: screenshot![index].url!,
+                        boxFit: BoxFit.cover,
                       ),
                     ),
                     index == screenshot!.length - 1

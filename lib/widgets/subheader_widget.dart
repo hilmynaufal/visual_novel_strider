@@ -22,9 +22,10 @@ class SubHeaderWidget extends StatelessWidget {
             automaticallyImplyTrailing: false,
             title: Container(
               padding: const EdgeInsets.all(10),
+              color: _theme.primaryColor,
               child: Row(
                 children: [
-                  Container(
+                  SizedBox(
                     width: 30,
                     height: 30,
                     child: ClipRRect(
@@ -58,18 +59,26 @@ class SubHeaderWidget extends StatelessWidget {
                   ),
                 ],
               ),
-              color: _theme.primaryColor,
             ),
           ),
         );
       }
-      return const BackdropSubHeader(
-          padding: EdgeInsets.all(0),
-          automaticallyImplyTrailing: false,
-          title: BackdropToggleButton(
-            icon: AnimatedIcons.close_menu,
-            color: Colors.grey,
-          ));
+      return Center(
+        child: GestureDetector(
+          onVerticalDragEnd: (details) {
+            Backdrop.of(context).fling();
+          },
+          child: Container(
+            width: double.infinity,
+            color: _theme.primaryColor,
+            height: 30,
+            child: Icon(
+              Icons.drag_handle,
+              color: _theme.accentColor,
+            ),
+          ),
+        ),
+      );
     });
   }
 }

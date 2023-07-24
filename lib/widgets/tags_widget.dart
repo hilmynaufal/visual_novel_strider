@@ -1,13 +1,9 @@
 import 'dart:developer';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:visual_novel_strider/model/old_socket_model/item.dart';
-import 'package:visual_novel_strider/model/old_socket_model/tags_result.dart';
 import 'package:visual_novel_strider/widgets/vn_detail.dart';
 
-import '../controller&repository/tags_repository.dart';
 import '../model/kana_model/tag_result.dart';
 
 class TagsWidget extends StatelessWidget {
@@ -26,7 +22,7 @@ class TagsWidget extends StatelessWidget {
     tags.sort((b, a) => a.rating.compareTo(b.rating));
     tags = tags
         .where(
-          (e) => e.spoiler <= 1,
+          (e) => e.spoiler == 0,
         )
         .toList();
 
@@ -66,7 +62,7 @@ class TagsWidget extends StatelessWidget {
         tags.isNotEmpty
             ? Expanded(
                 child: ListView.builder(
-                  itemCount: 8,
+                  itemCount: tags.length < 8 ? tags.length : 8,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (_, index) {
                     return Row(

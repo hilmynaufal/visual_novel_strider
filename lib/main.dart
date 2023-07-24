@@ -36,7 +36,7 @@ import 'package:visual_novel_strider/model/hive_model/hive_model.dart';
 // import 'package:visual_novel_strider/model/image_flagging.dart';
 // import 'package:visual_novel_strider/model/screen.dart';
 import 'package:visual_novel_strider/service/socket_server.dart';
-import 'package:visual_novel_strider/controller&repository/tags_repository.dart';
+import 'package:visual_novel_strider/controller&repository/trait_repository.dart';
 import 'package:visual_novel_strider/widgets/player_card.dart';
 import 'package:visual_novel_strider/widgets/subheader_widget.dart';
 import 'package:visual_novel_strider/widgets/vn_detail.dart';
@@ -107,13 +107,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-        title: 'Flutter Demo',
+        title: 'Visual Novel Strider',
         theme: ThemeData(
             primaryColor: const Color(0xFF29b6f6),
             brightness: Brightness.light,
             textTheme: TextTheme(headline1: TextStyle(color: Colors.white)),
-            primaryColorLight: const Color(0xFF68CEFE),
             accentColor: Colors.white,
+            primaryColorLight: const Color(0xFF68CEFE),
             primaryColorDark: const Color(0xFF29b6f6),
             // textSelectionColor: Colors.white,
             fontFamily: "Nunito"),
@@ -133,7 +133,7 @@ class _MyHomeState extends State<MyHome> {
   final KanaServer _kanaServer = Get.put(KanaServer());
   final SearchRepository _searchRepository = Get.put(SearchRepository());
   final DetailRepository _detailRepository = Get.put(DetailRepository());
-  final TagsRepository _tagsRepository = Get.put(TagsRepository());
+  // final TagsRepository _tagsRepository = Get.put(TagsRepository());
   final CharactersRepository _charactersRepository =
       Get.put(CharactersRepository());
   final HiveRepository _hiveRepository = Get.put(HiveRepository());
@@ -163,7 +163,7 @@ class _MyHomeState extends State<MyHome> {
       extendBody: true,
       appBar: BackdropAppBar(
         leading: Image.asset('assets/logo_small_invert_light.png'),
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: _theme.primaryColor,
         actions: [
           Icon(CupertinoIcons.search),
           SizedBox(
@@ -174,11 +174,11 @@ class _MyHomeState extends State<MyHome> {
           focusNode: myFocusNode,
           cursorColor: Theme.of(context).accentColor,
           controller: _searchController,
-          style: TextStyle(fontSize: 16, color: Theme.of(context).accentColor),
+          style: TextStyle(fontSize: 16, color: _theme.accentColor),
           decoration: InputDecoration(
             // isDense: true,
             // contentPadding: EdgeInsets.symmetric(vertical: 4),
-            hintStyle: TextStyle(color: Theme.of(context).accentColor),
+            hintStyle: TextStyle(color: _theme.accentColor),
             hintText: "Search visual novel",
             prefixIcon: Icon(
               CupertinoIcons.search,
@@ -218,43 +218,44 @@ class _MyHomeState extends State<MyHome> {
         return PlayerCard();
       }),
       frontLayer: _pages.elementAt(_selectedIndex),
-      bottomNavigationBar: SizedBox(
-        height: 50,
-        child: BottomNavigationBar(
-          selectedItemColor: _theme.primaryColor,
-          backgroundColor: _theme.accentColor,
-          selectedFontSize: 10,
-          unselectedFontSize: 10,
-          showUnselectedLabels: true,
-          unselectedItemColor: Colors.grey[800],
-          iconSize: 22,
-          onTap: onItemTapped,
-          currentIndex: _selectedIndex,
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.house),
-              activeIcon: Icon(CupertinoIcons.house_fill),
-              label: 'Home',
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: _theme.primaryColor,
+        backgroundColor: _theme.accentColor,
+        elevation: 0,
+        selectedFontSize: 12,
+        unselectedFontSize: 12,
+        showUnselectedLabels: true,
+        unselectedItemColor: Colors.grey[600],
+        iconSize: 20,
+        onTap: onItemTapped,
+        selectedLabelStyle: _bottomNavItemTextStyle(selected: true),
+        unselectedLabelStyle: _bottomNavItemTextStyle(selected: false),
+        currentIndex: _selectedIndex,
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(CupertinoIcons.house),
+            activeIcon: Icon(CupertinoIcons.house_fill),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(CupertinoIcons.bag),
+            activeIcon: Icon(
+              CupertinoIcons.bag_fill,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.bag),
-              activeIcon: Icon(
-                CupertinoIcons.bag_fill,
-              ),
-              label: 'Inventory',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.explore_outlined),
-              activeIcon: Icon(Icons.explore),
-              label: 'Search',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.gear_alt),
-              activeIcon: Icon(CupertinoIcons.gear_alt_fill),
-              label: 'Search',
-            ),
-          ],
-        ),
+            label: 'Inventory',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.explore_outlined),
+            activeIcon: Icon(Icons.explore),
+            label: 'Search',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(CupertinoIcons.gear_alt),
+            activeIcon: Icon(CupertinoIcons.gear_alt_fill),
+            label: 'Settings',
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
           child: Icon(
@@ -295,6 +296,17 @@ class _MyHomeState extends State<MyHome> {
     HomeWidget(),
     InventoryWidget(),
     SearchWidget(),
-    EmptyWidget()
+    EmptyWidget(
+      text: "Settings",
+    )
   ];
+
+  TextStyle _bottomNavItemTextStyle({required bool selected}) {
+    switch (selected) {
+      case true:
+        return TextStyle(fontWeight: FontWeight.w800);
+      default:
+        return TextStyle(fontWeight: FontWeight.w600);
+    }
+  }
 }

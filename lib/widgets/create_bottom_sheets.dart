@@ -1,14 +1,16 @@
 // ignore_for_file: prefer_const_constructors, deprecated_member_use, unused_local_variable, sized_box_for_whitespace
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:transparent_image/transparent_image.dart';
-import 'package:visual_novel_strider/model/hive_model/hive_characters_model.dart';
 import 'package:visual_novel_strider/controller&repository/notification_controller.dart';
-import 'package:visual_novel_strider/controller&repository/tags_repository.dart';
 import 'package:visual_novel_strider/model/kana_model/individual_result.dart';
+import 'package:visual_novel_strider/model/kana_model/trait.dart';
+
+import '../controller&repository/trait_repository.dart';
+import '../utils/constant/color_constant.dart';
 
 class CreateBottomSheet extends StatelessWidget {
   CreateBottomSheet(
@@ -20,7 +22,6 @@ class CreateBottomSheet extends StatelessWidget {
   final String vnID;
   final String title;
   final TextEditingController _textField = TextEditingController();
-  final TagsRepository _tagsRepository = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +30,14 @@ class CreateBottomSheet extends StatelessWidget {
     final DateTime _reminder = DateTime.now();
     final _theme = Theme.of(context);
 
-    _tagsRepository.getTraits(e.traits);
+    // _traitRepository.getTraits(e.traits);
+    Trait? _hairColor = e.traits.firstWhereOrNull(
+      (element) => ColorConstant.hairColor[element.id] != null,
+    );
+
+    Trait? _eyeColor = e.traits.firstWhereOrNull(
+      (element) => ColorConstant.eyeColor[element.id] != null,
+    );
 
     return Container(
       margin: EdgeInsets.only(top: 100),
@@ -83,106 +91,98 @@ class CreateBottomSheet extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: GetBuilder<TagsRepository>(builder: (_) {
-                    if (_.isTraitReady.value) {
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.max,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.face_retouching_natural_rounded,
-                                color: _theme.primaryColor,
-                                size: 18,
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.face_retouching_natural_rounded,
+                              color: _theme.primaryColor,
+                              size: 18,
+                            ),
+                            SizedBox(
+                              width: 8,
+                            ),
+                            Text(
+                              _hairColor?.name ?? "None",
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.w300),
+                            ),
+                            SizedBox(
+                              width: 8,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                _controller.hexColor.value =
+                                    ColorConstant.hairColor[_hairColor?.id] ??
+                                        0xFF;
+                              },
+                              child: Container(
+                                height: 18,
+                                width: 18,
+                                decoration: BoxDecoration(
+                                    color: Color(ColorConstant
+                                            .hairColor[_hairColor?.id] ??
+                                        0xFF),
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                        width: 1, color: Colors.grey.shade300)),
                               ),
-                              SizedBox(
-                                width: 8,
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.remove_red_eye_rounded,
+                              color: _theme.primaryColor,
+                              size: 18,
+                            ),
+                            SizedBox(
+                              width: 8,
+                            ),
+                            Text(
+                              _eyeColor?.name ?? "None",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w300,
                               ),
-                              Text(
-                                _.traits.length >= 2
-                                    ? _.traits[1]!.name
-                                    : "None",
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.w300),
+                            ),
+                            SizedBox(
+                              width: 8,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                _controller.hexColor.value =
+                                    ColorConstant.eyeColor[_eyeColor?.id] ??
+                                        0xFF;
+                              },
+                              child: Container(
+                                height: 18,
+                                width: 18,
+                                decoration: BoxDecoration(
+                                    color: Color(
+                                        ColorConstant.eyeColor[_eyeColor?.id] ??
+                                            0xFF),
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                        width: 1, color: Colors.grey.shade300)),
                               ),
-                              SizedBox(
-                                width: 8,
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  _controller.hexColor.value =
-                                      _controller.hairColor[_.traits[1]!.id] ??
-                                          0xFF;
-                                },
-                                child: Container(
-                                  height: 18,
-                                  width: 18,
-                                  decoration: BoxDecoration(
-                                      color: Color(_controller
-                                          .hairColor[_.traits[1]!.id]!),
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                          width: 1,
-                                          color: Colors.grey.shade300)),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 8,
-                          ),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.remove_red_eye_rounded,
-                                color: _theme.primaryColor,
-                                size: 18,
-                              ),
-                              SizedBox(
-                                width: 8,
-                              ),
-                              Text(
-                                _.traits[0]!.name,
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w300,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 8,
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  _controller.hexColor.value =
-                                      _controller.eyeColor[_.traits[0]!.id] ??
-                                          0xFF;
-                                },
-                                child: Container(
-                                  height: 18,
-                                  width: 18,
-                                  decoration: BoxDecoration(
-                                      color: Color(_controller
-                                          .eyeColor[_.traits[0]!.id]!),
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                          width: 1,
-                                          color: Colors.grey.shade300)),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 8,
-                          ),
-                        ],
-                      );
-                    }
-                    return CircularProgressIndicator();
-                  }),
-                )
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                      ],
+                    ))
               ],
             ),
             Row(

@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:get/get.dart';
 import 'package:visual_novel_strider/model/kana_model/response_result.dart';
+import 'package:visual_novel_strider/model/kana_model/result.dart';
 
 class KanaServer extends GetxController {
   static const String URL = "https://api.vndb.org/kana/";
@@ -16,12 +17,6 @@ class KanaServer extends GetxController {
   final StreamController<ResponseResult> detailController =
       StreamController<ResponseResult>();
   final StreamController<ResponseResult> charactersController =
-      StreamController<ResponseResult>();
-  final StreamController<ResponseResult> newReleasedController =
-      StreamController<ResponseResult>();
-  final StreamController<ResponseResult> popularController =
-      StreamController<ResponseResult>();
-  final StreamController<ResponseResult> nakigeController =
       StreamController<ResponseResult>();
 
   Future<void> searchVisualNovel(String query) async {
@@ -89,18 +84,21 @@ class KanaServer extends GetxController {
     }
   }
 
-  Future<void> getBatchVisualNovel(String sort, String controller,
+  Future<ResponseResult> getBatchVisualNovel(String sort, String controller,
       {String? tags,
       String? releaseDate,
       String? olang,
-      required int filterCount}) async {
+      String? dev,
+      String? vnId,
+      required int filterCount,
+      required int itemCount}) async {
     final requestBody = json.encode(<String, dynamic>{
       "filters": filterCount == 0
           ? []
-          : _filtersFactory(filterCount, tags, releaseDate, olang),
+          : _filtersFactory(filterCount, vnId, tags, releaseDate, olang, dev),
       "fields":
           "title, alttitle, image.url, released, rating, languages, image.url, image.sexual, image.violence",
-      "results": 20,
+      "results": itemCount,
       "sort": sort,
       "reverse": true
     });
@@ -112,29 +110,18 @@ class KanaServer extends GetxController {
 
     log(requestBody);
     if (response.statusCode == 200) {
-      switch (controller) {
-        case "new":
-          newReleasedController
-              .add(ResponseResult.fromJson(jsonDecode(response.body)));
-          break;
-        case "popularity":
-          popularController
-              .add(ResponseResult.fromJson(jsonDecode(response.body)));
-          break;
-        case "nakige":
-          nakigeController
-              .add(ResponseResult.fromJson(jsonDecode(response.body)));
-          break;
-        default:
-      }
-      // searchController.add(SearchResult.fromJson(jsonDecode(response.body)));
       log(response.body);
-    } else {
+      return ResponseResult.fromJson(jsonDecode(response.body));
+    }
+    // searchController.add(SearchResult.fromJson(jsonDecode(response.body)));
+    else {
       log("error is in = " + controller + " controller");
+      return ResponseResult(results: [], more: false);
     }
   }
 
-  List<dynamic> _filtersFactory(int filterCount, tags, releaseDate, olang) {
+  List<dynamic> _filtersFactory(
+      int filterCount, vnId, tags, releaseDate, olang, dev) {
     List<dynamic> newFilters = [];
 
     newFilters.add("and");
@@ -142,6 +129,13 @@ class KanaServer extends GetxController {
     if (tags != null) newFilters.add(["tag", "=", tags]);
     if (releaseDate != null) newFilters.add(["released", ">=", releaseDate]);
     if (olang != null) newFilters.add(["olang", "=", olang]);
+    if (dev != null) {
+      newFilters.add([
+        "developer",
+        "=",
+        ["id", "=", dev]
+      ]);
+    }
 
     return newFilters;
   }

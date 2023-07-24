@@ -1,19 +1,17 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:backdrop/backdrop.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:transparent_image/transparent_image.dart';
-import 'package:visual_novel_strider/model/hive_model/hive_model.dart';
 import 'package:visual_novel_strider/controller&repository/notification_controller.dart';
 import 'package:visual_novel_strider/model/kana_model/detail_result.dart';
+import 'package:visual_novel_strider/model/old_socket_model/item.dart';
 import 'package:visual_novel_strider/utils/duration_parse.dart';
-import 'package:visual_novel_strider/widgets/character_card.dart';
-import 'package:visual_novel_strider/widgets/create_bottom_sheets.dart';
+import 'package:visual_novel_strider/widgets/empty_widget.dart';
+import 'package:visual_novel_strider/widgets/route_detail_widget/characters_drawer.dart';
+import 'package:visual_novel_strider/widgets/route_detail_widget/characters_route_body.dart';
+import 'package:visual_novel_strider/widgets/route_detail_widget/routes_maker_body.dart';
+import 'package:visual_novel_strider/widgets/vn_detail_header.dart';
 
 class DetailWidget extends StatefulWidget {
   DetailWidget({Key? key, required this.item}) : super(key: key);
@@ -26,7 +24,8 @@ class DetailWidget extends StatefulWidget {
   State<DetailWidget> createState() => _DetailWidgetState();
 }
 
-class _DetailWidgetState extends State<DetailWidget> {
+class _DetailWidgetState extends State<DetailWidget>
+    with TickerProviderStateMixin {
   // final List<Color> _colors = [];
 
   // void updatePallete() async {
@@ -45,6 +44,14 @@ class _DetailWidgetState extends State<DetailWidget> {
   //   setState(() {});
   // }
 
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
   @override
   Widget build(BuildContext context) {
     final _theme = Theme.of(context);
@@ -52,172 +59,27 @@ class _DetailWidgetState extends State<DetailWidget> {
     widget._notificationController.hiveRepository
         .getCharactersRoute(widget.item.id!);
 
-    return BackdropScaffold(
-        appBar: BackdropAppBar(
-          title: Text(
-            "Detail",
-            style: TextStyle(color: _theme.textSelectionTheme.selectionColor),
-          ),
-          elevation: 4,
-          backgroundColor: _theme.primaryColor,
-        ),
-        backLayer: Container(
-          margin: const EdgeInsets.only(bottom: 40),
-          alignment: Alignment.center,
-          child: Column(
+    return Scaffold(
+      backgroundColor: _theme.accentColor,
+      body: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) {
+            return [
+              VNDetailHeader(
+                image: widget.item.image?.url ?? "",
+                title: widget.item.title,
+                item: widget.item,
+                tabController: _tabController,
+              ),
+            ];
+          },
+          body: TabBarView(
+            controller: _tabController,
             children: [
-              const SizedBox(
-                height: 16,
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              Row(
-                children: [
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  Container(
-                    height: 22,
-                    width: 4,
-                    color: Colors.amber,
-                  ),
-                  const SizedBox(
-                    width: 4,
-                  ),
-                  Text(
-                    "Progress",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 22,
-                        color: _theme.primaryColor),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              Expanded(
-                child: Obx(() {
-                  if (widget._notificationController.hiveRepository.result[0]
-                          .id ==
-                      '0') {
-                    return const Center(
-                        child:
-                            Text("Open Character's Drawer to Add Route Card"));
-                  }
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.vertical,
-                    itemCount: widget
-                        ._notificationController.hiveRepository.result.length,
-                    itemBuilder: (context, index) => SizedBox(
-                        height: 215,
-                        child: CharacterCard(index: index, item: widget.item)),
-                  );
-                }),
-              ),
+              RoutesMakerBody(item: widget.item),
+              CharactersRouteBody(item: widget.item)
             ],
-          ),
-        ),
-        backLayerBackgroundColor: _theme.accentColor,
-        revealBackLayerAtStart: true,
-        frontLayerActiveFactor: 0.5,
-        frontLayerBackgroundColor: _theme.accentColor,
-        subHeader: Container(
-          color: _theme.primaryColorDark,
-          child: Row(children: const [
-            SizedBox(
-              width: 16,
-            ),
-            BackdropToggleButton(
-                color: Colors.white, icon: AnimatedIcons.menu_close),
-            Text(
-              "Character's Drawer",
-              style: TextStyle(color: Colors.white),
-            ),
-          ]),
-        ),
-        frontLayer: Column(
-          children: [
-            Container(
-              width: double.infinity,
-              height: 16,
-              color: Colors.yellow.shade500,
-              child: Center(
-                child: Text(
-                  "Some spoiler may be not filtered!",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Colors.yellow.shade900,
-                      fontSize: 11,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Container(
-                  margin: const EdgeInsets.only(top: 16, bottom: 16),
-                  child: Wrap(
-                      spacing: 20,
-                      runSpacing: 20,
-                      alignment: WrapAlignment.center,
-                      runAlignment: WrapAlignment.center,
-                      children: widget.item.characters!
-                          .asMap()
-                          .entries
-                          .map((e) {
-                            return ElevatedButton(
-                              onPressed: () {
-                                Get.bottomSheet(
-                                  CreateBottomSheet(
-                                    e: e.value,
-                                    vnID: widget.item.id!,
-                                    title: widget.item.title,
-                                  ),
-                                  enableDrag: true,
-                                  isScrollControlled: true,
-                                ).whenComplete(() {
-                                  widget._notificationController.hiveRepository
-                                      .getCharactersRoute(widget.item.id!);
-                                  widget._notificationController.clearData();
-                                });
-                              },
-                              clipBehavior: Clip.antiAlias,
-                              style: ElevatedButton.styleFrom(
-                                  elevation: 4,
-                                  side: BorderSide(
-                                      width: 0, color: _theme.accentColor),
-                                  padding: const EdgeInsets.all(0),
-                                  primary: _theme.accentColor,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(14))),
-                              child: e.value.image != null
-                                  ? SizedBox(
-                                      height: 100,
-                                      width: 70,
-                                      child: ClipRRect(
-                                          child: FadeInImage.memoryNetwork(
-                                              fit: BoxFit.cover,
-                                              imageScale: 3,
-                                              alignment: Alignment.topCenter,
-                                              placeholder: kTransparentImage,
-                                              image: e.value.image!.url)))
-                                  : Container(
-                                      height: 100,
-                                      width: 70,
-                                      child: Text("No Image"),
-                                    ),
-                            );
-                          })
-                          .toList()
-                          .cast<Widget>()),
-                ),
-              ),
-            ),
-          ],
-        ));
+          )),
+    );
   }
 
   String toDuration(String duration) {
