@@ -81,52 +81,47 @@ class CharactersWidget extends StatelessWidget {
                           : SizedBox(),
                       Column(
                         children: [
-                          ElevatedButton(
-                              clipBehavior: Clip.antiAlias,
-                              onPressed: () {
-                                //TODO: on pressed (CharacterDetailWidget)
-                                Get.bottomSheet(
-                                    CharacterDetailBottomSheet(
-                                      id: _e.id,
-                                      name: _e.name,
-                                      image:
-                                          _e.image != null ? _e.image!.url : '',
-                                    ),
-                                    isScrollControlled: true,
-                                    enableDrag: true);
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(16)),
-                                  // side: BorderSide(
-                                  //     width: 1,
-                                  //     color: Theme.of(context).primaryColor),
-                                  elevation: 4,
-                                  primary: Theme.of(context).accentColor),
-                              child: _e.image != null
-                                  ? SizedBox(
-                                      height: 100,
-                                      width: 70,
-                                      child: ClipRRect(
-                                        child: FadeInImage.memoryNetwork(
-                                          image: _e.image!.url,
-                                          alignment: Alignment.topCenter,
-                                          fit: BoxFit.cover,
-                                          placeholder: kTransparentImage,
+                          GestureDetector(
+                            onTap: () {
+                              //TODO: on pressed (CharacterDetailWidget)
+                              Get.bottomSheet(
+                                  CharacterDetailBottomSheet(
+                                    id: _e.id,
+                                    name: _e.name,
+                                    image:
+                                        _e.image != null ? _e.image!.url : '',
+                                  ),
+                                  isScrollControlled: true,
+                                  enableDrag: true);
+                            },
+                            child: Container(
+                                padding: EdgeInsets.all(2),
+                                decoration: BoxDecoration(
+                                    color: Colors.grey[100],
+                                    border:
+                                        Border.all(color: Colors.grey[300]!)),
+                                child: _e.image != null
+                                    ? SizedBox(
+                                        height: 100,
+                                        width: 140,
+                                        child: ClipRRect(
+                                          child: FadeInImage.memoryNetwork(
+                                            image: _e.image!.url,
+                                            alignment: Alignment.topCenter,
+                                            fit: BoxFit.fitWidth,
+                                            placeholder: kTransparentImage,
+                                          ),
                                         ),
-                                      ),
-                                    )
-                                  : const Text("no image")),
+                                      )
+                                    : const Text("no image")),
+                          ),
                           SizedBox(height: 8),
-                          SizedBox(
-                            width: 70,
-                            child: Text(
-                              _e.name,
-                              maxLines: 2,
-                              textAlign: TextAlign.center,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(fontWeight: FontWeight.w600),
-                            ),
+                          Text(
+                            _e.name,
+                            maxLines: 2,
+                            textAlign: TextAlign.center,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(fontWeight: FontWeight.w600),
                           ),
                           Text(
                             _e.vns
