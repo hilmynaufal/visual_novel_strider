@@ -10,7 +10,7 @@ class ScreensWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
         height: 200,
         child: ListView.builder(
             // shrinkWrap: true,
@@ -27,10 +27,9 @@ class ScreensWidget extends StatelessWidget {
                     Container(
                       width: 340,
                       margin: const EdgeInsets.only(right: 8),
-                      padding: EdgeInsets.all(4),
+                      clipBehavior: Clip.antiAlias,
                       decoration: BoxDecoration(
-                          color: Colors.grey[100],
-                          border: Border.all(color: Colors.grey[300]!)),
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
                       child: FancyShimmerImage(
                         imageUrl: screenshot![index].url!,
                         boxFit: BoxFit.cover,

@@ -4,28 +4,22 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
+import 'package:visual_novel_strider/controller&repository/abstract_card_persistent_controller.dart';
 import 'package:visual_novel_strider/controller&repository/hive_repository.dart';
+import 'package:visual_novel_strider/controller&repository/hive_repository_mixin.dart';
 import 'package:visual_novel_strider/model/hive_model/hive_characters_model.dart';
 import 'package:visual_novel_strider/model/kana_model/individual_result.dart';
 
 import '../model/hive_model/progress_model.dart';
 
-class NotificationController extends GetxController {
+class NotificationController extends AbstractCardPersistentController
+    with HiveRepositoryMixin {
   final Rx<ReceivedAction> action = ReceivedAction().obs;
-
-  final HiveRepository hiveRepository = Get.find();
 
   final StopWatchTimer _stopWatchTimer = StopWatchTimer();
   StopWatchTimer get stopWatchTimer => _stopWatchTimer;
 
   // RxInt minutes = 0.obs, seconds = 0.obs;
-  RxBool isPlaying = false.obs;
-
-  RxInt hexColor = 0xFF29b6f6.obs;
-  String reminder = "";
-  RxBool hasReminder = false.obs;
-  RxInt length = 1.obs;
-  String note = "";
 
   // @override
   // void onReady() {

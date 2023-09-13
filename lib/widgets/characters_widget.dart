@@ -12,9 +12,10 @@ import 'package:visual_novel_strider/model/kana_model/individual_result.dart';
 import 'package:visual_novel_strider/widgets/characters_detail_bottom_sheets.dart';
 
 class CharactersWidget extends StatelessWidget {
-  CharactersWidget({Key? key, required this.vnId}) : super(key: key);
+  CharactersWidget({Key? key, required this.vnId, required this.repository})
+      : super(key: key);
 
-  final CharactersRepository _repository = Get.find();
+  final CharactersRepository repository;
 
   final String vnId;
 
@@ -23,20 +24,34 @@ class CharactersWidget extends StatelessWidget {
     final _theme = Theme.of(context);
 
     return Obx(() {
-      if (_repository.result.value.results.isNotEmpty) {
+      if (repository.result.value.results.isNotEmpty) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  margin: EdgeInsets.only(left: 16),
-                  child: const Text("Characters",
+                Row(
+                  children: [
+                    SizedBox(
+                      width: 16,
+                    ),
+                    Container(
+                      height: 22,
+                      width: 4,
+                      color: _theme.primaryColor,
+                    ),
+                    SizedBox(
+                      width: 4,
+                    ),
+                    Text(
+                      "Characters",
                       style: TextStyle(
-                        fontSize: 18,
                         fontWeight: FontWeight.w800,
-                      )),
+                        fontSize: 18,
+                      ),
+                    ),
+                  ],
                 ),
                 Container(
                   margin: EdgeInsets.only(right: 16),
@@ -68,10 +83,10 @@ class CharactersWidget extends StatelessWidget {
             SizedBox(
               height: 200,
               child: ListView.builder(
-                itemCount: _repository.result.value.results.length,
+                itemCount: repository.result.value.results.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (_, index) {
-                  IndividualResult _e = _repository.result.value.results[index];
+                  IndividualResult _e = repository.result.value.results[index];
                   return Row(
                     children: [
                       index == 0

@@ -57,7 +57,7 @@ class _DetailWidgetState extends State<DetailWidget>
     final _theme = Theme.of(context);
 
     widget._notificationController.hiveRepository
-        .getCharactersRoute(widget.item.id!);
+        .getCharactersRoute(widget.item.id);
 
     return Scaffold(
       backgroundColor: _theme.accentColor,

@@ -22,7 +22,7 @@ class DetailResultAdapter extends TypeAdapter<DetailResult> {
       popularity: fields[3] as double?,
       screenshots: (fields[4] as List?)?.cast<Screenshot>(),
       image: fields[5] as Image?,
-      id: fields[6] as String?,
+      id: fields[6] as String,
       tags: (fields[7] as List).cast<TagResult>(),
       languages: (fields[8] as List?)?.cast<String>(),
       alttitle: fields[9] as dynamic,
@@ -31,6 +31,7 @@ class DetailResultAdapter extends TypeAdapter<DetailResult> {
       votecount: fields[12] as int?,
       olang: fields[13] as String?,
       length: fields[14] as int?,
+      developers: (fields[21] as List).cast<DeveloperModel>(),
     )
       ..characters = (fields[19] as List?)?.cast<IndividualResult>()
       ..isComplete = fields[20] as bool?;
@@ -39,7 +40,7 @@ class DetailResultAdapter extends TypeAdapter<DetailResult> {
   @override
   void write(BinaryWriter writer, DetailResult obj) {
     writer
-      ..writeByte(16)
+      ..writeByte(17)
       ..writeByte(1)
       ..write(obj.rating)
       ..writeByte(2)
@@ -71,7 +72,9 @@ class DetailResultAdapter extends TypeAdapter<DetailResult> {
       ..writeByte(19)
       ..write(obj.characters)
       ..writeByte(20)
-      ..write(obj.isComplete);
+      ..write(obj.isComplete)
+      ..writeByte(21)
+      ..write(obj.developers);
   }
 
   @override

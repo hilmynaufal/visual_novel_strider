@@ -10,37 +10,47 @@ import 'package:visual_novel_strider/model/kana_model/individual_result.dart';
 import 'package:visual_novel_strider/model/hive_model/progress_model.dart';
 
 class HiveRepository extends GetxController {
-  Box<DetailResult>? box;
+  late Box<DetailResult> box;
   Box<ProgressModel>? progressBox;
   var isReady = false.obs;
   RxBool isLatestScheduleReady = false.obs;
 
   List<DetailResult>? data = [];
-  List<ProgressModel>? progressData = [];
+  List<ProgressModel> progressData = [];
   var scheduleData = [].obs;
 
   //initial
   //TODO: #1 bug fix
   var result = [].obs;
 
-  // StreamController<List<ProgressModel>> progressStreamController =
-  //     StreamController<List<ProgressModel>>();
+  StreamController<List<ProgressModel>> progressStreamController =
+      StreamController<List<ProgressModel>>();
 
   @override
   void onInit() async {
     super.onInit();
     box = await Hive.openBox<DetailResult>('inventory');
     progressBox = await Hive.openBox<ProgressModel>('progress');
-    getItem();
+    await getItem();
     // result.bindStream(progressStreamController.stream);
   }
 
   Future<void> getItem() async {
     isReady.value = false;
-    data = box!.values.toList();
-    progressData = progressBox!.values.toList();
+    data = box.values.toList();
+    // progressData = progressBox!.values.toList();
     isReady.value = true;
     log("item get");
+    update();
+  }
+
+  Future<void> getProgressDataWithVNId(String vnId) async {
+    // isReady.value = false;
+    // data = box.values.toList();
+    progressData =
+        progressBox!.values.where((element) => element.vnId == vnId).toList();
+    // isReady.value = true;
+    log("progress get");
     update();
   }
 
@@ -64,23 +74,8 @@ class HiveRepository extends GetxController {
         progressBox!.values.where((element) => element.vnId == vnId).toList();
     if (_temp.isNotEmpty) {
       result.value = _temp;
-    } else {
-      result.value = [
-        ProgressModel(
-            id: '0',
-            character: null,
-            reminder: "",
-            playtime: "",
-            lastPlayed: DateTime.now(),
-            hexColor: 0xFF,
-            isCompleted: false,
-            endTime: "",
-            hasReminder: false,
-            isPlaying: false,
-            vnId: '',
-            note: "")
-      ];
     }
+    // update();
   }
 
   void addItem(
@@ -92,7 +87,7 @@ class HiveRepository extends GetxController {
 
     if (checkIfAdded(detailResult)) {
       log('added');
-      box!.add(detailResult);
+      box.add(detailResult);
     }
   }
 

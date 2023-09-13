@@ -14,13 +14,16 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:visual_novel_strider/controller&repository/detail_repository.dart';
 import 'package:visual_novel_strider/controller&repository/player_controller.dart';
 import 'package:visual_novel_strider/controller&repository/hive_repository.dart';
+import 'package:visual_novel_strider/controller&repository/playground_controller.dart';
 import 'package:visual_novel_strider/controller&repository/search_repository.dart';
+import 'package:visual_novel_strider/model/kana_model/developer_model.dart';
 import 'package:visual_novel_strider/model/kana_model/image.dart' as ImageP;
 import 'package:visual_novel_strider/model/kana_model/individual_result.dart';
 import 'package:visual_novel_strider/model/kana_model/screenshot_result.dart';
 import 'package:visual_novel_strider/model/kana_model/tag_result.dart';
 import 'package:visual_novel_strider/model/kana_model/trait.dart';
 import 'package:visual_novel_strider/model/kana_model/vns.dart';
+import 'package:visual_novel_strider/model/playground_model.dart';
 import 'package:visual_novel_strider/service/http_client.dart';
 import 'package:visual_novel_strider/model/hive_model/progress_model.dart';
 import 'package:visual_novel_strider/controller&repository/notification_controller.dart';
@@ -45,6 +48,7 @@ import 'package:visual_novel_strider/widgets/search_widget.dart';
 
 import 'controller&repository/characters_repository.dart';
 import 'model/kana_model/detail_result.dart';
+import 'model/kana_model/node_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -77,6 +81,9 @@ void main() async {
   Hive.registerAdapter(TagResultAdapter());
   Hive.registerAdapter(VnsAdapter());
   Hive.registerAdapter(ProgressModelAdapter());
+  Hive.registerAdapter(DeveloperModelAdapter());
+  Hive.registerAdapter(PlaygroundModelAdapter());
+  Hive.registerAdapter(NodeModelAdapter());
   AwesomeNotifications().initialize(null, [
     NotificationChannel(
         channelKey: 'schedule_notification',
@@ -132,13 +139,16 @@ class _MyHomeState extends State<MyHome> {
   // final SocketServer _serverSocket = Get.put(SocketServer());
   final KanaServer _kanaServer = Get.put(KanaServer());
   final SearchRepository _searchRepository = Get.put(SearchRepository());
-  final DetailRepository _detailRepository = Get.put(DetailRepository());
+  final _detailRepository =
+      Get.create<DetailRepository>(() => DetailRepository());
   // final TagsRepository _tagsRepository = Get.put(TagsRepository());
-  final CharactersRepository _charactersRepository =
-      Get.put(CharactersRepository());
+  final _charactersRepository =
+      Get.create<CharactersRepository>(() => CharactersRepository());
   final HiveRepository _hiveRepository = Get.put(HiveRepository());
   final NotificationController _controller = Get.put(NotificationController());
   final PlayerController _playerController = Get.put(PlayerController());
+  final PlaygroundController _playgroundController =
+      Get.put(PlaygroundController());
 
   final TextEditingController _searchController = TextEditingController();
 

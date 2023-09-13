@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 
@@ -25,18 +27,27 @@ class CharactersRouteBody extends StatelessWidget {
         ),
         Expanded(
           child: Obx(() {
-            if (_notificationController.hiveRepository.result[0].id == '0') {
+            if (_notificationController.hiveRepository.result.isEmpty) {
+              // _notificationController.hiveRepository
+              //     .getProgressDataWithVNId(item.id);
+
               return const Center(
                   child: Text("Open Character's Drawer to Add Route Card"));
             }
+            log("a = " +
+                _notificationController.hiveRepository.result.length
+                    .toString());
             return ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              scrollDirection: Axis.vertical,
-              itemCount: _notificationController.hiveRepository.result.length,
-              itemBuilder: (context, index) => SizedBox(
-                  height: 215, child: CharacterCard(index: index, item: item)),
-            );
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                itemCount: _notificationController.hiveRepository.result.length,
+                itemBuilder: (context, index) => SizedBox(
+                    height: 215,
+                    child: CharacterCard(
+                        nodeModel: _notificationController
+                            .hiveRepository.result[index])) //TODO: fix
+                );
           }),
         ),
       ],

@@ -20,7 +20,7 @@ class DateTimeParse {
   }
 
   static String getNow() {
-    final inf = DateFormat("yyyy-MM-dd");
+    final inf = DateFormat("yyyyMMdd");
     return inf.format(DateTime.now());
   }
 }

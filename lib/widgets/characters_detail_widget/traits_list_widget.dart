@@ -51,13 +51,13 @@ class TraitsList extends StatelessWidget {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
-                                  e.name,
+                                  e.name + "  ",
                                   style: TextStyle(color: _theme.primaryColor),
                                 ),
-                                const Text(
-                                  ", ",
-                                  style: TextStyle(color: Colors.black),
-                                ),
+                                // const Text(
+                                //   ", ",
+                                //   style: TextStyle(color: Colors.black),
+                                // ),
                               ],
                             );
                           })
@@ -65,7 +65,7 @@ class TraitsList extends StatelessWidget {
                           .cast<Widget>(),
                     ),
                   )
-                : Container(child: CircularProgressIndicator())
+                : Container(child: Text("None"))
           ],
         ),
       ],

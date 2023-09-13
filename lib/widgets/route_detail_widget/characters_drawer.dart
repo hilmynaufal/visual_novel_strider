@@ -7,21 +7,25 @@ import 'package:get/get.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:visual_novel_strider/controller&repository/notification_controller.dart';
 import 'package:visual_novel_strider/model/kana_model/detail_result.dart';
+import 'package:visual_novel_strider/widgets/playground/create_initial_protagonist_bottomsheet.dart';
 
 import '../create_bottom_sheets.dart';
 
 class CharactersDrawer extends StatelessWidget {
-  CharactersDrawer({Key? key, required this.item}) : super(key: key);
+  CharactersDrawer({Key? key, required this.item, required this.controller})
+      : super(key: key);
 
   final DetailResult item;
+  final String controller;
 
-  final NotificationController _notificationController = Get.find();
+  // final NotificationController _notificationController = Get.find();
 
   @override
   Widget build(BuildContext context) {
     final _theme = Theme.of(context);
 
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         GestureDetector(
           onTap: () {
@@ -82,65 +86,70 @@ class CharactersDrawer extends StatelessWidget {
           ),
         ),
         Expanded(
-          child: SingleChildScrollView(
-            child: Container(
-              width: double.infinity,
-              color: _theme.accentColor,
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              child: Wrap(
-                  spacing: 20,
-                  runSpacing: 20,
-                  alignment: WrapAlignment.center,
-                  runAlignment: WrapAlignment.center,
-                  children: item.characters!
-                      .asMap()
-                      .entries
-                      .map((e) {
-                        return ElevatedButton(
-                          onPressed: () {
-                            Get.bottomSheet(
-                              CreateBottomSheet(
-                                e: e.value,
-                                vnID: item.id!,
-                                title: item.title,
-                              ),
-                              enableDrag: true,
-                              isScrollControlled: true,
-                            ).whenComplete(() {
-                              _notificationController.hiveRepository
-                                  .getCharactersRoute(item.id!);
-                              _notificationController.clearData();
-                            });
-                          },
-                          clipBehavior: Clip.antiAlias,
-                          style: ElevatedButton.styleFrom(
-                              elevation: 4,
-                              side: BorderSide(
-                                  width: 0, color: _theme.accentColor),
-                              padding: const EdgeInsets.all(0),
-                              primary: _theme.accentColor,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(14))),
-                          child: e.value.image != null
-                              ? SizedBox(
-                                  height: 100,
-                                  width: 70,
-                                  child: ClipRRect(
-                                      child: FadeInImage.memoryNetwork(
-                                          fit: BoxFit.cover,
-                                          imageScale: 3,
-                                          alignment: Alignment.topCenter,
-                                          placeholder: kTransparentImage,
-                                          image: e.value.image!.url)))
-                              : Container(
-                                  height: 100,
-                                  width: 70,
-                                  child: Text("No Image"),
-                                ),
-                        );
-                      })
-                      .toList()
-                      .cast<Widget>()),
+          child: Container(
+            width: double.infinity,
+            color: _theme.accentColor,
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                child: Wrap(
+                    spacing: 20,
+                    runSpacing: 20,
+                    alignment: WrapAlignment.center,
+                    runAlignment: WrapAlignment.center,
+                    children: item.characters!
+                        .asMap()
+                        .entries
+                        .map((e) {
+                          return ElevatedButton(
+                            onPressed: () {
+                              Get.back();
+                              Get.bottomSheet(
+                                controller == "playground"
+                                    ? CreateInitialProtagonistBottomSheet(
+                                        e: e.value,
+                                        vnID: item.id,
+                                        title: item.title,
+                                        customCallbackForAddButton: () {})
+                                    : CreateCardBottomSheet(
+                                        e: e.value,
+                                        vnID: item.id,
+                                        title: item.title,
+                                      ),
+                                enableDrag: true,
+                                isScrollControlled: true,
+                              ).whenComplete(() {});
+                            },
+                            clipBehavior: Clip.antiAlias,
+                            style: ElevatedButton.styleFrom(
+                                elevation: 4,
+                                side: BorderSide(
+                                    width: 0, color: _theme.accentColor),
+                                padding: const EdgeInsets.all(0),
+                                primary: _theme.accentColor,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(14))),
+                            child: e.value.image != null
+                                ? SizedBox(
+                                    height: 100,
+                                    width: 70,
+                                    child: ClipRRect(
+                                        child: FadeInImage.memoryNetwork(
+                                            fit: BoxFit.cover,
+                                            imageScale: 3,
+                                            alignment: Alignment.topCenter,
+                                            placeholder: kTransparentImage,
+                                            image: e.value.image!.url)))
+                                : Container(
+                                    height: 100,
+                                    width: 70,
+                                    child: Text("No Image"),
+                                  ),
+                          );
+                        })
+                        .toList()
+                        .cast<Widget>()),
+              ),
             ),
           ),
         ),

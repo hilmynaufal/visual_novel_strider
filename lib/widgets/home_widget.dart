@@ -65,22 +65,23 @@ class HomeWidget extends StatelessWidget {
                   if (_hiveRepository.result.isEmpty) {
                     return Text("Your latest schedule will show up here.");
                   } else {
-                    return SizedBox(
-                      height: 220,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: _hiveRepository.result.length,
-                        itemBuilder: (context, index) => SizedBox(
-                          width: 340,
-                          child: CharacterCard(
-                              index: index, item: _hiveRepository.data![index]),
-                        ),
-                      ),
-                    );
+                    return Text("is playing");
+                    // return SizedBox(
+                    //   height: 220,
+                    //   child: ListView.builder(
+                    //     scrollDirection: Axis.horizontal,
+                    //     itemCount: _hiveRepository.result.length,
+                    //     itemBuilder: (context, index) => SizedBox(
+                    //       width: 340,
+                    //       child: CharacterCard(
+                    //           index: index, item: _hiveRepository.data![index]),
+                    //     ),
+                    //   ),
+                    // );
                   }
                 }),
                 SizedBox(
-                  height: 24,
+                  height: 16,
                 ),
                 VNHighlightWidget(
                   id: "",

@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:visual_novel_strider/model/kana_model/developer_model.dart';
 import 'package:visual_novel_strider/model/kana_model/image.dart';
 import 'package:visual_novel_strider/model/kana_model/individual_result.dart';
 import 'package:visual_novel_strider/model/kana_model/screenshot_result.dart';
@@ -19,7 +20,7 @@ class DetailResult extends HiveObject {
   @HiveField(5)
   Image? image;
   @HiveField(6)
-  String? id;
+  String id;
   @HiveField(7)
   List<TagResult> tags;
   @HiveField(8)
@@ -40,6 +41,8 @@ class DetailResult extends HiveObject {
   List<IndividualResult>? characters;
   @HiveField(20)
   bool? isComplete;
+  @HiveField(21)
+  List<DeveloperModel> developers;
 
   DetailResult(
       {this.rating,
@@ -47,7 +50,7 @@ class DetailResult extends HiveObject {
       this.popularity,
       this.screenshots,
       this.image,
-      this.id,
+      required this.id,
       required this.tags,
       this.languages,
       this.alttitle,
@@ -55,31 +58,37 @@ class DetailResult extends HiveObject {
       this.released,
       this.votecount,
       this.olang,
-      this.length});
+      this.length,
+      required this.developers});
 
   factory DetailResult.fromJson(Map<String, dynamic> json) => DetailResult(
-      rating: json["rating"]?.toDouble(),
-      description: json["description"],
-      popularity: json["popularity"]?.toDouble(),
-      screenshots: json["screenshots"] == null
-          ? []
-          : List<Screenshot>.from(
-              json["screenshots"]!.map((x) => Screenshot.fromJson(x))),
-      image: json["image"] == null ? null : Image.fromJson(json["image"]),
-      id: json["id"],
-      tags: json["tags"] == null
-          ? []
-          : List<TagResult>.from(
-              json["tags"]!.map((x) => TagResult.fromJson(x))),
-      languages: json["languages"] == null
-          ? []
-          : List<String>.from(json["languages"]!.map((x) => x)),
-      alttitle: json["alttitle"],
-      title: json["title"],
-      released: json["released"],
-      votecount: json["votecount"],
-      olang: json["olang"],
-      length: json["length"]);
+        rating: json["rating"]?.toDouble(),
+        description: json["description"],
+        popularity: json["popularity"]?.toDouble(),
+        screenshots: json["screenshots"] == null
+            ? []
+            : List<Screenshot>.from(
+                json["screenshots"]!.map((x) => Screenshot.fromJson(x))),
+        image: json["image"] == null ? null : Image.fromJson(json["image"]),
+        id: json["id"],
+        tags: json["tags"] == null
+            ? []
+            : List<TagResult>.from(
+                json["tags"]!.map((x) => TagResult.fromJson(x))),
+        languages: json["languages"] == null
+            ? []
+            : List<String>.from(json["languages"]!.map((x) => x)),
+        alttitle: json["alttitle"],
+        title: json["title"],
+        released: json["released"],
+        votecount: json["votecount"],
+        olang: json["olang"],
+        length: json["length"],
+        developers: json["developers"] == null
+            ? []
+            : List<DeveloperModel>.from(
+                json["developers"]!.map((x) => DeveloperModel.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
         "rating": rating,
@@ -99,6 +108,7 @@ class DetailResult extends HiveObject {
         "released": released,
         "votecount": votecount,
         "olang": olang,
-        "length": length
+        "length": length,
+        "developers": developers
       };
 }

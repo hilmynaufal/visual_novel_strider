@@ -20,6 +20,9 @@ class _SearchWidgetState extends State<SearchWidget> {
 
     return Column(
       children: [
+        SizedBox(
+          height: 16,
+        ),
         Row(
           children: [
             const SizedBox(

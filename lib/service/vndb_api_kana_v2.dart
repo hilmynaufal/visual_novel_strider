@@ -14,8 +14,6 @@ class KanaServer extends GetxController {
 
   final StreamController<ResponseResult> searchController =
       StreamController<ResponseResult>();
-  final StreamController<ResponseResult> detailController =
-      StreamController<ResponseResult>();
   final StreamController<ResponseResult> charactersController =
       StreamController<ResponseResult>();
 
@@ -38,7 +36,7 @@ class KanaServer extends GetxController {
     }
   }
 
-  Future<void> getCharacters(String id) async {
+  Future<ResponseResult> getCharacters(String id) async {
     final response = await http.post(Uri.parse(URL + "character"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
@@ -55,15 +53,15 @@ class KanaServer extends GetxController {
         }));
 
     if (response.statusCode == 200) {
-      charactersController.add(
-          ResponseResult.fromIndividualDetailJson(jsonDecode(response.body)));
+      return ResponseResult.fromIndividualDetailJson(jsonDecode(response.body));
     } else {
-      log("error");
-      log(response.body);
+      // log("error");
+      // log(response.body);
+      return ResponseResult(results: [], more: false);
     }
   }
 
-  Future<void> getVNDetail(String id) async {
+  Future<ResponseResult> getVNDetail(String id) async {
     final response = await http.post(Uri.parse(URL + "vn"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
@@ -71,16 +69,16 @@ class KanaServer extends GetxController {
         body: json.encode(<String, dynamic>{
           "filters": ["id", "=", id],
           "fields":
-              "title, alttitle, image.url, released, rating, languages, image.url, image.sexual, image.violence, description, popularity, votecount, screenshots.url, tags.id, tags.name, tags.rating, tags.spoiler, olang, length"
+              "title, alttitle, image.url, released, rating, languages, image.url, image.sexual, image.violence, description, popularity, votecount, screenshots.url, tags.id, tags.name, tags.rating, tags.spoiler, olang, length, developers.name"
         }));
 
     if (response.statusCode == 200) {
-      detailController
-          .add(ResponseResult.fromDetailJson(jsonDecode(response.body)));
-      log(response.body);
+      return ResponseResult.fromDetailJson(jsonDecode(response.body));
+      // log(response.body);
     } else {
-      log("error");
-      log(response.body);
+      return ResponseResult(results: [], more: false);
+      // log("error");
+      // log(response.body);
     }
   }
 

@@ -1,10 +1,15 @@
+import 'dart:developer';
+
+import 'package:date_format/date_format.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:visual_novel_strider/controller&repository/detail_repository.dart';
 
 import '../model/kana_model/detail_result.dart';
 import '../utils/datetime_parse.dart';
+import '../utils/length_convert.dart';
 
 class VNDetailHeader extends StatefulWidget {
   const VNDetailHeader({
@@ -28,6 +33,7 @@ class _VNDetailHeaderState extends State<VNDetailHeader> {
 
   @override
   Widget build(BuildContext context) {
+    // log(widget.item.developers.toString());
     final _theme = Theme.of(context);
     return SliverAppBar(
       backgroundColor: _theme.accentColor,
@@ -40,7 +46,7 @@ class _VNDetailHeaderState extends State<VNDetailHeader> {
       //       height: 100,
       //       color: Colors.red,
       //     )),
-      expandedHeight: widget.tabController != null ? 400 : 380,
+      expandedHeight: widget.tabController != null ? 330 : 300,
 
       bottom: widget.tabController != null
           ? PreferredSize(
@@ -64,19 +70,16 @@ class _VNDetailHeaderState extends State<VNDetailHeader> {
       flexibleSpace: FlexibleSpaceBar(
         collapseMode: CollapseMode.pin,
         background: Container(
-          height: 300,
-          margin: EdgeInsets.only(top: 60),
+          height: 240,
+          margin: EdgeInsets.only(top: 80),
           child: Column(
             children: [
               SizedBox(
-                height: 200,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
+                height: 240,
+                child: Stack(
                   children: [
-                    SizedBox(
-                      width: 16,
-                    ),
                     Container(
+                      width: double.infinity,
                       child: (widget.item.image!.sexual +
                                   widget.item.image!.violence <=
                               2)
@@ -91,82 +94,215 @@ class _VNDetailHeaderState extends State<VNDetailHeader> {
                               ),
                             ),
                     ),
-                    const SizedBox(
-                      width: 8,
+                    Positioned.fill(
+                      child: Container(
+                        decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                              Colors.black.withOpacity(0.7),
+                              Colors.black.withOpacity(0.7),
+                              Colors.black
+                            ],
+                                stops: [
+                              0.0,
+                              0.8,
+                              1.0
+                            ])),
+                      ),
                     ),
-                    SizedBox(
-                      width: 140,
-                      child: (widget.item.image!.sexual +
-                                  widget.item.image!.violence <=
-                              2)
-                          ? FancyShimmerImage(
-                              imageUrl: widget.image,
-                              boxFit: BoxFit.cover,
-                            )
-                          : const Center(
-                              child: Text(
-                                "NSFW",
-                                style: TextStyle(fontSize: 22),
+                    Positioned.fill(
+                        child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 16),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            height: 12,
+                          ),
+                          Row(
+                            children: [
+                              ElevatedButton(
+                                  onPressed: () {},
+                                  clipBehavior: Clip.antiAlias,
+                                  style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(12)),
+                                    elevation: 4,
+                                    padding: const EdgeInsets.all(0),
+                                  ),
+                                  child: SizedBox(
+                                    width: 110,
+                                    height: 150,
+                                    child: FancyShimmerImage(
+                                      imageUrl: widget.image,
+                                      boxFit: BoxFit.cover,
+                                      alignment: Alignment.topCenter,
+                                    ),
+                                  )),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Text(
+                                      widget.title,
+                                      maxLines: 2,
+                                      textAlign: TextAlign.center,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white),
+                                    ),
+                                    Text(
+                                        widget.item.alttitle ??
+                                            widget.item.title,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                            fontSize: 8,
+                                            fontWeight: FontWeight.w300,
+                                            color: Colors.white)),
+                                    const SizedBox(height: 8),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        const Text(
+                                          "by ",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        Text(
+                                          widget.item.developers.isEmpty
+                                              ? "No Developer"
+                                              : widget.item.developers[0].name,
+                                          // _charactersRepository
+                                          //     .releaseResult
+                                          //     .value
+                                          //     .items![0]
+                                          //     .producers![0]
+                                          //     .name,
+                                          style: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                          SizedBox(
+                            height: 12,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(
+                                    CupertinoIcons.star_circle,
+                                    size: 16,
+                                    color: _theme.accentColor,
+                                  ),
+                                  SizedBox(
+                                    width: 6,
+                                  ),
+                                  Text(
+                                    widget.item.rating!.toString(),
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 12,
+                                        color: _theme.accentColor),
+                                  ),
+                                  Text(
+                                    "/100",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w100,
+                                        fontSize: 12,
+                                        color: _theme.accentColor),
+                                  )
+                                ],
                               ),
-                            ),
-                    ),
-                    SizedBox(
-                      width: 16,
-                    ),
+                              SizedBox(
+                                width: 12,
+                              ),
+                              Container(
+                                height: 16,
+                                color: Colors.grey,
+                                width: 1,
+                              ),
+                              SizedBox(
+                                width: 12,
+                              ),
+                              Row(
+                                children: [
+                                  Icon(
+                                    CupertinoIcons.clock_solid,
+                                    size: 12,
+                                    color: _theme.accentColor,
+                                  ),
+                                  SizedBox(
+                                    width: 6,
+                                  ),
+                                  Text(
+                                    widget.item.length != null
+                                        ? LengthConvert.intLengthtoString(
+                                            widget.item.length!)
+                                        : "No Record",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 12,
+                                        color: _theme.accentColor),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                width: 12,
+                              ),
+                              Container(
+                                height: 12,
+                                color: Colors.grey,
+                                width: 1,
+                              ),
+                              SizedBox(
+                                width: 12,
+                              ),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.swap_vert_circle_outlined,
+                                    size: 16,
+                                    color: _theme.accentColor,
+                                  ),
+                                  SizedBox(
+                                    width: 6,
+                                  ),
+                                  Text(
+                                    "#" +
+                                        widget.item.popularity!
+                                            .round()
+                                            .toString(),
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 12,
+                                        color: _theme.accentColor),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ))
                   ],
                 ),
               ),
-              Container(
-                margin: EdgeInsets.only(right: 16),
-                child: Text(
-                  DateTimeParse.parseDateTime(widget.item.released!),
-                  style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey.shade900,
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.w100),
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Text(
-                    widget.title,
-                    maxLines: 2,
-                    textAlign: TextAlign.center,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  Text(widget.item.alttitle ?? widget.item.title,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                          fontSize: 8, fontWeight: FontWeight.w300)),
-                  const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text("by "),
-                      Text(
-                        "TODO",
-                        // _charactersRepository
-                        //     .releaseResult
-                        //     .value
-                        //     .items![0]
-                        //     .producers![0]
-                        //     .name,
-                        style: const TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                ],
-              )
             ],
           ),
         ),

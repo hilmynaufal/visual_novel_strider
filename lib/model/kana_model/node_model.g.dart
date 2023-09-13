@@ -1,41 +1,45 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'progress_model.dart';
+part of 'node_model.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class ProgressModelAdapter extends TypeAdapter<ProgressModel> {
+class NodeModelAdapter extends TypeAdapter<NodeModel> {
   @override
-  final int typeId = 9;
+  final int typeId = 10;
 
   @override
-  ProgressModel read(BinaryReader reader) {
+  NodeModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return ProgressModel(
+    return NodeModel(
       id: fields[0] as String,
       character: fields[2] as IndividualResult?,
-      reminder: fields[3] as String,
       playtime: fields[4] as String,
       lastPlayed: fields[5] as DateTime,
       hexColor: fields[6] as int,
       isCompleted: fields[7] as bool,
       endTime: fields[10] as String,
-      hasReminder: fields[9] as bool,
       isPlaying: fields[8] as bool,
       vnId: fields[1] as String,
       note: fields[11] as String,
+      nextNodeId: fields[13] as String?,
+      previousNodeId: fields[12] as String?,
     );
   }
 
   @override
-  void write(BinaryWriter writer, ProgressModel obj) {
+  void write(BinaryWriter writer, NodeModel obj) {
     writer
       ..writeByte(12)
+      ..writeByte(12)
+      ..write(obj.previousNodeId)
+      ..writeByte(13)
+      ..write(obj.nextNodeId)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -55,11 +59,7 @@ class ProgressModelAdapter extends TypeAdapter<ProgressModel> {
       ..writeByte(10)
       ..write(obj.endTime)
       ..writeByte(11)
-      ..write(obj.note)
-      ..writeByte(3)
-      ..write(obj.reminder)
-      ..writeByte(9)
-      ..write(obj.hasReminder);
+      ..write(obj.note);
   }
 
   @override
@@ -68,7 +68,7 @@ class ProgressModelAdapter extends TypeAdapter<ProgressModel> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ProgressModelAdapter &&
+      other is NodeModelAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

@@ -20,17 +20,16 @@ class CharactersRepository extends GetxController {
 
   RxBool isReady = false.obs;
 
-  Rx<int?> individualColor = null.obs;
+  Rx<int?> individualColor = 0xFF.obs;
 
   @override
   void onReady() {
-    result.bindStream(_kanaServer.charactersController.stream);
     // releaseResult.bindStream(_server.firstReleaseController.stream);
   }
 
   Future<void> getCharacters(String id) async {
     log("requesting api characters");
-    await _kanaServer.getCharacters(id);
+    result.value = await _kanaServer.getCharacters(id);
     isReady.value = true;
     // update();
   }
@@ -49,7 +48,12 @@ class CharactersRepository extends GetxController {
       individualResult.value = _response;
       List<Trait> trait = _response.results.first.traits;
 
+      // var t = await compute(getColor, trait);
+
+      log(individualColor.value.toString());
+
       individualColor.value = await compute(getColor, trait);
+      // log(individualColor.value.toString());
     }
   }
 

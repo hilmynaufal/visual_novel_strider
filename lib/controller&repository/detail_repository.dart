@@ -17,16 +17,11 @@ class DetailRepository extends GetxController {
 
   var isReady = false.obs;
 
-  @override
-  void onReady() {
-    detailResult.bindStream(_kanaServer.detailController.stream);
-  }
-
   Future<void> getDetail(String id) async {
     isReady.value = false;
     log("requesting api vn detail");
-    await _kanaServer.getVNDetail(id);
+    detailResult.value = await _kanaServer.getVNDetail(id);
     isReady.value = true;
-    // update();
+    update();
   }
 }

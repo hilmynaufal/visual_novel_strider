@@ -1,5 +1,4 @@
-// ignore_for_file: deprecated_member_use, sized_box_for_whitespace, prefer_const_constructors
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:visual_novel_strider/controller&repository/characters_repository.dart';
@@ -51,86 +50,69 @@ class VnDetail extends StatelessWidget {
                   color: _theme.accentColor,
                   child: Column(
                     children: [
-                      const SizedBox(height: 16),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Column(
-                            children: [
-                              Icon(
-                                Icons.star,
-                                size: 20,
-                                color: _theme.primaryColor,
+                          RotatedBox(
+                            quarterTurns: 1,
+                            child: Center(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Text(
+                                    "DESCRIPTION",
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.grey[400],
+                                        fontWeight: FontWeight.w200),
+                                  ),
+                                  Container(
+                                    color: Colors.black,
+                                    height: 2,
+                                    width: 40,
+                                  ),
+                                  SizedBox(
+                                    height: 2,
+                                  )
+                                ],
                               ),
-                              Text(
-                                item.rating!.toString(),
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 14,
-                                ),
-                              )
-                            ],
+                            ),
                           ),
-                          Column(
-                            children: [
-                              Text(
-                                item.length != null
-                                    ? LengthConvert.intLengthtoString(
-                                        item.length!)
-                                    : "No Record",
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 20,
+                          Expanded(
+                            child: Column(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.all(16),
+                                  child: ReadMoreText(
+                                    item.description != null
+                                        ? item.description!
+                                        : "No Description",
+                                    style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400),
+                                    colorClickableText: _theme.primaryColor,
+                                  ),
                                 ),
-                              ),
-                              const Text(
-                                "Playtime",
-                                style: TextStyle(fontSize: 12),
-                              )
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Text(
-                                "#" + item.popularity!.round().toString(),
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 14,
-                                ),
-                              ),
-                              const Text(
-                                "Popularity",
-                                style: TextStyle(fontSize: 11),
-                              )
-                            ],
+                              ],
+                            ),
                           ),
                         ],
                       ),
-                      Container(
-                        margin: EdgeInsets.all(16),
-                        child: ReadMoreText(
-                          item.description != null
-                              ? item.description!
-                              : "No Description",
-                          style: const TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.w400),
-                          colorClickableText: _theme.primaryColor,
-                        ),
+                      Column(
+                        children: [
+                          Container(
+                            child: TagsWidget(tags: item.tags),
+                            height: 50,
+                          ),
+                          const SizedBox(height: 16),
+                          ScreensWidget(screenshot: item.screenshots),
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          CharactersWidget(
+                              vnId: id, repository: _charactersRepository),
+                        ],
                       ),
-                      const SizedBox(height: 24),
-                      SizedBox(
-                        width: 20,
-                      ),
-                      Container(
-                        child: TagsWidget(tags: item.tags),
-                        height: 50,
-                      ),
-                      const SizedBox(height: 16),
-                      ScreensWidget(screenshot: item.screenshots),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      CharactersWidget(vnId: id),
                     ],
                   ),
                 ))

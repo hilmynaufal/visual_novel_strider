@@ -32,13 +32,27 @@ class TagsWidget extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
-              margin: EdgeInsets.only(left: 16),
-              child: const Text("Tags",
+            Row(
+              children: [
+                SizedBox(
+                  width: 16,
+                ),
+                Container(
+                  height: 22,
+                  width: 4,
+                  color: _theme.primaryColor,
+                ),
+                SizedBox(
+                  width: 4,
+                ),
+                Text(
+                  "Tags",
                   style: TextStyle(
-                    fontSize: 18,
                     fontWeight: FontWeight.w800,
-                  )),
+                    fontSize: 18,
+                  ),
+                ),
+              ],
             ),
             Container(
               margin: EdgeInsets.only(right: 16),

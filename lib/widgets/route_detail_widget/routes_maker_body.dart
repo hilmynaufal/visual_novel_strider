@@ -1,7 +1,10 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:visual_novel_strider/controller&repository/playground_controller.dart';
 import 'package:visual_novel_strider/model/kana_model/detail_result.dart';
+import 'package:visual_novel_strider/widgets/create_bottom_sheets.dart';
+import 'package:visual_novel_strider/widgets/new_route_branch_type_selection.dart';
 import 'package:visual_novel_strider/widgets/route_detail_widget/characters_drawer.dart';
 
 class RoutesMakerBody extends StatelessWidget {
@@ -16,7 +19,14 @@ class RoutesMakerBody extends StatelessWidget {
         margin: EdgeInsets.symmetric(horizontal: 16),
         child: GestureDetector(
           onTap: () {
-            Get.bottomSheet(CharactersDrawer(item: item));
+            // Get.to(() => NewRouteBranchTypeSelectionPage(
+            //       item: item,
+            //       playgroundController: Get.find<PlaygroundController>(),
+            //     ));
+            Get.bottomSheet(CharactersDrawer(
+              item: item,
+              controller: '',
+            ));
           },
           child: DottedBorder(
             borderType: BorderType.RRect,
