@@ -27,7 +27,8 @@ class CharactersRouteBody extends StatelessWidget {
         ),
         Expanded(
           child: Obx(() {
-            if (_notificationController.hiveRepository.result.isEmpty) {
+            if (_notificationController.hiveRepository.result.isEmpty &&
+                _notificationController.hiveRepository.isReady.isTrue) {
               // _notificationController.hiveRepository
               //     .getProgressDataWithVNId(item.id);
 

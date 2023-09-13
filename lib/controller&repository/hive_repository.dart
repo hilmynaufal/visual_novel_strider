@@ -45,11 +45,11 @@ class HiveRepository extends GetxController {
   }
 
   Future<void> getProgressDataWithVNId(String vnId) async {
-    // isReady.value = false;
+    isReady.value = false;
     // data = box.values.toList();
     progressData =
         progressBox!.values.where((element) => element.vnId == vnId).toList();
-    // isReady.value = true;
+    isReady.value = true;
     log("progress get");
     update();
   }
@@ -70,11 +70,13 @@ class HiveRepository extends GetxController {
   }
 
   void getCharactersRoute(String vnId) {
+    isReady.value = false;
     List<ProgressModel> _temp =
         progressBox!.values.where((element) => element.vnId == vnId).toList();
     if (_temp.isNotEmpty) {
       result.value = _temp;
     }
+    isReady.value = true;
     // update();
   }
 
@@ -113,6 +115,7 @@ class HiveRepository extends GetxController {
         vnId: vnID,
         note: note);
     progressBox!.put(hiveCHaractersModel.id, _value);
+    update();
   }
 
   Future<void> deleteProgressFromBox(int index, String vnId) async {
