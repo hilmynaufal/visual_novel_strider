@@ -15,29 +15,29 @@ class TransparentRoundedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _theme = Theme.of(context);
+    final theme = Theme.of(context);
 
     return ElevatedButton(
         onPressed: onTap,
         style: ElevatedButton.styleFrom(
-            padding: EdgeInsets.all(16),
+            foregroundColor: Colors.black,
+            padding: const EdgeInsets.all(16),
+            backgroundColor: theme.primaryColorLight,
             elevation: 0,
             splashFactory: NoSplash.splashFactory,
-            primary: _theme.accentColor,
-            onPrimary: Colors.black,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30),
                 side: BorderSide(color: Colors.grey[800]!, width: 1))),
         child: Row(
           children: [
-            SizedBox(
+            const SizedBox(
               width: 8,
             ),
             Icon(
               icon,
               size: 28,
             ),
-            SizedBox(
+            const SizedBox(
               width: 16,
             ),
             Expanded(
@@ -46,11 +46,13 @@ class TransparentRoundedButton extends StatelessWidget {
                 children: [
                   Text(
                     headerTitle,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                   Text(
                     description,
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w200),
+                    style: const TextStyle(
+                        fontSize: 12, fontWeight: FontWeight.w200),
                   )
                 ],
               ),

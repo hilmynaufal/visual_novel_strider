@@ -1,4 +1,3 @@
-import 'chara_item.dart';
 
 // class CharacterResult {
 //   CharacterResult({

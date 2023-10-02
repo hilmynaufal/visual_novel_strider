@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
@@ -16,11 +15,11 @@ class SearchWidget extends StatefulWidget {
 class _SearchWidgetState extends State<SearchWidget> {
   @override
   Widget build(BuildContext context) {
-    final _theme = Theme.of(context);
+    final theme = Theme.of(context);
 
     return Column(
       children: [
-        SizedBox(
+        const SizedBox(
           height: 16,
         ),
         Row(
@@ -31,7 +30,7 @@ class _SearchWidgetState extends State<SearchWidget> {
             Container(
               height: 22,
               width: 4,
-              color: _theme.primaryColor,
+              color: theme.primaryColor,
             ),
             const SizedBox(
               width: 4,
@@ -48,8 +47,8 @@ class _SearchWidgetState extends State<SearchWidget> {
         const SizedBox(
           height: 8,
         ),
-        GetBuilder<SearchRepository>(builder: (_controller) {
-          if (!_controller.isReady.value) {
+        GetBuilder<SearchRepository>(builder: (controller) {
+          if (!controller.isReady.value) {
             return const Text("No Data");
           }
           return const ItemWidget();

@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:visual_novel_strider/controller&repository/home_repository.dart';
-import 'package:visual_novel_strider/model/kana_model/detail_result.dart';
 import 'package:visual_novel_strider/widgets/text/nsfw_widget.dart';
 import 'package:visual_novel_strider/widgets/vn_detail.dart';
 
@@ -18,7 +17,7 @@ class PopularWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _theme = Theme.of(context);
+    final theme = Theme.of(context);
 
     return Obx(
       () {
@@ -42,7 +41,7 @@ class PopularWidget extends StatelessWidget {
                   Container(
                     height: 22,
                     width: 4,
-                    color: _theme.primaryColor,
+                    color: theme.primaryColor,
                   ),
                   const SizedBox(
                     width: 4,
@@ -65,13 +64,13 @@ class PopularWidget extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   itemCount: _repository.popularResult.value.results.length,
                   itemBuilder: (BuildContext context, int index) {
-                    Result _e = _repository.popularResult.value.results[index];
+                    Result e = _repository.popularResult.value.results[index];
                     return GestureDetector(
                       onTap: () {
                         Get.to(() => VnDetail(
-                              id: _e.id,
-                              image: _e.image.url,
-                              title: _e.title,
+                              id: e.id,
+                              image: e.image.url,
+                              title: e.title,
                             ));
                       },
                       child: Row(
@@ -80,7 +79,7 @@ class PopularWidget extends StatelessWidget {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              itemSettings(index, _e),
+                              itemSettings(index, e),
                               SizedBox(
                                 height: 8,
                               ),
@@ -105,13 +104,13 @@ class PopularWidget extends StatelessWidget {
                                   Icon(
                                     CupertinoIcons.star_fill,
                                     size: 10,
-                                    color: _theme.primaryColor,
+                                    color: theme.primaryColor,
                                   ),
                                   SizedBox(
                                     width: 4,
                                   ),
                                   Text(
-                                    _e.rating.toString(),
+                                    e.rating.toString(),
                                     style: TextStyle(fontSize: 12),
                                   )
                                 ],
@@ -142,44 +141,43 @@ class PopularWidget extends StatelessWidget {
     );
   }
 
-  Stack itemSettings(int index, Result _e) {
-    String? _image = _repository.popularResult.value.results[index].image.url;
-    dynamic _imageRating =
+  Stack itemSettings(int index, Result e) {
+    dynamic imageRating =
         (_repository.popularResult.value.results[index].image.sexual +
             _repository.popularResult.value.results[index].image.violence);
-    Color _background, _surface;
+    Color background, surface;
     switch (index + 1) {
       case 1:
         {
-          _background = Colors.amber[300]!;
-          _surface = Colors.black;
+          background = Colors.amber[300]!;
+          surface = Colors.black;
           break;
         }
       case 2:
         {
-          _background = Colors.grey[300]!;
-          _surface = Colors.black;
+          background = Colors.grey[300]!;
+          surface = Colors.black;
           break;
         }
       case 3:
         {
-          _background = Colors.brown[400]!;
-          _surface = Colors.white;
+          background = Colors.brown[400]!;
+          surface = Colors.white;
           break;
         }
       default:
         {
-          _background = Colors.black87;
-          _surface = Colors.white;
+          background = Colors.black87;
+          surface = Colors.white;
         }
     }
     return Stack(children: [
       ElevatedButton(
         onPressed: () {
           Get.to(() => VnDetail(
-                id: _e.id,
-                image: _e.image.url,
-                title: _e.title,
+                id: e.id,
+                image: e.image.url,
+                title: e.title,
               ));
         },
         clipBehavior: Clip.antiAlias,
@@ -192,7 +190,7 @@ class PopularWidget extends StatelessWidget {
         child: SizedBox(
           height: 130,
           width: 100,
-          child: _imageRating <= 1
+          child: imageRating <= 1
               ? FancyShimmerImage(
                   shimmerBaseColor: Colors.grey[300],
                   shimmerHighlightColor: Colors.grey[100],
@@ -207,18 +205,18 @@ class PopularWidget extends StatelessWidget {
       ),
       Positioned(
           child: Container(
-        child: Center(
-          child: Text(
-            "#${(index + 1).toString()}",
-            style: TextStyle(color: _surface, fontWeight: FontWeight.bold),
-          ),
-        ),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-            color: _background),
+            color: background),
         height: 20,
         width: 40,
+        child: Center(
+          child: Text(
+            "#${(index + 1).toString()}",
+            style: TextStyle(color: surface, fontWeight: FontWeight.bold),
+          ),
+        ),
       ))
     ]);
   }

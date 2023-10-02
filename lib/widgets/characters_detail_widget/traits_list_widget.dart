@@ -1,7 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 import '../../model/kana_model/trait.dart';
 
@@ -19,25 +16,25 @@ class TraitsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _theme = Theme.of(context);
+    final theme = Theme.of(context);
     return Column(
       children: [
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
+            const SizedBox(
               width: 16,
             ),
             Icon(
               icon,
               size: 18,
             ),
-            SizedBox(
+            const SizedBox(
               width: 8,
             ),
             Text(
-              headerTitle + ' : ',
-              style: TextStyle(fontSize: 14),
+              '$headerTitle : ',
+              style: const TextStyle(fontSize: 14),
             ),
             traits.isNotEmpty
                 ? Expanded(
@@ -51,8 +48,8 @@ class TraitsList extends StatelessWidget {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
-                                  e.name + "  ",
-                                  style: TextStyle(color: _theme.primaryColor),
+                                  "${e.name}  ",
+                                  style: TextStyle(color: theme.primaryColor),
                                 ),
                                 // const Text(
                                 //   ", ",
@@ -65,7 +62,7 @@ class TraitsList extends StatelessWidget {
                           .cast<Widget>(),
                     ),
                   )
-                : Container(child: Text("None"))
+                : const Text("None")
           ],
         ),
       ],

@@ -1,7 +1,5 @@
 import 'dart:developer';
 
-import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:visual_novel_strider/controller&repository/hive_repository.dart';
@@ -35,12 +33,12 @@ class PlayerController extends GetxController {
     // seconds.bindStream(_stopWatchTimer.rawTime);
   }
 
-  void starTimer(int index) {
+  void starTimer(ProgressModel progressModel) {
     isPlaying.value = true;
-    hiveRepository.result[index].isPlaying = true;
-    hiveRepository.result[index].save();
-    _nowPlaying = hiveRepository.result[index];
-    _stopWatchTimer.onExecute.add(StopWatchExecute.start);
+    progressModel.isPlaying = true;
+    progressModel.save();
+    _nowPlaying = progressModel;
+    _stopWatchTimer.onStartTimer();
 
     createMediaPlayerNotification();
 
@@ -51,7 +49,7 @@ class PlayerController extends GetxController {
     // await AwesomeNotifications().cancel(int.parse(_nowPlaying!.id));
     isPlaying.value = false;
 
-    _stopWatchTimer.onExecute.add(StopWatchExecute.stop);
+    _stopWatchTimer.onStopTimer();
     List<int> newTime = DurationParsing.durationStringToInt(
         StopWatchTimer.getDisplayTime(_stopWatchTimer.rawTime.value,
             hours: true));
@@ -67,8 +65,7 @@ class PlayerController extends GetxController {
         .add(oy)
         .add(Duration(hours: newTime[0], minutes: newTime[1]));
 
-    String playtime =
-        date.hour.toString() + " hours " + date.minute.toString() + " minutes";
+    String playtime = "${date.hour} hours ${date.minute} minutes";
 
     var lastPlayed = DateTime.now();
 
@@ -78,32 +75,31 @@ class PlayerController extends GetxController {
     _nowPlaying!.save();
     _nowPlaying = null;
 
-    _stopWatchTimer.onExecute.add(StopWatchExecute.reset);
+    _stopWatchTimer.onResetTimer();
 
     update();
   }
 
   void pauseTimer() {
-    _stopWatchTimer.onExecute.add(StopWatchExecute.stop);
+    _stopWatchTimer.onStopTimer();
   }
 
   void resumeTimer() {
-    _stopWatchTimer.onExecute.add(StopWatchExecute.start);
+    _stopWatchTimer.onStartTimer();
   }
 
   void createMediaPlayerNotification() async {
     log("aw");
-    await AwesomeNotifications().createNotification(
-      content: NotificationContent(
-          id: int.parse(_nowPlaying!.id),
-          channelKey: 'media_player',
-          title: "tes",
-          body: "test",
-          summary: 'Now playing',
-          notificationLayout: NotificationLayout.MediaPlayer,
-          color: Colors.purple.shade700,
-          autoCancel: false,
-          showWhen: false),
-    );
+    // await AwesomeNotifications().createNotification(
+    //   content: NotificationContent(
+    //       id: int.parse(_nowPlaying!.id),
+    //       channelKey: 'media_player',
+    //       title: "tes",
+    //       body: "test",
+    //       summary: 'Now playing',
+    //       notificationLayout: NotificationLayout.MediaPlayer,
+    //       color: Colors.purple.shade700,
+    //       showWhen: false),
+    // );
   }
 }

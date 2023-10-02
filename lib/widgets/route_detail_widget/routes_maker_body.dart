@@ -1,11 +1,9 @@
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:visual_novel_strider/controller&repository/playground_controller.dart';
 import 'package:visual_novel_strider/model/kana_model/detail_result.dart';
-import 'package:visual_novel_strider/widgets/create_bottom_sheets.dart';
+import 'package:visual_novel_strider/widgets/button_widgets/dotted_add_button.dart';
 import 'package:visual_novel_strider/widgets/new_route_branch_type_selection.dart';
-import 'package:visual_novel_strider/widgets/route_detail_widget/characters_drawer.dart';
 
 class RoutesMakerBody extends StatelessWidget {
   const RoutesMakerBody({Key? key, required this.item}) : super(key: key);
@@ -16,47 +14,20 @@ class RoutesMakerBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 16),
-        child: GestureDetector(
+        margin: const EdgeInsets.symmetric(horizontal: 16),
+        child: DottedAddButton(
+          title: "Add new routes for this visual novel.",
           onTap: () {
-            // Get.to(() => NewRouteBranchTypeSelectionPage(
-            //       item: item,
-            //       playgroundController: Get.find<PlaygroundController>(),
-            //     ));
-            Get.bottomSheet(CharactersDrawer(
-              item: item,
-              controller: '',
-            ));
+            Get.to(() => NewRouteBranchTypeSelectionPage(
+                  item: item,
+                  playgroundController: Get.find<PlaygroundController>(),
+                ));
+            // Get.bottomSheet(CharactersDrawer(
+            //   item: item,
+            //   controller: '',
+            // ));
           },
-          child: DottedBorder(
-            borderType: BorderType.RRect,
-            strokeCap: StrokeCap.butt,
-            dashPattern: [8, 2, 8, 2],
-            color: Colors.grey[400]!,
-            strokeWidth: 4,
-            radius: Radius.circular(12),
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 32, vertical: 20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.add_box_outlined,
-                    size: 164,
-                    color: Colors.grey[300],
-                  ),
-                  Text(
-                    "Add new routes for this visual novel.",
-                    style: TextStyle(
-                        color: Colors.grey[400],
-                        fontWeight: FontWeight.w800,
-                        fontSize: 14),
-                  )
-                ],
-              ),
-            ),
-          ),
+          iconSize: 64,
         ),
       ),
     );

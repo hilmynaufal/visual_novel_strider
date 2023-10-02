@@ -6,7 +6,7 @@ import 'package:visual_novel_strider/widgets/button_widgets/transparent_rounded_
 import 'package:visual_novel_strider/widgets/page_widgets/new_route_settings_page.dart';
 import 'package:visual_novel_strider/widgets/route_detail_widget/abstract_route_settings.dart';
 
-class NewRouteBranchTypeSelectionPage extends AbstractRouteSetings {
+class NewRouteBranchTypeSelectionPage extends AbstractSimpleMonochromePage {
   const NewRouteBranchTypeSelectionPage(
       {required this.playgroundController, required this.item, Key? key})
       : super(
@@ -33,18 +33,18 @@ class NewRouteBranchTypeSelectionPage extends AbstractRouteSetings {
           description:
               "A kinetic novel is a VN that does not present the player with any choices at all; they simply read through a single unbranching story.",
           icon: CupertinoIcons.down_arrow),
-      SizedBox(
+      const SizedBox(
         height: 16,
       ),
-      TransparentRoundedButton(
+      const TransparentRoundedButton(
           headerTitle: "Choice-based",
           description:
               "A kinetic novel is a VN that does not present the player with any choices at all; they simply read through a single unbranching story.",
           icon: CupertinoIcons.arrow_branch),
-      SizedBox(
+      const SizedBox(
         height: 16,
       ),
-      TransparentRoundedButton(
+      const TransparentRoundedButton(
           headerTitle: "Point-based",
           description:
               "A kinetic novel is a VN that does not present the player with any choices at all; they simply read through a single unbranching story.",

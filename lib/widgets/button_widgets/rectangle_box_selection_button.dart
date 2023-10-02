@@ -1,9 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:get/get.dart';
-import 'package:visual_novel_strider/widgets/playground/route_playground_page.dart';
 
 class RectangleBoxSelectionButton extends StatelessWidget {
   const RectangleBoxSelectionButton(
@@ -25,11 +20,11 @@ class RectangleBoxSelectionButton extends StatelessWidget {
     return ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          padding: EdgeInsets.all(8),
+          foregroundColor: Colors.black,
+          padding: const EdgeInsets.all(8),
+          backgroundColor: Colors.white,
           elevation: 0,
-          primary: Colors.white,
-          onPrimary: Colors.black,
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
               side: BorderSide(
             color: Colors.black,
             width: 1,
@@ -56,7 +51,7 @@ class RectangleBoxSelectionButton extends StatelessWidget {
               children: [
                 Text(
                   headerTitle,
-                  style: TextStyle(fontSize: 14),
+                  style: const TextStyle(fontSize: 14),
                 ),
                 description != null
                     ? Text(
@@ -66,10 +61,10 @@ class RectangleBoxSelectionButton extends StatelessWidget {
                             fontWeight: FontWeight.w600,
                             color: Colors.grey[400]),
                       )
-                    : SizedBox()
+                    : const SizedBox()
               ],
             ),
-            SizedBox(
+            const SizedBox(
               width: 8,
             )
           ],

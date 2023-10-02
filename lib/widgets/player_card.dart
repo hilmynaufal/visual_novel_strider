@@ -1,7 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:date_format/date_format.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -14,7 +13,7 @@ class PlayerCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var _theme = Theme.of(context);
+    var theme = Theme.of(context);
     return GetBuilder<PlayerController>(
       builder: (_) {
         return Column(
@@ -24,13 +23,13 @@ class PlayerCard extends StatelessWidget {
               "Now Playing",
               style: TextStyle(
                   fontSize: 22,
-                  color: _theme.accentColor,
+                  color: theme.primaryColorLight,
                   fontWeight: FontWeight.bold),
             ),
             Container(
               height: 4,
               width: 140,
-              color: _theme.accentColor,
+              color: theme.primaryColorLight,
             ),
             const SizedBox(
               height: 16,
@@ -41,6 +40,13 @@ class PlayerCard extends StatelessWidget {
                   widthFactor: 0.85,
                   child: ElevatedButton(
                     onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                        elevation: 8,
+                        onPrimary: Colors.white,
+                        padding: const EdgeInsets.all(16),
+                        primary: Color(_.nowPlaying!.hexColor),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16))),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -110,9 +116,9 @@ class PlayerCard extends StatelessWidget {
                                         width: 4,
                                       ),
                                       GetBuilder<PlayerController>(
-                                          builder: (_local) {
+                                          builder: (local) {
                                         return Text(
-                                          _local.nowPlaying!.playtime,
+                                          local.nowPlaying!.playtime,
                                           style: const TextStyle(
                                               fontSize: 14,
                                               fontWeight: FontWeight.w300),
@@ -172,7 +178,7 @@ class PlayerCard extends StatelessWidget {
                                   onTap: () {
                                     _.stopPlaying();
                                   },
-                                  child: Icon(
+                                  child: const Icon(
                                     Icons.stop,
                                     size: 48,
                                   ),
@@ -192,13 +198,6 @@ class PlayerCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    style: ElevatedButton.styleFrom(
-                        elevation: 8,
-                        onPrimary: Colors.white,
-                        padding: const EdgeInsets.all(16),
-                        primary: Color(_.nowPlaying!.hexColor),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16))),
                   )),
             ),
           ],
@@ -209,8 +208,7 @@ class PlayerCard extends StatelessWidget {
 
   String durationToString(String duration) {
     List<int> time = DurationParsing.durationStringToInt(duration);
-    String temp =
-        time[0].toString() + ' hour ' + time[1].toString() + ' minute';
+    String temp = '${time[0]} hour ${time[1]} minute';
     return temp;
   }
 }

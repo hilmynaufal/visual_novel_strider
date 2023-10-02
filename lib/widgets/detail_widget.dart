@@ -1,14 +1,10 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:backdrop/backdrop.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:visual_novel_strider/controller&repository/notification_controller.dart';
 import 'package:visual_novel_strider/model/kana_model/detail_result.dart';
-import 'package:visual_novel_strider/model/old_socket_model/item.dart';
 import 'package:visual_novel_strider/utils/duration_parse.dart';
-import 'package:visual_novel_strider/widgets/empty_widget.dart';
-import 'package:visual_novel_strider/widgets/route_detail_widget/characters_drawer.dart';
 import 'package:visual_novel_strider/widgets/route_detail_widget/characters_route_body.dart';
 import 'package:visual_novel_strider/widgets/route_detail_widget/routes_maker_body.dart';
 import 'package:visual_novel_strider/widgets/vn_detail_header.dart';
@@ -54,13 +50,13 @@ class _DetailWidgetState extends State<DetailWidget>
 
   @override
   Widget build(BuildContext context) {
-    final _theme = Theme.of(context);
+    final theme = Theme.of(context);
 
     widget._notificationController.hiveRepository
         .getCharactersRoute(widget.item.id);
 
     return Scaffold(
-      backgroundColor: _theme.accentColor,
+      backgroundColor: theme.primaryColorLight,
       body: NestedScrollView(
           headerSliverBuilder: (context, innerBoxIsScrolled) {
             return [
@@ -84,10 +80,7 @@ class _DetailWidgetState extends State<DetailWidget>
 
   String toDuration(String duration) {
     Duration playtime = DurationParsing.parseDuration(duration);
-    String s = playtime.inHours.toString() +
-        " hours " +
-        playtime.inMinutes.toString() +
-        " minute";
+    String s = "${playtime.inHours} hours ${playtime.inMinutes} minute";
     return s;
   }
 }

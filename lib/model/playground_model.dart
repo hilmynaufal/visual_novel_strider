@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:visual_novel_strider/model/kana_model/branch_node_model.dart';
 import 'package:visual_novel_strider/model/kana_model/node_model.dart';
 
 part 'playground_model.g.dart';
@@ -24,14 +25,22 @@ class PlaygroundModel with HiveObjectMixin {
   bool isFinished;
 
   @HiveField(6)
-  List<NodeModel> nodes;
+  String route;
+
+  @HiveField(7)
+  List<EventNodeModel> eventNodes;
+
+  @HiveField(8)
+  List<BranchNodeModel> branchNodes;
 
   PlaygroundModel(
       {required this.id,
       required this.vnId,
-      required this.nodes,
+      required this.eventNodes,
       required this.name,
       required this.createdAt,
       required this.isFinished,
-      required this.lastPlayed});
+      required this.route,
+      required this.lastPlayed,
+      required this.branchNodes});
 }

@@ -1,15 +1,6 @@
-import 'dart:async';
-import 'dart:convert';
-import 'dart:developer';
-import 'dart:io';
 
-import 'package:get/get.dart';
 
-import '../model/old_socket_model/character_result.dart';
-import '../model/old_socket_model/release_result.dart';
-import '../model/old_socket_model/result.dart';
-
-class SocketServer extends GetxController {
+// class SocketServer extends GetxController {
   // String? type;
   // Socket? socket;
   // Rx<Result> result = Result(items: [], more: false, num: 0).obs;
@@ -177,4 +168,4 @@ class SocketServer extends GetxController {
   // }
 
   // void atest() {}
-}
+// }

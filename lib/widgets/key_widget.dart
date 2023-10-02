@@ -14,7 +14,7 @@ class KeyWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _theme = Theme.of(context);
+    final theme = Theme.of(context);
     return Obx(
       () {
         if (_repository.keyResult.value.results.isNotEmpty) {
@@ -38,7 +38,7 @@ class KeyWidget extends StatelessWidget {
                   Container(
                     height: 22,
                     width: 4,
-                    color: _theme.primaryColor,
+                    color: theme.primaryColor,
                   ),
                   const SizedBox(
                     width: 4,
@@ -60,7 +60,7 @@ class KeyWidget extends StatelessWidget {
                 children: [
                   Container(
                     // padding: EdgeInsets.only(bottom: 40),
-                    margin: EdgeInsets.only(bottom: 130),
+                    margin: const EdgeInsets.only(bottom: 130),
                     color: Colors.red,
                     width: double.infinity,
                     height: 100,
@@ -73,39 +73,38 @@ class KeyWidget extends StatelessWidget {
                         scrollDirection: Axis.horizontal,
                         itemCount: _repository.keyResult.value.results.length,
                         itemBuilder: (BuildContext context, int index) {
-                          Result _e =
-                              _repository.keyResult.value.results[index];
+                          Result e = _repository.keyResult.value.results[index];
                           return GestureDetector(
                             onTap: () {
                               Get.to(() => VnDetail(
-                                  id: _e.id,
-                                  title: _e.title,
-                                  image: _e.image.url));
+                                  id: e.id,
+                                  title: e.title,
+                                  image: e.image.url));
                             },
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 index == 0
                                     ? Container(
-                                        padding: EdgeInsets.all(4),
-                                        decoration: BoxDecoration(
+                                        padding: const EdgeInsets.all(4),
+                                        decoration: const BoxDecoration(
                                             color: Colors.white,
                                             shape: BoxShape.circle),
                                         child: Container(
-                                          decoration: BoxDecoration(
+                                          decoration: const BoxDecoration(
                                               color: Colors.redAccent,
                                               shape: BoxShape.circle),
-                                          padding: EdgeInsets.all(4),
-                                          margin: EdgeInsets.symmetric(
+                                          padding: const EdgeInsets.all(4),
+                                          margin: const EdgeInsets.symmetric(
                                               horizontal: 40),
                                           child: Container(
-                                            decoration: BoxDecoration(
+                                            decoration: const BoxDecoration(
                                                 shape: BoxShape.circle,
                                                 color: Colors.white),
                                             child: ClipOval(
                                               clipBehavior: Clip.antiAlias,
                                               child: SizedBox.fromSize(
-                                                size: Size.fromRadius(60),
+                                                size: const Size.fromRadius(60),
                                                 child: Image.asset(
                                                   'assets/key_logo.png',
                                                   fit: BoxFit.contain,
@@ -115,10 +114,10 @@ class KeyWidget extends StatelessWidget {
                                           ),
                                         ),
                                       )
-                                    : SizedBox(width: 16),
+                                    : const SizedBox(width: 16),
                                 Column(
                                   children: [
-                                    itemSettings(index, _e),
+                                    itemSettings(index, e),
                                     const SizedBox(
                                       height: 8,
                                     ),
@@ -163,42 +162,40 @@ class KeyWidget extends StatelessWidget {
     );
   }
 
-  Widget itemSettings(int index, Result _e) {
-    String? _image = _repository.keyResult.value.results[index].image.url;
-    dynamic _imageRating =
+  Widget itemSettings(int index, Result e) {
+    dynamic imageRating =
         (_repository.keyResult.value.results[index].image.sexual +
             _repository.keyResult.value.results[index].image.violence);
-    Color _background, _surface;
+    Color background, surface;
     switch (index + 1) {
       case 1:
         {
-          _background = Colors.amber[300]!;
-          _surface = Colors.black;
+          background = Colors.amber[300]!;
+          surface = Colors.black;
           break;
         }
       case 2:
         {
-          _background = Colors.grey[300]!;
-          _surface = Colors.black;
+          background = Colors.grey[300]!;
+          surface = Colors.black;
           break;
         }
       case 3:
         {
-          _background = Colors.brown[400]!;
-          _surface = Colors.white;
+          background = Colors.brown[400]!;
+          surface = Colors.white;
           break;
         }
       default:
         {
-          _background = Colors.black87;
-          _surface = Colors.white;
+          background = Colors.black87;
+          surface = Colors.white;
         }
     }
     return Stack(children: [
       ElevatedButton(
         onPressed: () {
-          Get.to(
-              () => VnDetail(id: _e.id, title: _e.title, image: _e.image.url));
+          Get.to(() => VnDetail(id: e.id, title: e.title, image: e.image.url));
         },
         clipBehavior: Clip.antiAlias,
         style: ElevatedButton.styleFrom(
@@ -210,7 +207,7 @@ class KeyWidget extends StatelessWidget {
         child: SizedBox(
           height: 130,
           width: 100,
-          child: _imageRating <= 1
+          child: imageRating <= 1
               ? FancyShimmerImage(
                   shimmerBaseColor: Colors.grey[300],
                   shimmerHighlightColor: Colors.grey[100],
@@ -219,24 +216,24 @@ class KeyWidget extends StatelessWidget {
                   imageUrl:
                       _repository.keyResult.value.results[index].image.url)
               : const Center(
-                  child: const NSFWWidget(),
+                  child: NSFWWidget(),
                 ),
         ),
       ),
       Positioned(
           child: Container(
-        child: Center(
-          child: Text(
-            "#${(index + 1).toString()}",
-            style: TextStyle(color: _surface, fontWeight: FontWeight.bold),
-          ),
-        ),
         decoration: BoxDecoration(
             borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-            color: _background),
+            color: background),
         height: 20,
         width: 40,
+        child: Center(
+          child: Text(
+            "#${(index + 1).toString()}",
+            style: TextStyle(color: surface, fontWeight: FontWeight.bold),
+          ),
+        ),
       ))
     ]);
   }

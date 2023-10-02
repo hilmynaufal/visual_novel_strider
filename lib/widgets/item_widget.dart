@@ -3,7 +3,6 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:visual_novel_strider/controller&repository/search_repository.dart';
@@ -18,27 +17,27 @@ class ItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _theme = Theme.of(context);
+    final theme = Theme.of(context);
 
-    var _splashColor = _theme.primaryColorLight;
+    var splashColor = theme.primaryColorLight;
 
     return GetBuilder<SearchRepository>(
-        builder: (_controller) => Expanded(
+        builder: (controller) => Expanded(
               child: ListView.builder(
-                  itemCount: _controller.searchResult.value.results.length,
+                  itemCount: controller.searchResult.value.results.length,
                   itemBuilder: (context, index) => InkWell(
                         onTap: () {
                           log("message");
-                          Result _e =
-                              _controller.searchResult.value.results[index];
+                          Result e =
+                              controller.searchResult.value.results[index];
 
                           Get.to(() => VnDetail(
-                                id: _e.id,
-                                image: _e.image.url,
-                                title: _e.title,
+                                id: e.id,
+                                image: e.image.url,
+                                title: e.title,
                               ));
                         },
-                        splashColor: _splashColor,
+                        splashColor: splashColor,
                         child: Container(
                             margin: const EdgeInsets.symmetric(
                                 vertical: 6, horizontal: 16),
@@ -57,13 +56,13 @@ class ItemWidget extends StatelessWidget {
                                   child: SizedBox(
                                     height: 100,
                                     width: 70,
-                                    child: (_controller
+                                    child: (controller
                                                     .searchResult
                                                     .value
                                                     .results[index]
                                                     .image
                                                     .sexual +
-                                                _controller
+                                                controller
                                                     .searchResult
                                                     .value
                                                     .results[index]
@@ -72,8 +71,8 @@ class ItemWidget extends StatelessWidget {
                                             0)
                                         ? FadeInImage.memoryNetwork(
                                             placeholder: kTransparentImage,
-                                            image: _controller.searchResult
-                                                .value.results[index].image.url,
+                                            image: controller.searchResult.value
+                                                .results[index].image.url,
                                             fit: BoxFit.cover,
                                           )
                                         : const Center(
@@ -90,7 +89,7 @@ class ItemWidget extends StatelessWidget {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        _controller.searchResult.value
+                                        controller.searchResult.value
                                             .results[index].title,
                                         overflow: TextOverflow.ellipsis,
                                         style: const TextStyle(
@@ -98,9 +97,9 @@ class ItemWidget extends StatelessWidget {
                                             fontWeight: FontWeight.bold),
                                       ),
                                       Text(
-                                        _controller.searchResult.value
+                                        controller.searchResult.value
                                                 .results[index].alttitle ??
-                                            _controller.searchResult.value
+                                            controller.searchResult.value
                                                 .results[index].title,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
@@ -114,7 +113,7 @@ class ItemWidget extends StatelessWidget {
                                         height: 20,
                                         child: ListView.builder(
                                             scrollDirection: Axis.horizontal,
-                                            itemCount: _controller
+                                            itemCount: controller
                                                 .searchResult
                                                 .value
                                                 .results[index]
@@ -129,7 +128,7 @@ class ItemWidget extends StatelessWidget {
                                                   child: OutlinedButton(
                                                       style: OutlinedButton.styleFrom(
                                                           side: BorderSide(
-                                                              color: _theme
+                                                              color: theme
                                                                   .primaryColor,
                                                               width: 1),
                                                           shape: RoundedRectangleBorder(
@@ -139,7 +138,7 @@ class ItemWidget extends StatelessWidget {
                                                                           10))),
                                                       onPressed: () {},
                                                       child: Text(
-                                                        _controller
+                                                        controller
                                                             .searchResult
                                                             .value
                                                             .results[index]
@@ -162,20 +161,20 @@ class ItemWidget extends StatelessWidget {
                                           Icon(
                                             Icons.calendar_month_rounded,
                                             size: 18,
-                                            color: _theme.primaryColor,
+                                            color: theme.primaryColor,
                                           ),
                                           SizedBox(
                                             width: 4,
                                           ),
                                           Text(
-                                            _controller
+                                            controller
                                                     .searchResult
                                                     .value
                                                     .results[index]
                                                     .released
                                                     .isNotEmpty
                                                 ? DateTimeParse.parseDateTime(
-                                                    _controller
+                                                    controller
                                                         .searchResult
                                                         .value
                                                         .results[index]
@@ -195,15 +194,22 @@ class ItemWidget extends StatelessWidget {
                                           Icon(
                                             Icons.star_rate_rounded,
                                             size: 18,
-                                            color: _theme.primaryColor,
+                                            color: theme.primaryColor,
                                           ),
                                           SizedBox(
                                             width: 4,
                                           ),
                                           Text(
-                                            _controller.searchResult.value
-                                                .results[index].rating
-                                                .toString(),
+                                            controller
+                                                        .searchResult
+                                                        .value
+                                                        .results[index]
+                                                        .rating !=
+                                                    null
+                                                ? controller.searchResult.value
+                                                    .results[index].rating
+                                                    .toString()
+                                                : "No Rating",
                                             style: const TextStyle(
                                               fontWeight: FontWeight.w600,
                                               fontSize: 12,

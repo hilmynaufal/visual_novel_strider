@@ -1,13 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'dart:developer';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:visual_novel_strider/controller&repository/hive_repository.dart';
 import 'package:visual_novel_strider/controller&repository/home_repository.dart';
-import 'package:visual_novel_strider/widgets/character_card.dart';
 import 'package:visual_novel_strider/widgets/key_widget.dart';
 import 'package:visual_novel_strider/widgets/latest_widget.dart';
 import 'package:visual_novel_strider/widgets/nakige_widget.dart';
@@ -26,7 +22,7 @@ class HomeWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     _hiveRepository.getLatestSchedule();
 
-    final _theme = Theme.of(context);
+    final theme = Theme.of(context);
     return Obx(
       () {
         if (_repository.isReady.value) {
@@ -44,7 +40,7 @@ class HomeWidget extends StatelessWidget {
                     Container(
                       height: 22,
                       width: 4,
-                      color: _theme.primaryColor,
+                      color: theme.primaryColor,
                     ),
                     const SizedBox(
                       width: 4,

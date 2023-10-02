@@ -8,7 +8,7 @@ import 'package:visual_novel_strider/widgets/page_widgets/new_route_protagonist_
 import 'package:visual_novel_strider/widgets/route_detail_widget/abstract_route_settings.dart';
 import 'package:visual_novel_strider/widgets/texteditting_controller_mixin.dart';
 
-class NewRouteSettingsPage extends AbstractRouteSetings
+class NewRouteSettingsPage extends AbstractSimpleMonochromePage
     with TextEdittingControllerMixin {
   NewRouteSettingsPage(
       {Key? key, required this.item, required this.playgroundController})
@@ -38,17 +38,18 @@ class NewRouteSettingsPage extends AbstractRouteSetings
                 fontSize: 12,
                 fontWeight: FontWeight.w400),
           ),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           TextField(
               controller: textEditingController,
               cursorColor: Colors.black,
               decoration: InputDecoration(
                 hintText: "Ex. Save 1",
                 hintStyle: TextStyle(color: Colors.grey[400]),
-                suffixIcon: Icon(CupertinoIcons.pencil_ellipsis_rectangle),
+                suffixIcon:
+                    const Icon(CupertinoIcons.pencil_ellipsis_rectangle),
                 focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(0),
-                    borderSide: BorderSide(
+                    borderSide: const BorderSide(
                       color: Colors.black,
                       style: BorderStyle.solid,
                       width: 1,
@@ -61,7 +62,7 @@ class NewRouteSettingsPage extends AbstractRouteSetings
                       width: 1,
                     )),
               )),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Text(
             "Route branching type:",
             style: TextStyle(
@@ -69,13 +70,13 @@ class NewRouteSettingsPage extends AbstractRouteSetings
                 fontSize: 12,
                 fontWeight: FontWeight.w400),
           ),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           RectangleBoxSelectionButton(
             headerTitle: playgroundController.routeBranchType.value,
             icon: CupertinoIcons.down_arrow,
             onPressed: (() {}),
           ),
-          SizedBox(
+          const SizedBox(
             height: 16,
           ),
           Text(
@@ -85,7 +86,7 @@ class NewRouteSettingsPage extends AbstractRouteSetings
                 fontSize: 12,
                 fontWeight: FontWeight.w400),
           ),
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
           ElevatedButton(
@@ -97,12 +98,12 @@ class NewRouteSettingsPage extends AbstractRouteSetings
               },
               style: ElevatedButton.styleFrom(
                   splashFactory: NoSplash.splashFactory,
-                  padding: EdgeInsets.all(8),
+                  backgroundColor: Colors.white,
+                  padding: const EdgeInsets.all(8),
                   elevation: 0,
-                  primary: Colors.white,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(0),
-                      side: BorderSide(color: Colors.black, width: 1))),
+                      side: const BorderSide(color: Colors.black, width: 1))),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -113,7 +114,7 @@ class NewRouteSettingsPage extends AbstractRouteSetings
                         fontSize: 12,
                         fontWeight: FontWeight.w400),
                   ),
-                  Container(
+                  SizedBox(
                     height: 60,
                     child: ListView(
                         scrollDirection: Axis.horizontal,
@@ -124,16 +125,18 @@ class NewRouteSettingsPage extends AbstractRouteSetings
                                         (element) => element.id == item.id)
                                     .role ==
                                 "main")
-                            .map((e) => Container(
-                                  height: 40,
-                                  width: 40,
-                                  child: Image.network(e.image!.url),
-                                  alignment: Alignment.center,
-                                ))
+                            .map((e) => e.image == null
+                                ? const SizedBox()
+                                : Container(
+                                    height: 40,
+                                    width: 40,
+                                    alignment: Alignment.center,
+                                    child: Image.network(e.image!.url),
+                                  ))
                             .toList()
                             .cast<Widget>()),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 8,
                   ),
                   Text(
@@ -143,7 +146,7 @@ class NewRouteSettingsPage extends AbstractRouteSetings
                         fontSize: 12,
                         fontWeight: FontWeight.w400),
                   ),
-                  Container(
+                  SizedBox(
                     height: 60,
                     child: ListView(
                         scrollDirection: Axis.horizontal,
@@ -154,16 +157,18 @@ class NewRouteSettingsPage extends AbstractRouteSetings
                                         (element) => element.id == item.id)
                                     .role ==
                                 "primary")
-                            .map((e) => Container(
-                                  height: 40,
-                                  width: 40,
-                                  child: Image.network(e.image!.url),
-                                  alignment: Alignment.center,
-                                ))
+                            .map((e) => e.image == null
+                                ? const SizedBox()
+                                : Container(
+                                    height: 40,
+                                    width: 40,
+                                    alignment: Alignment.center,
+                                    child: Image.network(e.image!.url),
+                                  ))
                             .toList()
                             .cast<Widget>()),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 8,
                   ),
                   Text(
@@ -173,7 +178,7 @@ class NewRouteSettingsPage extends AbstractRouteSetings
                         fontSize: 12,
                         fontWeight: FontWeight.w400),
                   ),
-                  Container(
+                  SizedBox(
                     height: 60,
                     child: ListView(
                         scrollDirection: Axis.horizontal,
@@ -184,12 +189,14 @@ class NewRouteSettingsPage extends AbstractRouteSetings
                                         (element) => element.id == item.id)
                                     .role ==
                                 "side")
-                            .map((e) => Container(
-                                  height: 40,
-                                  width: 40,
-                                  child: Image.network(e.image!.url),
-                                  alignment: Alignment.center,
-                                ))
+                            .map((e) => e.image == null
+                                ? const SizedBox()
+                                : Container(
+                                    height: 40,
+                                    width: 40,
+                                    alignment: Alignment.center,
+                                    child: Image.network(e.image!.url),
+                                  ))
                             .toList()
                             .cast<Widget>()),
                   ),

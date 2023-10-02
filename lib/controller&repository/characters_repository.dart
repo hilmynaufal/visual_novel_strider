@@ -36,17 +36,17 @@ class CharactersRepository extends GetxController {
 
   Future<void> getIndividualDetail(String id) async {
     log("requesting api individual detail");
-    final ResponseResult _response = await _kanaServer.getIndividual(
+    final ResponseResult? response = await _kanaServer.postApiCall(
+        headers: "character",
         jsonBody: jsonEncode(<String, dynamic>{
           "filters": ["id", "=", id],
           "fields":
               "name, original, description, sex, age, vns.role, image.url, vns.spoiler, traits.name, traits.group_name, traits.char_count, birthday",
           // "results": "100"
-        }),
-        headers: "");
-    if (_response.results.isNotEmpty) {
-      individualResult.value = _response;
-      List<Trait> trait = _response.results.first.traits;
+        }));
+    if (response != null) {
+      individualResult.value = response;
+      List<Trait> trait = response.results.first.traits;
 
       // var t = await compute(getColor, trait);
 

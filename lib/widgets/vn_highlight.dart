@@ -1,7 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class VNHighlightWidget extends StatelessWidget {
   const VNHighlightWidget(
@@ -26,34 +23,35 @@ class VNHighlightWidget extends StatelessWidget {
             fit: BoxFit.fitWidth,
             width: MediaQuery.of(context).size.width - 14,
           ),
-          Container(
+          const SizedBox(
             width: 20,
             child: Icon(CupertinoIcons.arrow_left),
           ),
           Container(
-            padding: EdgeInsets.all(8),
+            padding: const EdgeInsets.all(8),
             width: 200,
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               Text(
                 title,
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16),
+                style: const TextStyle(fontSize: 16),
               ),
-              Text(
+              const Text(
                 "by",
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 4,
               ),
               Text(
                 developer,
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 4,
               ),
             ]),

@@ -1,14 +1,8 @@
-import 'dart:developer';
-
-import 'package:date_format/date_format.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:visual_novel_strider/controller&repository/detail_repository.dart';
 
 import '../model/kana_model/detail_result.dart';
-import '../utils/datetime_parse.dart';
 import '../utils/length_convert.dart';
 
 class VNDetailHeader extends StatefulWidget {
@@ -34,9 +28,9 @@ class _VNDetailHeaderState extends State<VNDetailHeader> {
   @override
   Widget build(BuildContext context) {
     // log(widget.item.developers.toString());
-    final _theme = Theme.of(context);
+    final theme = Theme.of(context);
     return SliverAppBar(
-      backgroundColor: _theme.accentColor,
+      backgroundColor: theme.primaryColorLight,
       elevation: 0,
       foregroundColor: Colors.black,
       pinned: true,
@@ -50,9 +44,9 @@ class _VNDetailHeaderState extends State<VNDetailHeader> {
 
       bottom: widget.tabController != null
           ? PreferredSize(
-              preferredSize: Size.fromHeight(40),
+              preferredSize: const Size.fromHeight(40),
               child: Container(
-                color: _theme.accentColor,
+                color: theme.primaryColorLight,
                 child: TabBar(
                     controller: widget.tabController,
                     indicatorColor: Colors.grey[200],
@@ -71,14 +65,14 @@ class _VNDetailHeaderState extends State<VNDetailHeader> {
         collapseMode: CollapseMode.pin,
         background: Container(
           height: 240,
-          margin: EdgeInsets.only(top: 80),
+          margin: const EdgeInsets.only(top: 80),
           child: Column(
             children: [
               SizedBox(
                 height: 240,
                 child: Stack(
                   children: [
-                    Container(
+                    SizedBox(
                       width: double.infinity,
                       child: (widget.item.image!.sexual +
                                   widget.item.image!.violence <=
@@ -105,7 +99,7 @@ class _VNDetailHeaderState extends State<VNDetailHeader> {
                               Colors.black.withOpacity(0.7),
                               Colors.black
                             ],
-                                stops: [
+                                stops: const [
                               0.0,
                               0.8,
                               1.0
@@ -114,11 +108,11 @@ class _VNDetailHeaderState extends State<VNDetailHeader> {
                     ),
                     Positioned.fill(
                         child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 16),
+                      margin: const EdgeInsets.symmetric(horizontal: 16),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             height: 12,
                           ),
                           Row(
@@ -197,7 +191,7 @@ class _VNDetailHeaderState extends State<VNDetailHeader> {
                               )
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 12,
                           ),
                           Row(
@@ -208,28 +202,30 @@ class _VNDetailHeaderState extends State<VNDetailHeader> {
                                   Icon(
                                     CupertinoIcons.star_circle,
                                     size: 16,
-                                    color: _theme.accentColor,
+                                    color: theme.primaryColorLight,
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 6,
                                   ),
                                   Text(
-                                    widget.item.rating!.toString(),
+                                    widget.item.rating != null
+                                        ? widget.item.rating.toString()
+                                        : "No Rating",
                                     style: TextStyle(
                                         fontWeight: FontWeight.w600,
                                         fontSize: 12,
-                                        color: _theme.accentColor),
+                                        color: theme.primaryColorLight),
                                   ),
                                   Text(
                                     "/100",
                                     style: TextStyle(
                                         fontWeight: FontWeight.w100,
                                         fontSize: 12,
-                                        color: _theme.accentColor),
+                                        color: theme.primaryColorLight),
                                   )
                                 ],
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 12,
                               ),
                               Container(
@@ -237,7 +233,7 @@ class _VNDetailHeaderState extends State<VNDetailHeader> {
                                 color: Colors.grey,
                                 width: 1,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 12,
                               ),
                               Row(
@@ -245,9 +241,9 @@ class _VNDetailHeaderState extends State<VNDetailHeader> {
                                   Icon(
                                     CupertinoIcons.clock_solid,
                                     size: 12,
-                                    color: _theme.accentColor,
+                                    color: theme.primaryColorLight,
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 6,
                                   ),
                                   Text(
@@ -258,11 +254,11 @@ class _VNDetailHeaderState extends State<VNDetailHeader> {
                                     style: TextStyle(
                                         fontWeight: FontWeight.w600,
                                         fontSize: 12,
-                                        color: _theme.accentColor),
+                                        color: theme.primaryColorLight),
                                   ),
                                 ],
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 12,
                               ),
                               Container(
@@ -270,7 +266,7 @@ class _VNDetailHeaderState extends State<VNDetailHeader> {
                                 color: Colors.grey,
                                 width: 1,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 12,
                               ),
                               Row(
@@ -278,20 +274,17 @@ class _VNDetailHeaderState extends State<VNDetailHeader> {
                                   Icon(
                                     Icons.swap_vert_circle_outlined,
                                     size: 16,
-                                    color: _theme.accentColor,
+                                    color: theme.primaryColorLight,
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 6,
                                   ),
                                   Text(
-                                    "#" +
-                                        widget.item.popularity!
-                                            .round()
-                                            .toString(),
+                                    "#${widget.item.popularity!.round()}",
                                     style: TextStyle(
                                         fontWeight: FontWeight.w600,
                                         fontSize: 12,
-                                        color: _theme.accentColor),
+                                        color: theme.primaryColorLight),
                                   ),
                                 ],
                               ),

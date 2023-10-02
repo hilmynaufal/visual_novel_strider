@@ -17,7 +17,7 @@ class LatestWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _theme = Theme.of(context);
+    final theme = Theme.of(context);
     return Obx(() {
       if (_repository.result.value.results.isNotEmpty) {
         return Column(
@@ -40,7 +40,7 @@ class LatestWidget extends StatelessWidget {
                 Container(
                   height: 22,
                   width: 4,
-                  color: _theme.primaryColor,
+                  color: theme.primaryColor,
                 ),
                 SizedBox(
                   width: 4,
@@ -63,7 +63,7 @@ class LatestWidget extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 itemCount: _repository.result.value.results.length,
                 itemBuilder: (BuildContext context, int index) {
-                  dynamic _imageRating = _repository
+                  dynamic imageRating = _repository
                           .result.value.results[index].image.sexual +
                       _repository.result.value.results[index].image.violence;
                   return Row(
@@ -73,25 +73,26 @@ class LatestWidget extends StatelessWidget {
                         children: [
                           ElevatedButton(
                             onPressed: () {
-                              Result _e =
+                              Result e =
                                   _repository.result.value.results[index];
                               Get.to(() => VnDetail(
-                                    id: _e.id,
-                                    image: _e.image.url,
-                                    title: _e.title,
+                                    id: e.id,
+                                    image: e.image.url,
+                                    title: e.title,
                                   ));
                             },
                             clipBehavior: Clip.antiAlias,
                             style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(16)),
+                                backgroundColor:
+                                    Theme.of(context).primaryColorLight,
                                 elevation: 4,
-                                padding: EdgeInsets.all(0),
-                                primary: Theme.of(context).accentColor),
+                                padding: EdgeInsets.all(0)),
                             child: SizedBox(
                               height: 130,
                               width: 100,
-                              child: _imageRating <= 1
+                              child: imageRating <= 1
                                   ? FancyShimmerImage(
                                       shimmerBaseColor: Colors.grey[300],
                                       shimmerHighlightColor: Colors.grey[100],

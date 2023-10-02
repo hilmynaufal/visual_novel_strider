@@ -28,6 +28,7 @@ class ProgressModelAdapter extends TypeAdapter<ProgressModel> {
       hasReminder: fields[9] as bool,
       isPlaying: fields[8] as bool,
       vnId: fields[1] as String,
+      createdAt: fields[12] as DateTime,
       note: fields[11] as String,
     );
   }
@@ -35,7 +36,7 @@ class ProgressModelAdapter extends TypeAdapter<ProgressModel> {
   @override
   void write(BinaryWriter writer, ProgressModel obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(13)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -56,6 +57,8 @@ class ProgressModelAdapter extends TypeAdapter<ProgressModel> {
       ..write(obj.endTime)
       ..writeByte(11)
       ..write(obj.note)
+      ..writeByte(12)
+      ..write(obj.createdAt)
       ..writeByte(3)
       ..write(obj.reminder)
       ..writeByte(9)

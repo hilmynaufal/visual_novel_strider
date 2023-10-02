@@ -1,18 +1,16 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:visual_novel_strider/controller&repository/characters_repository.dart';
-import 'package:visual_novel_strider/model/kana_model/characters_result.dart';
 import 'package:visual_novel_strider/model/kana_model/individual_result.dart';
 import 'package:visual_novel_strider/widgets/characters_detail_bottom_sheets.dart';
 
 class CharactersWidget extends StatelessWidget {
-  CharactersWidget({Key? key, required this.vnId, required this.repository})
+  const CharactersWidget(
+      {Key? key, required this.vnId, required this.repository})
       : super(key: key);
 
   final CharactersRepository repository;
@@ -21,7 +19,7 @@ class CharactersWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _theme = Theme.of(context);
+    final theme = Theme.of(context);
 
     return Obx(() {
       if (repository.result.value.results.isNotEmpty) {
@@ -33,18 +31,18 @@ class CharactersWidget extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       width: 16,
                     ),
                     Container(
                       height: 22,
                       width: 4,
-                      color: _theme.primaryColor,
+                      color: theme.primaryColor,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 4,
                     ),
-                    Text(
+                    const Text(
                       "Characters",
                       style: TextStyle(
                         fontWeight: FontWeight.w800,
@@ -54,14 +52,14 @@ class CharactersWidget extends StatelessWidget {
                   ],
                 ),
                 Container(
-                  margin: EdgeInsets.only(right: 16),
+                  margin: const EdgeInsets.only(right: 16),
                   child: GestureDetector(
                     onTap: () {
                       Get.showSnackbar(GetSnackBar(
-                        backgroundColor: _theme.primaryColor,
+                        backgroundColor: theme.primaryColor,
                         icon: Icon(
                           CupertinoIcons.check_mark_circled_solid,
-                          color: _theme.accentColor,
+                          color: theme.primaryColorLight,
                         ),
                         duration: const Duration(seconds: 2),
                         title: "a",
@@ -71,7 +69,7 @@ class CharactersWidget extends StatelessWidget {
                     child: Icon(
                       Icons.info_outline_rounded,
                       size: 16,
-                      color: _theme.primaryColor,
+                      color: theme.primaryColor,
                     ),
                   ),
                 ),
@@ -81,19 +79,19 @@ class CharactersWidget extends StatelessWidget {
               height: 16,
             ),
             SizedBox(
-              height: 200,
+              height: 180,
               child: ListView.builder(
                 itemCount: repository.result.value.results.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (_, index) {
-                  IndividualResult _e = repository.result.value.results[index];
+                  IndividualResult e = repository.result.value.results[index];
                   return Row(
                     children: [
                       index == 0
-                          ? SizedBox(
+                          ? const SizedBox(
                               width: 16,
                             )
-                          : SizedBox(),
+                          : const SizedBox(),
                       Column(
                         children: [
                           GestureDetector(
@@ -101,27 +99,26 @@ class CharactersWidget extends StatelessWidget {
                               //TODO: on pressed (CharacterDetailWidget)
                               Get.bottomSheet(
                                   CharacterDetailBottomSheet(
-                                    id: _e.id,
-                                    name: _e.name,
-                                    image:
-                                        _e.image != null ? _e.image!.url : '',
+                                    id: e.id,
+                                    name: e.name,
+                                    image: e.image != null ? e.image!.url : '',
                                   ),
                                   isScrollControlled: true,
                                   enableDrag: true);
                             },
                             child: Container(
-                                padding: EdgeInsets.all(2),
+                                padding: const EdgeInsets.all(2),
                                 decoration: BoxDecoration(
                                     color: Colors.grey[100],
                                     border:
                                         Border.all(color: Colors.grey[300]!)),
-                                child: _e.image != null
+                                child: e.image != null
                                     ? SizedBox(
                                         height: 100,
                                         width: 140,
                                         child: ClipRRect(
                                           child: FadeInImage.memoryNetwork(
-                                            image: _e.image!.url,
+                                            image: e.image!.url,
                                             alignment: Alignment.topCenter,
                                             fit: BoxFit.fitWidth,
                                             placeholder: kTransparentImage,
@@ -130,27 +127,27 @@ class CharactersWidget extends StatelessWidget {
                                       )
                                     : const Text("no image")),
                           ),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           Text(
-                            _e.name,
+                            e.name,
                             maxLines: 2,
                             textAlign: TextAlign.center,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(fontWeight: FontWeight.w600),
+                            style: const TextStyle(fontWeight: FontWeight.w600),
                           ),
                           Text(
-                            _e.vns
+                            e.vns
                                 .firstWhere((element) => element.id == vnId)
                                 .role!
                                 .toUpperCase(),
                             textAlign: TextAlign.center,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontWeight: FontWeight.w200, fontSize: 12),
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 16,
                       ),
                     ],
@@ -158,9 +155,6 @@ class CharactersWidget extends StatelessWidget {
                 },
               ),
             ),
-            const SizedBox(
-              height: 80,
-            )
           ],
         );
       }

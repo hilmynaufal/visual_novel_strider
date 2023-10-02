@@ -1,5 +1,4 @@
 import 'package:backdrop/backdrop.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -10,7 +9,7 @@ class SubHeaderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var _theme = Theme.of(context);
+    var theme = Theme.of(context);
     return GetBuilder<PlayerController>(builder: (_) {
       if (_.isPlaying.value) {
         return GestureDetector(
@@ -22,7 +21,7 @@ class SubHeaderWidget extends StatelessWidget {
             automaticallyImplyTrailing: false,
             title: Container(
               padding: const EdgeInsets.all(10),
-              color: _theme.primaryColor,
+              color: theme.primaryColor,
               child: Row(
                 children: [
                   SizedBox(
@@ -41,7 +40,7 @@ class SubHeaderWidget extends StatelessWidget {
                   const SizedBox(
                     width: 8,
                   ),
-                  Row(
+                  const Row(
                     children: [
                       Text(
                         "Now Playing",
@@ -70,11 +69,11 @@ class SubHeaderWidget extends StatelessWidget {
           },
           child: Container(
             width: double.infinity,
-            color: _theme.primaryColor,
+            color: theme.primaryColor,
             height: 30,
             child: Icon(
               Icons.drag_handle,
-              color: _theme.accentColor,
+              color: theme.primaryColorLight,
             ),
           ),
         ),

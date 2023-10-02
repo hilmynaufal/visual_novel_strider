@@ -3,9 +3,7 @@
 import 'dart:developer';
 
 import 'package:date_format/date_format.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -24,12 +22,15 @@ import '../model/hive_model/progress_model.dart';
 
 // ignore: must_be_immutable
 class CharacterCard extends StatelessWidget {
-  const CharacterCard({Key? key, required this.nodeModel}) : super(key: key);
+  const CharacterCard(
+      {Key? key, required this.nodeModel, required this.onCardPressed})
+      : super(key: key);
 
   // final NotificationController _notificationController = Get.find();
 
   // final DetailResult item;
   final dynamic nodeModel;
+  final void Function() onCardPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -39,14 +40,15 @@ class CharacterCard extends StatelessWidget {
         widthFactor: 0.95,
         child: ElevatedButton(
           onPressed: () {
-            // Get.bottomSheet(CharacterCardBottomSheet(index: index, item: item),
+            // Get.bottomSheet(CharacterCardBottomSheet(progressModel: nodeModel),
             //     backgroundColor: Color(nodeModel.hexColor));
+            onCardPressed();
           },
           style: ElevatedButton.styleFrom(
               elevation: 4,
+              backgroundColor: Color(nodeModel.hexColor),
               shadowColor: Color(nodeModel.hexColor),
               padding: const EdgeInsets.all(16),
-              primary: Color(nodeModel.hexColor),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12))),
           child: Column(
@@ -142,7 +144,7 @@ class CharacterCard extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Column(children: [
+                  const Column(children: [
                     // FlutterSwitch(
                     //   toggleColor: Color(nodeModel.hexColor),
                     //   activeColor: Colors.white.withOpacity(0.5),
@@ -200,8 +202,7 @@ class CharacterCard extends StatelessWidget {
 
   String durationToString(String duration) {
     List<int> time = DurationParsing.durationStringToInt(duration);
-    String temp =
-        time[0].toString() + ' hours ' + time[1].toString() + ' minutes';
+    String temp = '${time[0]} hours ${time[1]} minutes';
     return temp;
   }
 }

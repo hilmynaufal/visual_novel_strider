@@ -33,6 +33,9 @@ abstract class AbstractCardModel {
   @HiveField(11)
   String note;
 
+  @HiveField(12)
+  DateTime createdAt;
+
   AbstractCardModel(
       {required this.id,
       required this.character,
@@ -43,5 +46,6 @@ abstract class AbstractCardModel {
       required this.endTime,
       required this.isPlaying,
       required this.vnId,
+      required this.createdAt,
       required this.note});
 }

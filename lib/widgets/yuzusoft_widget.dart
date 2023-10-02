@@ -14,7 +14,7 @@ class YuzusoftWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _theme = Theme.of(context);
+    final theme = Theme.of(context);
     return Obx(
       () {
         if (_repository.yuzusoftResult.value.results.isNotEmpty) {
@@ -38,7 +38,7 @@ class YuzusoftWidget extends StatelessWidget {
                   Container(
                     height: 22,
                     width: 4,
-                    color: _theme.primaryColor,
+                    color: theme.primaryColor,
                   ),
                   const SizedBox(
                     width: 4,
@@ -60,7 +60,7 @@ class YuzusoftWidget extends StatelessWidget {
                 children: [
                   Container(
                     // padding: EdgeInsets.only(bottom: 40),
-                    margin: EdgeInsets.only(bottom: 130),
+                    margin: const EdgeInsets.only(bottom: 130),
                     color: Colors.amber,
                     width: double.infinity,
                     height: 100,
@@ -74,27 +74,27 @@ class YuzusoftWidget extends StatelessWidget {
                         itemCount:
                             _repository.yuzusoftResult.value.results.length,
                         itemBuilder: (BuildContext context, int index) {
-                          Result _e =
+                          Result e =
                               _repository.yuzusoftResult.value.results[index];
                           return Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               index == 0
                                   ? Container(
-                                      padding: EdgeInsets.all(4),
-                                      decoration: BoxDecoration(
+                                      padding: const EdgeInsets.all(4),
+                                      decoration: const BoxDecoration(
                                           color: Colors.white,
                                           shape: BoxShape.circle),
                                       child: Container(
-                                        decoration: BoxDecoration(
+                                        decoration: const BoxDecoration(
                                             color: Colors.amber,
                                             shape: BoxShape.circle),
-                                        padding: EdgeInsets.all(4),
-                                        margin: EdgeInsets.symmetric(
+                                        padding: const EdgeInsets.all(4),
+                                        margin: const EdgeInsets.symmetric(
                                             horizontal: 40),
                                         child: ClipOval(
                                           child: SizedBox.fromSize(
-                                            size: Size.fromRadius(60),
+                                            size: const Size.fromRadius(60),
                                             child: Image.asset(
                                               'assets/yuzusoft_logo.jpg',
                                               fit: BoxFit.fill,
@@ -103,17 +103,17 @@ class YuzusoftWidget extends StatelessWidget {
                                         ),
                                       ),
                                     )
-                                  : SizedBox(width: 16),
+                                  : const SizedBox(width: 16),
                               GestureDetector(
                                 onTap: () {
                                   Get.to(() => VnDetail(
-                                      id: _e.id,
-                                      title: _e.title,
-                                      image: _e.image.url));
+                                      id: e.id,
+                                      title: e.title,
+                                      image: e.image.url));
                                 },
                                 child: Column(
                                   children: [
-                                    itemSettings(index, _e),
+                                    itemSettings(index, e),
                                     const SizedBox(
                                       height: 8,
                                     ),
@@ -158,42 +158,40 @@ class YuzusoftWidget extends StatelessWidget {
     );
   }
 
-  Widget itemSettings(int index, Result _e) {
-    String? _image = _repository.yuzusoftResult.value.results[index].image.url;
-    dynamic _imageRating =
+  Widget itemSettings(int index, Result e) {
+    dynamic imageRating =
         (_repository.yuzusoftResult.value.results[index].image.sexual +
             _repository.yuzusoftResult.value.results[index].image.violence);
-    Color _background, _surface;
+    Color background, surface;
     switch (index + 1) {
       case 1:
         {
-          _background = Colors.amber[300]!;
-          _surface = Colors.black;
+          background = Colors.amber[300]!;
+          surface = Colors.black;
           break;
         }
       case 2:
         {
-          _background = Colors.grey[300]!;
-          _surface = Colors.black;
+          background = Colors.grey[300]!;
+          surface = Colors.black;
           break;
         }
       case 3:
         {
-          _background = Colors.brown[400]!;
-          _surface = Colors.white;
+          background = Colors.brown[400]!;
+          surface = Colors.white;
           break;
         }
       default:
         {
-          _background = Colors.black87;
-          _surface = Colors.white;
+          background = Colors.black87;
+          surface = Colors.white;
         }
     }
     return Stack(children: [
       ElevatedButton(
         onPressed: () {
-          Get.to(
-              () => VnDetail(id: _e.id, title: _e.title, image: _e.image.url));
+          Get.to(() => VnDetail(id: e.id, title: e.title, image: e.image.url));
         },
         clipBehavior: Clip.antiAlias,
         style: ElevatedButton.styleFrom(
@@ -205,7 +203,7 @@ class YuzusoftWidget extends StatelessWidget {
         child: SizedBox(
           height: 130,
           width: 100,
-          child: _imageRating <= 1
+          child: imageRating <= 1
               ? FancyShimmerImage(
                   shimmerBaseColor: Colors.grey[300],
                   shimmerHighlightColor: Colors.grey[100],
@@ -214,24 +212,24 @@ class YuzusoftWidget extends StatelessWidget {
                   imageUrl:
                       _repository.yuzusoftResult.value.results[index].image.url)
               : const Center(
-                  child: const NSFWWidget(),
+                  child: NSFWWidget(),
                 ),
         ),
       ),
       Positioned(
           child: Container(
-        child: Center(
-          child: Text(
-            "#${(index + 1).toString()}",
-            style: TextStyle(color: _surface, fontWeight: FontWeight.bold),
-          ),
-        ),
         decoration: BoxDecoration(
             borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-            color: _background),
+            color: background),
         height: 20,
         width: 40,
+        child: Center(
+          child: Text(
+            "#${(index + 1).toString()}",
+            style: TextStyle(color: surface, fontWeight: FontWeight.bold),
+          ),
+        ),
       ))
     ]);
   }

@@ -1,6 +1,5 @@
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
-import 'package:transparent_image/transparent_image.dart';
 import 'package:visual_novel_strider/model/kana_model/screenshot_result.dart';
 
 class ScreensWidget extends StatelessWidget {
@@ -10,7 +9,7 @@ class ScreensWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
         height: 200,
         child: ListView.builder(
             // shrinkWrap: true,
@@ -28,7 +27,7 @@ class ScreensWidget extends StatelessWidget {
                       width: 340,
                       margin: const EdgeInsets.only(right: 8),
                       clipBehavior: Clip.antiAlias,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(10))),
                       child: FancyShimmerImage(
                         imageUrl: screenshot![index].url!,

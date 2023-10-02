@@ -1,8 +1,6 @@
-import 'dart:async';
 import 'dart:core';
 import 'dart:developer';
 
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:visual_novel_strider/model/kana_model/detail_result.dart';
@@ -23,8 +21,8 @@ class HiveRepository extends GetxController {
   //TODO: #1 bug fix
   var result = [].obs;
 
-  StreamController<List<ProgressModel>> progressStreamController =
-      StreamController<List<ProgressModel>>();
+  // StreamController<List<ProgressModel>> progressStreamController =
+  //     StreamController<List<ProgressModel>>();
 
   @override
   void onInit() async {
@@ -56,25 +54,25 @@ class HiveRepository extends GetxController {
 
   void getLatestSchedule() async {
     isLatestScheduleReady.value = false;
-    List<ProgressModel> _temp = progressBox!.values
+    List<ProgressModel> temp = progressBox!.values
         .where((element) => element.hasReminder == true)
         .toList();
 
-    _temp.sort((x, y) => x.reminder.compareTo(y.reminder));
+    temp.sort((x, y) => x.reminder.compareTo(y.reminder));
 
-    log("schedule length = " + _temp.length.toString());
+    log("schedule length = ${temp.length}");
 
-    scheduleData.value = _temp;
+    scheduleData.value = temp;
 
     isLatestScheduleReady.value = true;
   }
 
   void getCharactersRoute(String vnId) {
     isReady.value = false;
-    List<ProgressModel> _temp =
+    List<ProgressModel> temp =
         progressBox!.values.where((element) => element.vnId == vnId).toList();
-    if (_temp.isNotEmpty) {
-      result.value = _temp;
+    if (temp.isNotEmpty) {
+      result.value = temp;
     }
     isReady.value = true;
     // update();
@@ -85,7 +83,7 @@ class HiveRepository extends GetxController {
     detailResult.characters = individualResult;
     detailResult.isComplete = false;
 
-    log("chara = " + individualResult.length.toString());
+    log("chara = ${individualResult.length}");
 
     if (checkIfAdded(detailResult)) {
       log('added');
@@ -101,27 +99,30 @@ class HiveRepository extends GetxController {
       String vnID,
       Duration endTime,
       String note) {
-    var _value = ProgressModel(
+    final now = DateTime.now();
+    var value = ProgressModel(
         id: hiveCHaractersModel.id,
         character: hiveCHaractersModel,
         reminder: reminder,
         playtime: "0 hours 0 minutes",
-        lastPlayed: DateTime.now(),
+        lastPlayed: now,
         hexColor: hexColor,
         isCompleted: false,
         endTime: endTime.toString(),
         hasReminder: hasReminder,
         isPlaying: false,
         vnId: vnID,
-        note: note);
-    progressBox!.put(hiveCHaractersModel.id, _value);
+        note: note,
+        createdAt: now);
+    progressBox!.put(hiveCHaractersModel.id, value);
     update();
   }
 
-  Future<void> deleteProgressFromBox(int index, String vnId) async {
-    await result[index].delete();
-
-    getCharactersRoute(vnId);
+  Future<void> deleteProgressFromBox(
+      ProgressModel progressModel, String vnid) async {
+    await progressModel.delete();
+    String id = progressModel.vnId;
+    getCharactersRoute(id);
 
     update();
   }

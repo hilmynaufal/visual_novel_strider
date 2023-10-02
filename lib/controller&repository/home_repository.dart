@@ -70,7 +70,7 @@ class HomeRepository extends GetxController {
 
   void getKey() async {
     // isReady.value = false;
-    log("requesting kana api yuzusoft");
+    log("requesting kana api key");
 
     var response = await _server.getBatchVisualNovel("rating", "developer",
         dev: "p24", filterCount: 1, itemCount: 5);

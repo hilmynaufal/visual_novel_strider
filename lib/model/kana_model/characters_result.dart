@@ -1,6 +1,3 @@
-import 'package:hive/hive.dart';
-import 'package:visual_novel_strider/model/kana_model/image.dart';
-import 'package:visual_novel_strider/model/kana_model/vns.dart';
 
 // @HiveType(typeId: 1)
 // class CharactersResult {

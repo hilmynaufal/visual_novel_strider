@@ -24,9 +24,9 @@ class PlaygroundCreationIntermediate extends StatelessWidget {
               height: 16,
             ),
             GetBuilder<PlaygroundController>(builder: (controller) {
-              if (controller.playthroughModel.value != null) {
+              if (controller.curentPlaythrough.value != null) {
                 controller.redirectWithFunction(function: () {
-                  Get.to(() => const RoutePlaygroundPage());
+                  Get.off(() => const RoutePlaygroundPage());
                 });
                 // Get.to(() => RoutePlaygroundPage());
                 return const Center(

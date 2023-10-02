@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class PlaygroundNodeIndicator extends StatelessWidget {
   const PlaygroundNodeIndicator({Key? key, required this.isNextNode})
@@ -11,7 +9,7 @@ class PlaygroundNodeIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 80,
       child: Row(
         children: [
@@ -19,39 +17,39 @@ class PlaygroundNodeIndicator extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             children: [
               Container(
-                padding: EdgeInsets.all(2),
+                padding: const EdgeInsets.all(2),
                 alignment: Alignment.center,
                 width: 20,
                 height: 20,
-                decoration:
-                    BoxDecoration(shape: BoxShape.circle, color: Colors.amber),
+                decoration: const BoxDecoration(
+                    shape: BoxShape.circle, color: Colors.amber),
                 child: Container(
                     width: 18,
                     height: 18,
                     alignment: Alignment.center,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         shape: BoxShape.circle, color: Colors.white),
-                    child: Icon(
+                    child: const Icon(
                       CupertinoIcons.arrow_branch,
                       size: 14,
                       color: Colors.amber,
                     )),
               ),
               isNextNode
-                  ? SizedBox()
+                  ? const SizedBox()
                   : Expanded(
                       child: Container(
                         width: 2,
-                        margin: EdgeInsets.symmetric(vertical: 8),
+                        margin: const EdgeInsets.symmetric(vertical: 8),
                         color: Colors.amber,
                       ),
                     ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             width: 16,
           ),
-          Column(
+          const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(

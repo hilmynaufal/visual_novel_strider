@@ -1,9 +1,6 @@
 // ignore_for_file: deprecated_member_use, prefer_const_constructors
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:visual_novel_strider/controller&repository/hive_repository.dart';
@@ -20,16 +17,16 @@ class InventoryWidget extends StatefulWidget {
 class _InventoryWidgetState extends State<InventoryWidget> {
   @override
   Widget build(BuildContext context) {
-    var _theme = Theme.of(context);
+    var theme = Theme.of(context);
 
     return Container(
-      color: _theme.accentColor,
+      color: theme.primaryColorLight,
       child: GetBuilder<HiveRepository>(
-        builder: (_repository) {
-          _repository.getItem();
-          if (_repository.isReady.isTrue) {
+        builder: (repository) {
+          repository.getItem();
+          if (repository.isReady.isTrue) {
             return ListView.builder(
-              itemCount: _repository.data!.length,
+              itemCount: repository.data!.length,
               itemBuilder: (context, index) {
                 return Column(
                   children: [
@@ -45,11 +42,11 @@ class _InventoryWidgetState extends State<InventoryWidget> {
                             splashFactory: NoSplash.splashFactory,
                             elevation: 0,
                             padding: const EdgeInsets.all(0),
-                            primary: _theme.accentColor,
+                            primary: theme.primaryColorLight,
                             onPrimary: Colors.black),
                         onPressed: () {
                           Get.to(() =>
-                              DetailWidget(item: _repository.data![index]));
+                              DetailWidget(item: repository.data![index]));
                         },
                         onLongPress: () {
                           Get.bottomSheet(
@@ -59,16 +56,15 @@ class _InventoryWidgetState extends State<InventoryWidget> {
                                   GestureDetector(
                                     onTap: () {
                                       Get.back();
-                                      if (_repository
-                                          .data![index].isComplete!) {
-                                        _repository.data![index].isComplete =
+                                      if (repository.data![index].isComplete!) {
+                                        repository.data![index].isComplete =
                                             false;
                                       } else {
-                                        _repository.data![index].isComplete =
+                                        repository.data![index].isComplete =
                                             true;
                                       }
-                                      _repository.data![index].save();
-                                      _repository.update();
+                                      repository.data![index].save();
+                                      repository.update();
                                     },
                                     child: Container(
                                       margin: const EdgeInsets.fromLTRB(
@@ -77,18 +73,18 @@ class _InventoryWidgetState extends State<InventoryWidget> {
                                         children: [
                                           Icon(
                                             Icons.play_arrow_rounded,
-                                            color: _theme.accentColor,
+                                            color: theme.primaryColorLight,
                                             size: 32,
                                           ),
                                           const SizedBox(
                                             width: 32,
                                           ),
                                           Text(
-                                            _repository.data![index].isComplete!
+                                            repository.data![index].isComplete!
                                                 ? "Mark Playing"
                                                 : "Mark Completed",
                                             style: TextStyle(
-                                                color: _theme.accentColor,
+                                                color: theme.primaryColorLight,
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.w600),
                                           ),
@@ -99,8 +95,8 @@ class _InventoryWidgetState extends State<InventoryWidget> {
                                   GestureDetector(
                                     onTap: () {
                                       Get.back();
-                                      _repository.data![index].delete();
-                                      _repository.update();
+                                      repository.data![index].delete();
+                                      repository.update();
                                     },
                                     child: Container(
                                       margin: const EdgeInsets.fromLTRB(
@@ -109,7 +105,7 @@ class _InventoryWidgetState extends State<InventoryWidget> {
                                         children: [
                                           Icon(
                                             Icons.delete,
-                                            color: _theme.accentColor,
+                                            color: theme.primaryColorLight,
                                             size: 32,
                                           ),
                                           const SizedBox(
@@ -118,7 +114,7 @@ class _InventoryWidgetState extends State<InventoryWidget> {
                                           Text(
                                             "Delete",
                                             style: TextStyle(
-                                                color: _theme.accentColor,
+                                                color: theme.primaryColorLight,
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.w600),
                                           ),
@@ -131,7 +127,7 @@ class _InventoryWidgetState extends State<InventoryWidget> {
                                   ),
                                 ],
                               ),
-                              backgroundColor: _theme.primaryColor);
+                              backgroundColor: theme.primaryColor);
                         },
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -142,15 +138,15 @@ class _InventoryWidgetState extends State<InventoryWidget> {
                               child: SizedBox(
                                 height: 140,
                                 width: 100,
-                                child: (_repository.data![index].image?.sexual +
-                                            _repository
+                                child: (repository.data![index].image?.sexual +
+                                            repository
                                                 .data![index].image?.violence ==
                                         0)
                                     ? FadeInImage.memoryNetwork(
                                         placeholder: kTransparentImage,
                                         imageScale: 3,
                                         image:
-                                            _repository.data![index].image!.url,
+                                            repository.data![index].image!.url,
                                         fit: BoxFit.cover,
                                       )
                                     : const Center(
@@ -166,15 +162,15 @@ class _InventoryWidgetState extends State<InventoryWidget> {
                                 children: [
                                   Container(
                                     width: double.infinity,
-                                    color: _repository.data![index].isComplete!
-                                        ? _theme.primaryColor
+                                    color: repository.data![index].isComplete!
+                                        ? theme.primaryColor
                                         : Colors.yellow.shade900,
                                     child: Text(
-                                      _repository.data![index].isComplete!
+                                      repository.data![index].isComplete!
                                           ? "Completed".toUpperCase()
                                           : "Playing".toUpperCase(),
                                       style: TextStyle(
-                                          color: _theme.accentColor,
+                                          color: theme.primaryColorLight,
                                           fontWeight: FontWeight.bold,
                                           fontSize: 11),
                                     ),
@@ -190,7 +186,7 @@ class _InventoryWidgetState extends State<InventoryWidget> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          _repository.data![index].title,
+                                          repository.data![index].title,
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 2,
                                           style: const TextStyle(
@@ -198,8 +194,8 @@ class _InventoryWidgetState extends State<InventoryWidget> {
                                               fontWeight: FontWeight.bold),
                                         ),
                                         Text(
-                                          _repository.data![index].alttitle ??
-                                              _repository.data![index].title,
+                                          repository.data![index].alttitle ??
+                                              repository.data![index].title,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
                                               fontSize: 8,
@@ -217,7 +213,7 @@ class _InventoryWidgetState extends State<InventoryWidget> {
                                               child: OutlinedButton(
                                                   style: OutlinedButton.styleFrom(
                                                       side: BorderSide(
-                                                          color: _theme
+                                                          color: theme
                                                               .primaryColor,
                                                           width: 1),
                                                       shape:
@@ -228,9 +224,9 @@ class _InventoryWidgetState extends State<InventoryWidget> {
                                                                           30))),
                                                   onPressed: () {},
                                                   child: Text(
-                                                    _repository.data![index]
+                                                    repository.data![index]
                                                             .olang!.isNotEmpty
-                                                        ? _repository
+                                                        ? repository
                                                             .data![index].olang!
                                                             .toUpperCase()
                                                         : "JA",
@@ -252,13 +248,13 @@ class _InventoryWidgetState extends State<InventoryWidget> {
                                                 Icon(
                                                   Icons.calendar_today,
                                                   size: 16,
-                                                  color: _theme.primaryColor,
+                                                  color: theme.primaryColor,
                                                 ),
                                                 SizedBox(
                                                   width: 4,
                                                 ),
                                                 Text(
-                                                  _repository
+                                                  repository
                                                       .data![index].released!,
                                                   style: const TextStyle(
                                                       fontWeight:
@@ -272,11 +268,10 @@ class _InventoryWidgetState extends State<InventoryWidget> {
                                                 Icon(
                                                   Icons.star,
                                                   size: 16,
-                                                  color: _theme.primaryColor,
+                                                  color: theme.primaryColor,
                                                 ),
                                                 Text(
-                                                  _repository
-                                                      .data![index].rating
+                                                  repository.data![index].rating
                                                       .toString(),
                                                   style: const TextStyle(
                                                     fontWeight: FontWeight.w100,
@@ -292,7 +287,7 @@ class _InventoryWidgetState extends State<InventoryWidget> {
                                   ),
                                   LinearProgressIndicator(
                                     backgroundColor: Colors.grey[100],
-                                    color: _theme.primaryColor,
+                                    color: theme.primaryColor,
                                     minHeight: 4,
                                     value: 0.2,
                                   )

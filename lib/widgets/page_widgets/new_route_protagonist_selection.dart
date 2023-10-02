@@ -5,12 +5,14 @@ import 'package:visual_novel_strider/controller&repository/playground_controller
 import 'package:visual_novel_strider/model/kana_model/detail_result.dart';
 import 'package:visual_novel_strider/widgets/button_widgets/rectangle_box_selection_button.dart';
 import 'package:visual_novel_strider/widgets/character_card.dart';
+import 'package:visual_novel_strider/widgets/create_bottom_sheets.dart';
 import 'package:visual_novel_strider/widgets/playground/playground_creation_intermediate.dart';
 import 'package:visual_novel_strider/widgets/route_detail_widget/abstract_route_settings.dart';
 import 'package:visual_novel_strider/widgets/route_detail_widget/characters_drawer.dart';
-import 'package:visual_novel_strider/widgets/playground/route_playground_page.dart';
 
-class NewRouteProtagonistSelectionPage extends AbstractRouteSetings {
+import '../../model/kana_model/individual_result.dart';
+
+class NewRouteProtagonistSelectionPage extends AbstractSimpleMonochromePage {
   const NewRouteProtagonistSelectionPage(
       {Key? key, required this.item, required this.playgroundController})
       : super(
@@ -30,10 +32,10 @@ class NewRouteProtagonistSelectionPage extends AbstractRouteSetings {
         headerTitle: item.characters!.first.name,
         description: "as Protagonist 1",
         onPressed: () {
-          Get.to(() => PlaygroundCreationIntermediate());
+          Get.to(() => const PlaygroundCreationIntermediate());
         },
       ),
-      SizedBox(
+      const SizedBox(
         height: 16,
       ),
       RectangleBoxSelectionButton(
@@ -44,24 +46,35 @@ class NewRouteProtagonistSelectionPage extends AbstractRouteSetings {
           Get.bottomSheet(
             CharactersDrawer(
               item: item,
-              controller: 'playground',
+              onCharacterSelected: (IndividualResult e) {
+                Get.bottomSheet(CreateCardBottomSheet(
+                    e: e,
+                    onAddButtonPressed: (individualResult) {
+                      playgroundController.createNewNodePreview(e, item.id);
+                    },
+                    vnID: item.id,
+                    title: title,
+                    controller: playgroundController));
+              },
             ),
           );
         },
       ),
-      SizedBox(
+      const SizedBox(
         height: 32,
       ),
       Obx(() => playgroundController.currentNode.value == null
-          ? SizedBox()
+          ? const SizedBox()
           : GestureDetector(
               onTap: () {
-                Get.to(() => PlaygroundCreationIntermediate());
+                Get.to(() => const PlaygroundCreationIntermediate());
               },
-              child: Container(
+              child: SizedBox(
                 height: 230,
                 child: CharacterCard(
-                    nodeModel: playgroundController.currentNode.value!),
+                  nodeModel: playgroundController.currentNode.value!,
+                  onCardPressed: () {},
+                ),
               ),
             ))
     ]);

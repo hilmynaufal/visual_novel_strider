@@ -1,22 +1,21 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, unused_import, deprecated_member_use, unused_field
 
 import 'dart:io';
-import 'dart:ui';
 
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:backdrop/backdrop.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:visual_novel_strider/controller&repository/detail_repository.dart';
 import 'package:visual_novel_strider/controller&repository/player_controller.dart';
 import 'package:visual_novel_strider/controller&repository/hive_repository.dart';
 import 'package:visual_novel_strider/controller&repository/playground_controller.dart';
 import 'package:visual_novel_strider/controller&repository/search_repository.dart';
+import 'package:visual_novel_strider/model/kana_model/branch_node_model.dart';
+import 'package:visual_novel_strider/model/kana_model/choice_model.dart';
 import 'package:visual_novel_strider/model/kana_model/developer_model.dart';
+// ignore: library_prefixes
 import 'package:visual_novel_strider/model/kana_model/image.dart' as ImageP;
 import 'package:visual_novel_strider/model/kana_model/individual_result.dart';
 import 'package:visual_novel_strider/model/kana_model/screenshot_result.dart';
@@ -83,26 +82,28 @@ void main() async {
   Hive.registerAdapter(ProgressModelAdapter());
   Hive.registerAdapter(DeveloperModelAdapter());
   Hive.registerAdapter(PlaygroundModelAdapter());
-  Hive.registerAdapter(NodeModelAdapter());
-  AwesomeNotifications().initialize(null, [
-    NotificationChannel(
-        channelKey: 'schedule_notification',
-        channelName: 'Route Schedule Notification',
-        channelDescription: 'Notification channel to send schedule reminder',
-        channelShowBadge: true,
-        onlyAlertOnce: true,
-        defaultColor: Color(0xFF9D50DD),
-        ledColor: Colors.yellow),
-    NotificationChannel(
-        channelKey: 'media_player',
-        channelName: 'Media player controller',
-        channelDescription: 'Media player controller',
-        channelShowBadge: true,
-        onlyAlertOnce: true,
-        defaultColor: Color(0xFF9D50DD),
-        ledColor: Colors.yellow,
-        locked: true),
-  ]);
+  Hive.registerAdapter(EventNodeModelAdapter());
+  Hive.registerAdapter(BranchNodeModelAdapter());
+  Hive.registerAdapter(ChoiceModelAdapter());
+  // AwesomeNotifications().initialize(null, [
+  //   NotificationChannel(
+  //       channelKey: 'schedule_notification',
+  //       channelName: 'Route Schedule Notification',
+  //       channelDescription: 'Notification channel to send schedule reminder',
+  //       channelShowBadge: true,
+  //       onlyAlertOnce: true,
+  //       defaultColor: Color(0xFF9D50DD),
+  //       ledColor: Colors.yellow),
+  //   NotificationChannel(
+  //       channelKey: 'media_player',
+  //       channelName: 'Media player controller',
+  //       channelDescription: 'Media player controller',
+  //       channelShowBadge: true,
+  //       onlyAlertOnce: true,
+  //       defaultColor: Color(0xFF9D50DD),
+  //       ledColor: Colors.yellow,
+  //       locked: true),
+  // ]);
 
   runApp(const MyApp());
 }
@@ -117,10 +118,9 @@ class MyApp extends StatelessWidget {
         title: 'Visual Novel Strider',
         theme: ThemeData(
             primaryColor: const Color(0xFF29b6f6),
-            brightness: Brightness.light,
+            // brightness: Brightness.light,
             textTheme: TextTheme(headline1: TextStyle(color: Colors.white)),
-            accentColor: Colors.white,
-            primaryColorLight: const Color(0xFF68CEFE),
+            primaryColorLight: Colors.white,
             primaryColorDark: const Color(0xFF29b6f6),
             // textSelectionColor: Colors.white,
             fontFamily: "Nunito"),
@@ -139,16 +139,14 @@ class _MyHomeState extends State<MyHome> {
   // final SocketServer _serverSocket = Get.put(SocketServer());
   final KanaServer _kanaServer = Get.put(KanaServer());
   final SearchRepository _searchRepository = Get.put(SearchRepository());
-  final _detailRepository =
-      Get.create<DetailRepository>(() => DetailRepository());
-  // final TagsRepository _tagsRepository = Get.put(TagsRepository());
-  final _charactersRepository =
-      Get.create<CharactersRepository>(() => CharactersRepository());
+  // final _detailRepository =
+  //     Get.create<DetailRepository>(() => DetailRepository());
+  // // final TagsRepository _tagsRepository = Get.put(TagsRepository());
+  // final _charactersRepository =
+  //     Get.create<CharactersRepository>(() => CharactersRepository());
   final HiveRepository _hiveRepository = Get.put(HiveRepository());
   final NotificationController _controller = Get.put(NotificationController());
   final PlayerController _playerController = Get.put(PlayerController());
-  final PlaygroundController _playgroundController =
-      Get.put(PlaygroundController());
 
   final TextEditingController _searchController = TextEditingController();
 
@@ -166,14 +164,14 @@ class _MyHomeState extends State<MyHome> {
   @override
   Widget build(BuildContext context) {
     // _httpClient.getTags();
-    final _theme = Theme.of(context);
-    final _headerHeight = MediaQuery.of(context).size.height - 400;
+    final theme = Theme.of(context);
+    final headerHeight = MediaQuery.of(context).size.height - 400;
 
     return BackdropScaffold(
       extendBody: true,
       appBar: BackdropAppBar(
         leading: Image.asset('assets/logo_small_invert_light.png'),
-        backgroundColor: _theme.primaryColor,
+        backgroundColor: theme.primaryColor,
         actions: [
           Icon(CupertinoIcons.search),
           SizedBox(
@@ -182,18 +180,18 @@ class _MyHomeState extends State<MyHome> {
         ],
         title: TextField(
           focusNode: myFocusNode,
-          cursorColor: Theme.of(context).accentColor,
+          cursorColor: Theme.of(context).primaryColorLight,
           controller: _searchController,
-          style: TextStyle(fontSize: 16, color: _theme.accentColor),
+          style: TextStyle(fontSize: 16, color: theme.primaryColorLight),
           decoration: InputDecoration(
             // isDense: true,
             // contentPadding: EdgeInsets.symmetric(vertical: 4),
-            hintStyle: TextStyle(color: _theme.accentColor),
+            hintStyle: TextStyle(color: theme.primaryColorLight),
             hintText: "Search visual novel",
             prefixIcon: Icon(
               CupertinoIcons.search,
               size: 16,
-              color: Theme.of(context).accentColor,
+              color: Theme.of(context).primaryColorLight,
             ),
             focusedBorder: InputBorder.none,
             border: InputBorder.none,
@@ -201,12 +199,12 @@ class _MyHomeState extends State<MyHome> {
           ),
         ),
       ),
-      headerHeight: _headerHeight,
-      frontLayerBackgroundColor: Theme.of(context).accentColor,
+      headerHeight: headerHeight,
+      frontLayerBackgroundColor: Theme.of(context).primaryColorLight,
       subHeader: SubHeaderWidget(),
       subHeaderAlwaysActive: false,
       backgroundColor: Colors.white,
-      backLayerBackgroundColor: _theme.primaryColor,
+      backLayerBackgroundColor: theme.primaryColor,
       backLayer: GetBuilder<PlayerController>(builder: (_) {
         if (_.nowPlaying == null) {
           return Container(
@@ -219,7 +217,7 @@ class _MyHomeState extends State<MyHome> {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontSize: 22,
-                    color: _theme.accentColor,
+                    color: theme.primaryColorLight,
                     fontWeight: FontWeight.bold),
               ),
             ),
@@ -230,8 +228,8 @@ class _MyHomeState extends State<MyHome> {
       frontLayer: _pages.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: _theme.primaryColor,
-        backgroundColor: _theme.accentColor,
+        selectedItemColor: theme.primaryColor,
+        backgroundColor: theme.primaryColorLight,
         elevation: 0,
         selectedFontSize: 12,
         unselectedFontSize: 12,
@@ -268,10 +266,6 @@ class _MyHomeState extends State<MyHome> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-          child: Icon(
-            CupertinoIcons.search,
-            color: Theme.of(context).accentColor,
-          ),
           backgroundColor: Theme.of(context).primaryColor,
           onPressed: () async {
             if (!myFocusNode.hasFocus) {
@@ -284,7 +278,11 @@ class _MyHomeState extends State<MyHome> {
               });
               await _searchRepository.getSearchResult(_searchController.text);
             }
-          }),
+          },
+          child: Icon(
+            CupertinoIcons.search,
+            color: Theme.of(context).primaryColorLight,
+          )),
       backLayerScrim: Colors.transparent,
     );
   }

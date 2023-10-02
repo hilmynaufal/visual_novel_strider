@@ -19,18 +19,20 @@ class PlaygroundModelAdapter extends TypeAdapter<PlaygroundModel> {
     return PlaygroundModel(
       id: fields[0] as String,
       vnId: fields[1] as String,
-      nodes: (fields[6] as List).cast<NodeModel>(),
+      eventNodes: (fields[7] as List).cast<EventNodeModel>(),
       name: fields[2] as String,
       createdAt: fields[3] as String,
       isFinished: fields[5] as bool,
+      route: fields[6] as String,
       lastPlayed: fields[4] as String,
+      branchNodes: (fields[8] as List).cast<BranchNodeModel>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, PlaygroundModel obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -44,7 +46,11 @@ class PlaygroundModelAdapter extends TypeAdapter<PlaygroundModel> {
       ..writeByte(5)
       ..write(obj.isFinished)
       ..writeByte(6)
-      ..write(obj.nodes);
+      ..write(obj.route)
+      ..writeByte(7)
+      ..write(obj.eventNodes)
+      ..writeByte(8)
+      ..write(obj.branchNodes);
   }
 
   @override

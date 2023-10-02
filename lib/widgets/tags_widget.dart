@@ -2,14 +2,17 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:visual_novel_strider/widgets/vn_detail.dart';
+import 'package:visual_novel_strider/widgets/tag_info_bottomsheet.dart';
 
 import '../model/kana_model/tag_result.dart';
 
+// ignore: must_be_immutable
 class TagsWidget extends StatelessWidget {
-  TagsWidget({Key? key, required this.tags}) : super(key: key);
+  TagsWidget({Key? key, required this.tags, required this.vnId})
+      : super(key: key);
 
   List<TagResult> tags;
+  final String vnId;
 
   // final TagsRepository _tagsRepository = Get.find();
 
@@ -17,7 +20,7 @@ class TagsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     // _tagsRepository.getTags(item.tags!);
 
-    final _theme = Theme.of(context);
+    final theme = Theme.of(context);
 
     tags.sort((b, a) => a.rating.compareTo(b.rating));
     tags = tags
@@ -34,18 +37,18 @@ class TagsWidget extends StatelessWidget {
           children: [
             Row(
               children: [
-                SizedBox(
+                const SizedBox(
                   width: 16,
                 ),
                 Container(
                   height: 22,
                   width: 4,
-                  color: _theme.primaryColor,
+                  color: theme.primaryColor,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 4,
                 ),
-                Text(
+                const Text(
                   "Tags",
                   style: TextStyle(
                     fontWeight: FontWeight.w800,
@@ -55,16 +58,16 @@ class TagsWidget extends StatelessWidget {
               ],
             ),
             Container(
-              margin: EdgeInsets.only(right: 16),
+              margin: const EdgeInsets.only(right: 16),
               child: GestureDetector(
                 onTap: () {
                   log("message");
-                  Get.to(() => VnDetail(id: "v17", title: "title", image: ""));
+                  // Get.to(() => VnDetail(id: "v17", title: "title", image: ""));
                 },
                 child: Icon(
                   Icons.info_outline_rounded,
                   size: 16,
-                  color: _theme.primaryColor,
+                  color: theme.primaryColor,
                 ),
               ),
             ),
@@ -82,31 +85,33 @@ class TagsWidget extends StatelessWidget {
                     return Row(
                       children: [
                         index == 0
-                            ? SizedBox(
+                            ? const SizedBox(
                                 width: 16,
                               )
-                            : SizedBox(),
+                            : const SizedBox(),
                         Container(
                           height: 18,
-                          margin: EdgeInsets.only(right: 8),
+                          margin: const EdgeInsets.only(right: 8),
                           child: OutlinedButton(
+                              onPressed: () {
+                                Get.bottomSheet(TagInfoBottomsheet(id: vnId));
+                              },
                               style: OutlinedButton.styleFrom(
                                   side: BorderSide(
-                                      color: _theme.primaryColor, width: 0.5),
+                                      color: theme.primaryColor, width: 0.5),
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(30))),
-                              onPressed: () {},
                               child: Text(
                                 tags[index].name,
                                 style: TextStyle(
-                                    fontSize: 12, color: _theme.primaryColor),
+                                    fontSize: 12, color: theme.primaryColor),
                               )),
                         ),
                         index == 7
-                            ? SizedBox(
+                            ? const SizedBox(
                                 width: 8,
                               )
-                            : SizedBox(),
+                            : const SizedBox(),
                       ],
                     );
                   },

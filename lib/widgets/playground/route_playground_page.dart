@@ -1,17 +1,8 @@
-import 'dart:developer';
-
-import 'package:backdrop/backdrop.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
-import 'package:visual_novel_strider/controller&repository/notification_controller.dart';
 import 'package:visual_novel_strider/controller&repository/playground_controller.dart';
-import 'package:visual_novel_strider/model/kana_model/detail_result.dart';
-import 'package:visual_novel_strider/model/old_socket_model/media.dart';
-import 'package:visual_novel_strider/widgets/character_card.dart';
-import 'package:visual_novel_strider/widgets/empty_widget.dart';
+import 'package:visual_novel_strider/utils/datetime_parse.dart';
 import 'package:visual_novel_strider/widgets/playground/playground_header.dart';
 import 'package:visual_novel_strider/widgets/playground/playground_node_indicator.dart';
 
@@ -21,12 +12,10 @@ class RoutePlaygroundPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _theme = Theme.of(context);
+    final theme = Theme.of(context);
 
     final PlaygroundController playgroundController = Get.find();
     // final NotificationController _notificationController = Get.find();
-
-    // log(_notificationController.hiveRepository.result[0].hexColor.toString());
     return Scaffold(
       body: SafeArea(
         child: NestedScrollView(
@@ -34,8 +23,8 @@ class RoutePlaygroundPage extends StatelessWidget {
               [PlaygroundHeader()],
           body: Container(
             decoration: BoxDecoration(
-                color: _theme.accentColor,
-                borderRadius: BorderRadius.only(
+                color: theme.primaryColorLight,
+                borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(40),
                     topRight: Radius.circular(40))),
             child: SingleChildScrollView(
@@ -45,32 +34,32 @@ class RoutePlaygroundPage extends StatelessWidget {
                   children: [
                     Container(
                       height: 100,
-                      margin: EdgeInsets.symmetric(vertical: 20),
+                      margin: const EdgeInsets.symmetric(vertical: 20),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           ElevatedButton(
                               onPressed: () {},
                               style: ElevatedButton.styleFrom(
-                                  padding: EdgeInsets.all(20),
-                                  primary: _theme.accentColor,
-                                  onPrimary: _theme.primaryColor,
+                                  foregroundColor: theme.primaryColor,
+                                  padding: const EdgeInsets.all(20),
+                                  backgroundColor: theme.primaryColorLight,
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12))),
-                              child: Icon(
+                              child: const Icon(
                                 CupertinoIcons.pause_fill,
                                 size: 40,
                                 color: Colors.black,
                               )),
-                          SizedBox(
+                          const SizedBox(
                             width: 16,
                           ),
                           ElevatedButton(
                               onPressed: () {},
                               style: ElevatedButton.styleFrom(
-                                  padding: EdgeInsets.all(20),
-                                  primary: _theme.accentColor,
-                                  onPrimary: _theme.primaryColor,
+                                  foregroundColor: theme.primaryColor,
+                                  padding: const EdgeInsets.all(20),
+                                  backgroundColor: theme.primaryColorLight,
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12))),
                               child: Container(
@@ -82,25 +71,30 @@ class RoutePlaygroundPage extends StatelessWidget {
                                     border: Border.all(width: 1)),
                                 child: ClipOval(
                                   child: Image.network(
-                                    playgroundController.playthroughModel.value!
-                                        .nodes[0].character!.image!.url,
+                                    playgroundController
+                                        .curentPlaythrough
+                                        .value!
+                                        .eventNodes[0]
+                                        .character!
+                                        .image!
+                                        .url,
                                     alignment: Alignment.topCenter,
                                     fit: BoxFit.contain,
                                   ),
                                 ),
                               )),
-                          SizedBox(
+                          const SizedBox(
                             width: 16,
                           ),
                           ElevatedButton(
                               onPressed: () {},
                               style: ElevatedButton.styleFrom(
-                                  padding: EdgeInsets.all(20),
-                                  primary: _theme.accentColor,
-                                  onPrimary: _theme.primaryColor,
+                                  foregroundColor: theme.primaryColor,
+                                  padding: const EdgeInsets.all(20),
+                                  backgroundColor: theme.primaryColorLight,
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12))),
-                              child: Icon(
+                              child: const Icon(
                                 CupertinoIcons.stop_fill,
                                 size: 40,
                                 color: Colors.black,
@@ -109,52 +103,28 @@ class RoutePlaygroundPage extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.symmetric(horizontal: 8),
+                      margin: const EdgeInsets.symmetric(horizontal: 8),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey[300]!),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
-                            padding: EdgeInsets.all(8),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                children: [
-                                  PlaygroundNodeIndicator(
-                                    isNextNode: false,
-                                  ),
-                                  PlaygroundNodeIndicator(
-                                    isNextNode: false,
-                                  ),
-                                  PlaygroundNodeIndicator(
-                                    isNextNode: true,
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
                           Text(
-                            "Last Played: 2 Aug 2022    Created 1 Aug 2022",
+                            "Last Played ${DateTimeParse.parseDateTime(playgroundController.currentNode.value!.lastPlayed.toString())}    Created ${DateTimeParse.parseDateTime(playgroundController.currentNode.value!.createdAt.toString())}",
                             textAlign: TextAlign.start,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontWeight: FontWeight.w200, fontSize: 12),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 4,
                           ),
                           Row(
                             children: [
-                              Text(
+                              const Text(
                                 "Previous Node: Common Route",
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
                                     fontWeight: FontWeight.w600, fontSize: 14),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 4,
                               ),
                               Container(
@@ -166,28 +136,28 @@ class RoutePlaygroundPage extends StatelessWidget {
                                       Border.all(width: 1, color: Colors.black),
                                   shape: BoxShape.circle,
                                 ),
+                                alignment: Alignment.topCenter,
                                 child: ClipOval(
                                   child: Image.network(playgroundController
-                                      .playthroughModel
+                                      .curentPlaythrough
                                       .value!
-                                      .nodes[0]
+                                      .eventNodes[0]
                                       .character!
                                       .image!
                                       .url),
                                 ),
-                                alignment: Alignment.topCenter,
                               )
                             ],
                           ),
                           Row(
                             children: [
                               Text(
-                                "Next Node: Route Branch",
+                                "Next Node: ${playgroundController.currentNode.value!.nodeType}",
                                 textAlign: TextAlign.start,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontWeight: FontWeight.w600, fontSize: 14),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 4,
                               ),
                               Container(
@@ -199,23 +169,23 @@ class RoutePlaygroundPage extends StatelessWidget {
                                       Border.all(width: 1, color: Colors.black),
                                   shape: BoxShape.circle,
                                 ),
+                                alignment: Alignment.topCenter,
                                 child: ClipOval(
                                   child: Image.network(playgroundController
-                                      .playthroughModel
+                                      .curentPlaythrough
                                       .value!
-                                      .nodes[0]
+                                      .eventNodes[0]
                                       .character!
                                       .image!
                                       .url),
                                 ),
-                                alignment: Alignment.topCenter,
                               )
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 8,
                           ),
-                          Row(
+                          const Row(
                             children: [
                               Column(
                                 children: [
@@ -245,7 +215,38 @@ class RoutePlaygroundPage extends StatelessWidget {
                                 ],
                               ),
                             ],
-                          )
+                          ),
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey[300]!),
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(10))),
+                            padding: const EdgeInsets.all(8),
+                            child: const Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  Column(
+                                    children: [
+                                      PlaygroundNodeIndicator(
+                                        isNextNode: false,
+                                      ),
+                                      PlaygroundNodeIndicator(
+                                        isNextNode: false,
+                                      ),
+                                      PlaygroundNodeIndicator(
+                                        isNextNode: true,
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     )

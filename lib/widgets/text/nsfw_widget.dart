@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class NSFWWidget extends StatelessWidget {
   const NSFWWidget({Key? key}) : super(key: key);

@@ -1,6 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
-import 'dart:developer';
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, must_be_immutable
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -38,13 +36,13 @@ class CharacterDetailBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _theme = Theme.of(context);
+    final theme = Theme.of(context);
 
     getData();
 
     final height = MediaQuery.of(context).size.height - 100;
 
-    return Container(
+    return SizedBox(
       height: height,
       child: Column(
         children: [
@@ -66,7 +64,7 @@ class CharacterDetailBottomSheet extends StatelessWidget {
                 () => _charactersRepository
                         .individualResult.value.results.isNotEmpty
                     ? Container(
-                        color: _theme.accentColor,
+                        color: theme.primaryColorLight,
                         child: Column(
                           children: [
                             Stack(alignment: Alignment.bottomCenter, children: [
@@ -130,7 +128,7 @@ class CharacterDetailBottomSheet extends StatelessWidget {
                                         .results.first.description ??
                                     "Hi, I'm using Wutsapp!",
                                 textAlign: TextAlign.center,
-                                colorClickableText: _theme.primaryColor,
+                                colorClickableText: theme.primaryColor,
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 14,
@@ -201,11 +199,11 @@ class CharacterDetailBottomSheet extends StatelessWidget {
                         ),
                       )
                     : Container(
-                        color: _theme.accentColor,
+                        color: theme.primaryColorLight,
                         child: SizedBox(
-                          child: CircularProgressIndicator(),
                           width: 60,
                           height: 60,
+                          child: CircularProgressIndicator(),
                         ),
                       ),
               ),

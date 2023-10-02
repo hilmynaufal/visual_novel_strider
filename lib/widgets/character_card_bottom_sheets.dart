@@ -4,29 +4,29 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:visual_novel_strider/controller&repository/player_controller.dart';
-import 'package:visual_novel_strider/model/hive_model/hive_model.dart';
-import 'package:visual_novel_strider/model/kana_model/detail_result.dart';
 
 import '../controller&repository/notification_controller.dart';
+import '../model/hive_model/progress_model.dart';
 
 class CharacterCardBottomSheet extends StatelessWidget {
-  CharacterCardBottomSheet({Key? key, required this.index, required this.item})
+  CharacterCardBottomSheet({Key? key, required this.progressModel})
       : super(key: key);
 
   final NotificationController _notificationController = Get.find();
 
-  final int index;
+  // final int index;
 
-  final DetailResult item;
+  // final DetailResult item;
+  final ProgressModel progressModel;
 
   final PlayerController _playerController = Get.find();
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController _hoursController = TextEditingController();
-    final TextEditingController _minutesController = TextEditingController();
+    final TextEditingController hoursController = TextEditingController();
+    final TextEditingController minutesController = TextEditingController();
 
-    var _theme = Theme.of(context);
+    var theme = Theme.of(context);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -47,8 +47,8 @@ class CharacterCardBottomSheet extends StatelessWidget {
                         "How long do you play this route today?",
                         textAlign: TextAlign.center,
                         maxLines: 2,
-                        style:
-                            TextStyle(color: _theme.accentColor, fontSize: 22),
+                        style: TextStyle(
+                            color: theme.primaryColorLight, fontSize: 22),
                       ),
                       const SizedBox(
                         height: 16,
@@ -60,22 +60,22 @@ class CharacterCardBottomSheet extends StatelessWidget {
                           SizedBox(
                             width: 20,
                             child: TextField(
-                              controller: _hoursController,
+                              controller: hoursController,
                               keyboardType: TextInputType.number,
-                              cursorColor: _theme.accentColor,
-                              style: TextStyle(color: _theme.accentColor),
+                              cursorColor: theme.primaryColorLight,
+                              style: TextStyle(color: theme.primaryColorLight),
                               decoration: InputDecoration(
                                   isDense: true,
                                   contentPadding: const EdgeInsets.all(0),
                                   enabledBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(
-                                          color: _theme.accentColor)),
+                                          color: theme.primaryColorLight)),
                                   focusedBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(
-                                          color: _theme.accentColor)),
+                                          color: theme.primaryColorLight)),
                                   border: UnderlineInputBorder(
                                       borderSide: BorderSide(
-                                          color: _theme.accentColor))),
+                                          color: theme.primaryColorLight))),
                             ),
                           ),
                           const SizedBox(
@@ -84,7 +84,7 @@ class CharacterCardBottomSheet extends StatelessWidget {
                           Text(
                             "hours",
                             style: TextStyle(
-                                color: _theme.accentColor,
+                                color: theme.primaryColorLight,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w300),
                           ),
@@ -94,22 +94,22 @@ class CharacterCardBottomSheet extends StatelessWidget {
                           SizedBox(
                             width: 20,
                             child: TextField(
-                              controller: _minutesController,
+                              controller: minutesController,
                               keyboardType: TextInputType.number,
-                              cursorColor: _theme.accentColor,
-                              style: TextStyle(color: _theme.accentColor),
+                              cursorColor: theme.primaryColorLight,
+                              style: TextStyle(color: theme.primaryColorLight),
                               decoration: InputDecoration(
                                   isDense: true,
                                   contentPadding: const EdgeInsets.all(0),
                                   enabledBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(
-                                          color: _theme.accentColor)),
+                                          color: theme.primaryColorLight)),
                                   focusedBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(
-                                          color: _theme.accentColor)),
+                                          color: theme.primaryColorLight)),
                                   border: UnderlineInputBorder(
                                       borderSide: BorderSide(
-                                          color: _theme.accentColor))),
+                                          color: theme.primaryColorLight))),
                             ),
                           ),
                           const SizedBox(
@@ -118,7 +118,7 @@ class CharacterCardBottomSheet extends StatelessWidget {
                           Text(
                             "minutes",
                             style: TextStyle(
-                                color: _theme.accentColor,
+                                color: theme.primaryColorLight,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w300),
                           ),
@@ -132,23 +132,22 @@ class CharacterCardBottomSheet extends StatelessWidget {
                         children: [
                           ElevatedButton(
                               onPressed: () {
-                                if (_hoursController.text.isEmpty ||
-                                    _minutesController.text.isEmpty) {
+                                if (hoursController.text.isEmpty ||
+                                    minutesController.text.isEmpty) {
                                   Get.back();
                                   Get.snackbar("Failed",
                                       "Add progress failed because hours or minutes is empty",
-                                      backgroundColor: Color(
-                                          _notificationController.hiveRepository
-                                              .result[index].hexColor),
-                                      colorText: _theme.accentColor,
+                                      backgroundColor:
+                                          Color(progressModel.hexColor),
+                                      colorText: theme.primaryColorLight,
                                       snackPosition: SnackPosition.TOP,
                                       snackStyle: SnackStyle.FLOATING);
                                 } else {
                                   Get.back();
                                   _notificationController.addPlayTime(
-                                      _hoursController.text,
-                                      _minutesController.text,
-                                      index);
+                                      hoursController.text,
+                                      minutesController.text,
+                                      progressModel);
                                 }
                               },
                               style: ElevatedButton.styleFrom(
@@ -156,7 +155,7 @@ class CharacterCardBottomSheet extends StatelessWidget {
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(8),
                                       side: BorderSide(
-                                          color: _theme.accentColor)),
+                                          color: theme.primaryColorLight)),
                                   elevation: 0,
                                   primary: Colors.transparent),
                               child: const Text("Add")),
@@ -180,8 +179,7 @@ class CharacterCardBottomSheet extends StatelessWidget {
                     ],
                   ),
                 ),
-                backgroundColor: Color(_notificationController
-                    .hiveRepository.result[index].hexColor));
+                backgroundColor: Color(progressModel.hexColor));
           },
           child: Container(
             margin: const EdgeInsets.fromLTRB(16, 8, 0, 0),
@@ -189,7 +187,7 @@ class CharacterCardBottomSheet extends StatelessWidget {
               children: [
                 Icon(
                   Icons.add_alarm_rounded,
-                  color: _theme.accentColor,
+                  color: theme.primaryColorLight,
                   size: 32,
                 ),
                 const SizedBox(
@@ -198,7 +196,7 @@ class CharacterCardBottomSheet extends StatelessWidget {
                 Text(
                   "Add Progress",
                   style: TextStyle(
-                      color: _theme.accentColor,
+                      color: theme.primaryColorLight,
                       fontSize: 16,
                       fontWeight: FontWeight.w600),
                 ),
@@ -211,17 +209,17 @@ class CharacterCardBottomSheet extends StatelessWidget {
             Get.back();
             _playerController.isPlaying.value
                 ? Get.showSnackbar(GetBar(
-                    backgroundColor: _theme.primaryColor,
+                    backgroundColor: theme.primaryColor,
                     icon: Icon(
                       CupertinoIcons.xmark_circle,
-                      color: _theme.accentColor,
+                      color: theme.primaryColorLight,
                     ),
                     duration: const Duration(seconds: 5),
                     title: "No, you can't!",
                     message:
                         "Unfortunately, you can't play two girl at the same time! :(",
                   ))
-                : _playerController.starTimer(index);
+                : _playerController.starTimer(progressModel);
           },
           child: Container(
             margin: const EdgeInsets.fromLTRB(16, 8, 0, 0),
@@ -229,7 +227,7 @@ class CharacterCardBottomSheet extends StatelessWidget {
               children: [
                 Icon(
                   Icons.play_arrow_rounded,
-                  color: _theme.accentColor,
+                  color: theme.primaryColorLight,
                   size: 32,
                 ),
                 const SizedBox(
@@ -238,7 +236,7 @@ class CharacterCardBottomSheet extends StatelessWidget {
                 Text(
                   "Play",
                   style: TextStyle(
-                      color: _theme.accentColor,
+                      color: theme.primaryColorLight,
                       fontSize: 16,
                       fontWeight: FontWeight.w600),
                 ),
@@ -249,7 +247,7 @@ class CharacterCardBottomSheet extends StatelessWidget {
         GestureDetector(
           onTap: () {
             Get.back();
-            _notificationController.deleteProgress(index, item.id);
+            _notificationController.deleteProgress(progressModel);
           },
           child: Container(
             margin: const EdgeInsets.fromLTRB(16, 8, 0, 0),
@@ -257,7 +255,7 @@ class CharacterCardBottomSheet extends StatelessWidget {
               children: [
                 Icon(
                   Icons.delete,
-                  color: _theme.accentColor,
+                  color: theme.primaryColorLight,
                   size: 32,
                 ),
                 const SizedBox(
@@ -266,7 +264,7 @@ class CharacterCardBottomSheet extends StatelessWidget {
                 Text(
                   "Delete",
                   style: TextStyle(
-                      color: _theme.accentColor,
+                      color: theme.primaryColorLight,
                       fontSize: 16,
                       fontWeight: FontWeight.w600),
                 ),

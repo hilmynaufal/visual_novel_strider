@@ -5,10 +5,9 @@ import 'package:http/http.dart' as http;
 
 import 'package:get/get.dart';
 import 'package:visual_novel_strider/model/kana_model/response_result.dart';
-import 'package:visual_novel_strider/model/kana_model/result.dart';
 
 class KanaServer extends GetxController {
-  static const String URL = "https://api.vndb.org/kana/";
+  static const String url = "https://api.vndb.org/kana/";
 
   // RxBool isReady = false.obs;
 
@@ -18,7 +17,7 @@ class KanaServer extends GetxController {
       StreamController<ResponseResult>();
 
   Future<void> searchVisualNovel(String query) async {
-    final response = await http.post(Uri.parse(URL + "vn"),
+    final response = await http.post(Uri.parse("${url}vn"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -37,7 +36,7 @@ class KanaServer extends GetxController {
   }
 
   Future<ResponseResult> getCharacters(String id) async {
-    final response = await http.post(Uri.parse(URL + "character"),
+    final response = await http.post(Uri.parse("${url}character"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -62,7 +61,7 @@ class KanaServer extends GetxController {
   }
 
   Future<ResponseResult> getVNDetail(String id) async {
-    final response = await http.post(Uri.parse(URL + "vn"),
+    final response = await http.post(Uri.parse("${url}vn"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -100,7 +99,7 @@ class KanaServer extends GetxController {
       "sort": sort,
       "reverse": true
     });
-    final response = await http.post(Uri.parse(URL + "vn"),
+    final response = await http.post(Uri.parse("${url}vn"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -113,7 +112,7 @@ class KanaServer extends GetxController {
     }
     // searchController.add(SearchResult.fromJson(jsonDecode(response.body)));
     else {
-      log("error is in = " + controller + " controller");
+      log("error is in = $controller controller");
       return ResponseResult(results: [], more: false);
     }
   }
@@ -139,22 +138,49 @@ class KanaServer extends GetxController {
   }
 
   //testing new algorithm
-  Future<ResponseResult> getIndividual(
+  Future<ResponseResult?> postApiCall(
       {required String jsonBody, required String headers}) async {
-    final _response = await http.post(Uri.parse(URL + "character"),
+    final response = await http.post(Uri.parse(url + headers),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonBody);
 
-    if (_response.statusCode == 200) {
-      log(_response.body);
-      return ResponseResult.fromIndividualDetailJson(
-          jsonDecode(_response.body));
+    if (response.statusCode == 200) {
+      // log(_response.body);
+
+      return checkingHeaderAndConvert(header: headers, response: response);
     } else {
       log("error");
-      log(_response.body);
-      return ResponseResult(results: [], more: false);
+      // log(_response.body);
+      return null;
     }
+  }
+
+  ResponseResult? checkingHeaderAndConvert(
+      {required String header, required http.Response response}) {
+    if (header == "character") {
+      return ResponseResult.fromIndividualDetailJson(jsonDecode(response.body));
+    }
+
+    if (header == "release") {
+      return ResponseResult.fromReleaseJson(jsonDecode(response.body));
+    }
+    return null;
+  }
+
+  //new postapicall
+  Future<http.Response?> newpostApiCall(
+      {required String jsonBody, required String headers}) async {
+    final response = await http.post(Uri.parse(url + headers),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonBody);
+
+    if (response.statusCode == 200) {
+      return response;
+    }
+    return null;
   }
 }

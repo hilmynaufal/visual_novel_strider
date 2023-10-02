@@ -5,34 +5,27 @@ import 'package:visual_novel_strider/model/kana_model/individual_result.dart';
 part 'node_model.g.dart';
 
 @HiveType(typeId: 10)
-class NodeModel extends AbstractCardModel {
-  @HiveField(12)
-  String? previousNodeId;
+class EventNodeModel extends AbstractCardModel {
   @HiveField(13)
+  String? previousNodeId;
+  @HiveField(14)
   String? nextNodeId;
+  @HiveField(15)
+  String nodeType;
 
-  NodeModel(
-      {required String id,
-      required IndividualResult? character,
-      required String playtime,
-      required DateTime lastPlayed,
-      required int hexColor,
-      required bool isCompleted,
-      required String endTime,
-      required bool isPlaying,
-      required String vnId,
-      required String note,
+  EventNodeModel(
+      {required super.id,
+      required super.character,
+      required super.playtime,
+      required super.lastPlayed,
+      required super.hexColor,
+      required super.isCompleted,
+      required super.endTime,
+      required super.isPlaying,
+      required super.vnId,
+      required super.createdAt,
+      required super.note,
+      required this.nodeType,
       this.nextNodeId,
-      this.previousNodeId})
-      : super(
-            id: id,
-            character: character,
-            playtime: playtime,
-            lastPlayed: lastPlayed,
-            hexColor: hexColor,
-            isCompleted: isCompleted,
-            endTime: endTime,
-            isPlaying: isPlaying,
-            vnId: vnId,
-            note: note);
+      this.previousNodeId});
 }
