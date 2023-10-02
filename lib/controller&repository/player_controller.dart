@@ -38,7 +38,7 @@ class PlayerController extends GetxController {
     progressModel.isPlaying = true;
     progressModel.save();
     _nowPlaying = progressModel;
-    _stopWatchTimer.onStartTimer();
+    // _stopWatchTimer.onStartTimer();
 
     createMediaPlayerNotification();
 
@@ -49,7 +49,7 @@ class PlayerController extends GetxController {
     // await AwesomeNotifications().cancel(int.parse(_nowPlaying!.id));
     isPlaying.value = false;
 
-    _stopWatchTimer.onStopTimer();
+    // _stopWatchTimer.onStopTimer();
     List<int> newTime = DurationParsing.durationStringToInt(
         StopWatchTimer.getDisplayTime(_stopWatchTimer.rawTime.value,
             hours: true));
@@ -75,17 +75,17 @@ class PlayerController extends GetxController {
     _nowPlaying!.save();
     _nowPlaying = null;
 
-    _stopWatchTimer.onResetTimer();
+    // _stopWatchTimer.onResetTimer();
 
     update();
   }
 
   void pauseTimer() {
-    _stopWatchTimer.onStopTimer();
+    // _stopWatchTimer.onStopTimer();
   }
 
   void resumeTimer() {
-    _stopWatchTimer.onStartTimer();
+    // _stopWatchTimer.onStartTimer();
   }
 
   void createMediaPlayerNotification() async {

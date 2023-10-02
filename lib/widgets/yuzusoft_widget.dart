@@ -208,7 +208,7 @@ class YuzusoftWidget extends StatelessWidget {
                   shimmerBaseColor: Colors.grey[300],
                   shimmerHighlightColor: Colors.grey[100],
                   boxFit: BoxFit.cover,
-                  alignment: Alignment.topCenter,
+                  // alignment: Alignment.topCenter,
                   imageUrl:
                       _repository.yuzusoftResult.value.results[index].image.url)
               : const Center(

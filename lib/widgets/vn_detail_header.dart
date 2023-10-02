@@ -133,7 +133,7 @@ class _VNDetailHeaderState extends State<VNDetailHeader> {
                                     child: FancyShimmerImage(
                                       imageUrl: widget.image,
                                       boxFit: BoxFit.cover,
-                                      alignment: Alignment.topCenter,
+                                      // alignment: Alignment.topCenter,
                                     ),
                                   )),
                               Expanded(
